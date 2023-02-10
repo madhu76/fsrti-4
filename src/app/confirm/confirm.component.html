@@ -1,0 +1,76 @@
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-sm-3">
+            <h3>Confirm Registration</h3>
+        </div>
+        <div class="col-sm-9" style="border-left: #cccccc 1px dotted;">
+            <div>
+                <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+                    <legend>Please confirm the following very important information:</legend>
+                    <div class="form-group row">
+                        <label for="firstname" class="col-sm-3 col-form-label">First Name </label>
+                        <div class="col-sm-9">
+                            <input readonly type="text" required value="readonly value"
+                            class="form-control"
+                            value="{{registerData.firstname}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="lastname" class="col-sm-3 col-form-label">Last Name</label>
+                        <div class="col-sm-9">
+                            <input readonly type="text" required value="readonly value"
+                            class="form-control"
+                            value="{{registerData.lastname}}">
+                        </div>
+                    </div>
+
+                
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-3 col-form-label">User name</label>
+                        <div class="col-sm-9">
+                            <input readonly type="text"  required class="form-control" value="readonly value"
+                            value="{{registerData.email}}"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-3 col-form-label">E-mail Address </label>
+                        <div class="col-sm-9">
+                            <input readonly type="email" required value="readonly value"
+                            class="form-control"
+                            value="{{registerData.email}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="Country" class="col-sm-3 col-form-label">Country </label>
+                        <div class="col-sm-9">
+                            <input readonly type="text" value="readonly value"
+                            class="form-control"
+                            formControlName="country">
+                        </div>
+                    </div>
+                     <br>
+                     <hr>
+                     <p>Please click on the privacy policy links below and then check the box.</p>
+                     <div class="form-group form-check">
+                        
+                        <input  class="form-check-input" type="checkbox" formControlName="acceptTerms" id="acceptTerms" required [ngClass]="{ 'is-invalid': submitted && f.acceptTerms.errors }"><span style="color: red; font-size: large;"> *</span>
+                        <label class="form-check-label" for="acceptTerms">
+                            I acknowledge that my personal information will be accessed, used and otherwise processed in accordance with the <a href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/17814574/data/EM_S1_Privacy_Policy" target="__blank">Publisher's Data User Privacy Policy</a> and the <a href="https://www.ariessys.com/about/privacy-policy/" target="__blank">Aries Privacy Policy</a>.
+                        </label>
+                        <div *ngIf="submitted && f.acceptTerms.errors" class="invalid-feedback">Accept Ts & Cs is required</div>
+                      </div>
+                      <br>
+                      <p>
+                          If the information is correct and you wish to complete this registration, click the 'Continue' button below.
+                      </p>
+                      <a routerLink="/signup/registration" class="btn btn-group btn-group-sm mx-2">&lt;&lt;Previous </a>
+                      <button mat-button color="primary" type="submit" class=" btn btn-group btn-group-sm mx-2">Continue>></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

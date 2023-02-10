@@ -1,0 +1,31 @@
+.form-group input{
+width: auto;
+}
+.form-group label{
+    margin-right: 15px;
+    margin-left: 20%;
+}
+.vl{
+ border-left: 1px solid black;
+}
+.login-form{
+align-items: center;
+}
+.bottom-links a{
+    text-decoration: none;
+    margin-top: 15px;
+}
+.bottom-links{
+    border-top: 1px solid black;
+    
+}
+.invalid-feedback{
+    margin-left: 20px;
+    
+}
+
+@media only screen and (max-width: 600px) {
+    .form-group label{
+        margin-left: 0%;
+    }
+  }

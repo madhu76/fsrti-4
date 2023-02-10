@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:white">
+    <a class="navbar-brand" routerLink=" "><img class="img-responsive" src="https://res.cloudinary.com/jisst/image/upload/v1641732227/FSRTI__Logo_riitig.png" height="100%" width="70%">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="" data-toggle="collapse" data-target=".navbar-collapse.show">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <!-- <li class="nav-item active">
+        <a mat-button class="nav-link" routerLink="" data-toggle="collapse"
+          data-target=".navbar-collapse.show">Main Menu </a>
+      </li> -->
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="/about" data-toggle="collapse" data-target=".navbar-collapse.show">About The Journal</a>
+            </li>
+            <!-- <li class="nav-item active">
+        <a mat-button class="nav-link" routerLink="/author" data-toggle="collapse" data-target=".navbar-collapse.show">Submit
+          Article </a>
+      </li> -->
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="/archive" data-toggle="collapse" data-target=".navbar-collapse.show">Archives</a>
+            </li>
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="/guideliness" data-toggle="collapse" data-target=".navbar-collapse.show">Guidelines
+          for Authors</a>
+            </li>
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="/publicationpolicies" data-toggle="collapse" data-target=".navbar-collapse.show">Policies and Ethics</a>
+            </li>
+            <li class="nav-item active">
+                <a mat-button class="nav-link" href="https://researchfoundation.in/" target="_blank">FSRTI</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a mat-button class="nav-link" routerLink="/contact">
+          Contact Us
+        </a>
+            </li>
+            <li class="nav-item active">
+                <a mat-raised-button class="nav-link" routerLink="login" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!authService.isAuthenticated">
+          Login <i class="fas fa-sign-in-alt"></i>
+        </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="authService.isAuthenticated">
+
+                    <i class="fas fa-user-tie"> </i> &nbsp; <span style="color:blue;">{{authService.getUserName}}</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a mat-raised-button class="nav-link" routerLink="signup/pre-registration" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!authService.isAuthenticated">
+          Register <i class="fas fa-sign-in-alt"></i>
+        </a>
+            </li>
+            <li class="nav-item active">
+                <a mat-raised-button class="nav-link" routerLink="" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="authService.isAuthenticated" (click)="authService.logout()">
+          logout <i class="fas fa-sign-in-alt"></i>
+        </a>
+            </li>
+
+        </ul>
+    </div>
+</nav>

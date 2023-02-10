@@ -1,0 +1,79 @@
+
+        <div class="sidenav">
+          <a routerLink="/submission" class="btn btn-primary">Article Submission</a><br><br>
+          <a routerLink="/publisher" class="btn btn-primary">Publisher</a><br><br>
+  
+          <a href="#tree" class="btn btn-primary">View Articles</a>
+          <div>
+          <div class="tree">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+              <!-- This is the tree node template for leaf nodes -->
+  
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <a routerLink="/articles" *ngIf="node.name=='Volume 1, Issue 1'"><span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+                  
+                  <a routerLink="/vol1_issue2" *ngIf="node.name=='Volume 1, Issue 2'">
+                    <span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
+                  </a>
+
+                  <a routerLink="/vol1_issue3" *ngIf="node.name=='Volume 1, Issue 3'">
+                    <span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
+                  </a>
+
+                  <a routerLink="/vol1_issue4" *ngIf="node.name=='Volume 1, Issue 4'">
+                    <span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
+                  </a>
+
+
+                  <!-- added volume2 2022 -->
+                  <a routerLink="/vol2_issue1" *ngIf="node.name=='Volume 2, Issue 1'"><span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+                   
+                  <a routerLink="/vol2_issue2" *ngIf="node.name=='Volume 2, Issue 2'"><span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+                    
+                  <a routerLink="/vol2_issue3" *ngIf="node.name=='Volume 2, Issue 3'"><span  
+                    style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+
+                  <!-- added volume3 2023 -->
+                  <a routerLink="/vol3_issue1" *ngIf="node.name=='Volume 3, Issue 1'"><span  
+                  style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+                      
+              </mat-tree-node>
+  
+              <!-- This is the tree node template for expandable nodes -->
+  
+              <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+                <button style="outline:none;border: none; " mat-icon-button matTreeNodeToggle
+                  [attr.aria-label]="'Toggle ' + node.name">
+  
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                   
+                </button>
+                <span style="font-size: 17px; font-weight: 1000;color: #ff7f50"><i class="fas fa-folder"></i>
+                  {{node.name}}</span>
+              </mat-tree-node>
+  
+            </mat-tree>
+            
+          </div>
+
+          
+        </div>
+  
+          <br><br>
+          <a routerLink="/guideliness" class="btn btn-primary">Guidelines for Authors</a><br><br>
+          <a routerLink="/abstracting" class="btn btn-primary">Abstracting/Indexing</a><br><br>
+          <a routerLink="/construction" class="btn btn-primary">Track Your Paper</a><br><br>
+          <a routerLink="/order" class="btn btn-primary">Order Journal</a>
+        </div>
+  
+      

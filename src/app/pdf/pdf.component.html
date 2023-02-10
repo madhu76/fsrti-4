@@ -1,0 +1,28 @@
+<table id="table" class="table table-hover" >
+    <tr>
+      <th scope="col">Manuscript Number</th>
+      <td>{{subData._id}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Full Title</th>
+      <td>{{subData.title}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Article Type</th>
+      <td>{{subData.articletype}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Comments</th>
+      <td>{{subData.comments}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Funding Info</th>
+      <td>{{subData.fundinginfo}}</td>
+    </tr>
+    <!-- <tr> -->
+        <!-- <th scope="col">Funding Info</th>
+        //<td><a [href]="subFileData.avatar" target="_self">link</a></td> -->
+        <!-- <td><embed src="https://res.cloudinary.com/jisst/image/upload/v1607776369/kw0bhgzjqudgezdfmjj6.pdf" height="1000" width="1000"></td>
+      </tr> -->
+  </table>
+  <button class="btn btn primary" (click)="download()">Download pdf</button>
