@@ -23,7 +23,14 @@ const TREE_DATA: FoodNode[] = [
       {name: 'Volume 2, Issue 1'},
       {name: 'Volume 2, Issue 2'},
       {name: 'Volume 2, Issue 3'},
+      {name: 'Volume 2, Issue 4'}
 
+    ]
+  },
+  {
+    name: '2023',
+    children: [
+      {name: 'Volume 3, Issue 1'}
     ]
   }
 
