@@ -70,6 +70,7 @@ import { Vol2Issue2Component } from './vol2-issue2/vol2-issue2.component';
 import { AboutComponent } from './about/about.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
 import { Vol2Issue3Component } from './vol2-issue3/vol2-issue3.component';
+import { Vol2Issue4Component } from './vol2-issue4/vol2-issue4.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 
@@ -120,6 +121,7 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     ContactComponent,
     Vol2Issue1Component,
     Vol2Issue2Component,
+    Vol2Issue4Component,
     Vol3Issue1Component,
     AboutComponent,
     TestSigninComponent,

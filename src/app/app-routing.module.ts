@@ -34,6 +34,7 @@ import { ContactComponent } from './contact/contact.component';
 import { Vol2Issue1Component } from './vol2-issue1/vol2-issue1.component';
 import { Vol2Issue2Component } from './vol2-issue2/vol2-issue2.component';
 import { Vol2Issue3Component } from './vol2-issue3/vol2-issue3.component';
+import { Vol2Issue4Component } from './vol2-issue4/vol2-issue4.component';
 import { Vol3Issue1Component } from './vol3-issue1/vol3-issue1.component';
 import { AboutComponent } from './about/about.component';
 import { ArchiveComponent } from './archive/archive.component';
@@ -103,6 +104,7 @@ const routes: Routes = [
   { path: 'vol1_issue3', component: Vol1Issue3Component },
   { path: 'vol1_issue4', component: Vol1Issue4Component },
   { path: 'vol2_issue1', component: Vol2Issue1Component },
+  { path: 'vol2_issue4', component: Vol2Issue4Component },
   { path: 'vol3_issue1', component: Vol3Issue1Component },
   { path: 'management', component: ManagementComponent },
   { path: 'advisory', component: AdvisoryComponent },
