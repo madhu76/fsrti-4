@@ -23,6 +23,7 @@ import { AbstractingComponent } from './abstracting/abstracting.component';
 import { Vol1Issue2Component } from './vol1-issue2/vol1-issue2.component';
 import { Vol1Issue3Component } from './vol1-issue3/vol1-issue3.component';
 import { Vol1Issue4Component } from './vol1-issue4/vol1-issue4.component';
+import { Vol3Issue2Component } from './vol3-issue2/vol3-issue2.component';
 import { ManagementComponent } from './management/management.component';
 import { AdvisoryComponent } from './advisory/advisory.component';
 import { AdvisoryeditorialComponent } from './advisoryeditorial/advisoryeditorial.component';
@@ -106,6 +107,7 @@ const routes: Routes = [
   { path: 'vol2_issue1', component: Vol2Issue1Component },
   { path: 'vol2_issue4', component: Vol2Issue4Component },
   { path: 'vol3_issue1', component: Vol3Issue1Component },
+  { path: 'vol3_issue2', component: Vol3Issue2Component },
   { path: 'management', component: ManagementComponent },
   { path: 'advisory', component: AdvisoryComponent },
   { path: 'advisoryeditorial', component: AdvisoryeditorialComponent },

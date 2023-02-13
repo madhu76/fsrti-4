@@ -57,6 +57,7 @@ import { Vol1Issue2Component } from './vol1-issue2/vol1-issue2.component';
 import { Vol1Issue3Component } from './vol1-issue3/vol1-issue3.component';
 import { Vol1Issue4Component } from './vol1-issue4/vol1-issue4.component';
 import { Vol3Issue1Component } from './vol3-issue1/vol3-issue1.component';
+import { Vol3Issue2Component } from './vol3-issue2/vol3-issue2.component';
 import { ManagementComponent } from './management/management.component';
 import { AdvisoryComponent } from './advisory/advisory.component';
 import { AdvisoryeditorialComponent } from './advisoryeditorial/advisoryeditorial.component';
@@ -123,6 +124,7 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     Vol2Issue2Component,
     Vol2Issue4Component,
     Vol3Issue1Component,
+    Vol3Issue2Component,
     AboutComponent,
     TestSigninComponent,
     Vol2Issue3Component,
