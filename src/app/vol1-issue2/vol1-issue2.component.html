@@ -145,8 +145,11 @@
                                             <i class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;
                                             <b>Downloads: {{item.downloads}} </b> </i>
                                             <!-- href={{item.fileUrl}} -->
-                                            <a href="{{item.fileUrl}}" download="" target="_blank" style="float: right; font-size: larger;" (click)="countDownloads()"><i
-                                                class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; <b>Download</b> </a>
+<!--                                        <button (click)="password()" style="border: #3f51b5;"><h3>CLick here to download</h3> </button>
+                                            <!-- <a id="downloadpass" href="{{item.fileUrl}}" style="display: none" download="" target="_blank" style="float: right; font-size: larger;" (click)="countDownloads()" ><i
+                                                class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; <b>Download</b> </a> -->
+                                            <a id="downloadpass" href="{{item.fileUrl}}" download="file" target="_blank" style="float: right; font-size: larger; display: none;" (click)="countDownloads()"><i
+                                                    class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; <b></b> </a>
                                         </p>
                                 </div>
                             </div>
