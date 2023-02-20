@@ -64,5 +64,15 @@ export class Vol1Issue3Component implements OnInit {
     this.apiData.getData(`/author/downloads/${itemId}`).subscribe();
     })
   }
+   
+ password() {
+    var password = prompt("Please enter the password");
+    if (password === "fsrti@23") {
+      document.getElementById('downloadpass').click();
+    }
+    else {
+      alert("Password incorrect");
+    }
+  }
 
 }
