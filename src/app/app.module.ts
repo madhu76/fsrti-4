@@ -74,12 +74,8 @@ import { Vol2Issue3Component } from './vol2-issue3/vol2-issue3.component';
 import { Vol2Issue4Component } from './vol2-issue4/vol2-issue4.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
-
-
-
-
-
-
+import { BotDetectCaptchaModule } from 'angular-captcha';
+import { NgxCaptchaModule } from 'ngx-captcha';
 @NgModule({
   declarations: [
     AppComponent,
@@ -134,12 +130,14 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
   ],
   imports: [
     BrowserModule,
+    BotDetectCaptchaModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatSelectModule,
     MatFormFieldModule,
+    NgxCaptchaModule,
     MatInputModule,
     MatButtonModule,
     MatStepperModule,
