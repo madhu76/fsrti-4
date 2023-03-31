@@ -6,16 +6,138 @@
         </div>
 
         <div class="col-lg-9 col-md-9 col-sm-12 description mt-2 ">
-            <span id="title">Article Submission:</span> <br><br>
-            Submit pdf file of the manuscript with a covering letter to the following address:
-            jisst@researchfoundation.in <br><br> <br><br>
+            <span id="title">Article Submission:</span> <br><br> Submit pdf file of the manuscript with a covering letter to the following address: jisst@researchfoundation.in <br><br> <br><br>
             <!-- </p> -->
-            <p >Please download the copyright transfer statement and turn in the duly signed statement along with your submission. </p><br>
+            <p>Please download the copyright transfer statement and turn in the duly signed statement along with your submission. </p><br>
 
             <a href="https://res.cloudinary.com/jisst/image/upload/v1641743002/Copyright_Transfer_Statement_eodiqp.pdf" class="btn btn-primary">Download</a><br><br>
 
+            <form [formGroup]="adminForm">
+                <div class="form-group d-flex align-items-center">
+                    <label for="name" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Name</label>
+                    <input type="text" [ngClass]="{ 'is-invalid': submitted && f.articlename.errors }" formControlName="name" class="form-control col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.articlename.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.articlename.errors.required">articlename is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="email" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Email</label>
+                    <input type="email" [ngClass]="{ 'is-invalid': submitted && f.articlename.errors }" formControlName="email" class="form-control col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.articlename.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.articlename.errors.required">articlename is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="phoneno" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Phone No.</label>
+                    <input type="number" [ngClass]="{ 'is-invalid': submitted && f.articlename.errors }" formControlName="phoneno" class="form-control col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.articlename.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.articlename.errors.required">articlename is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="articlename" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Article Name</label>
+                    <input type="text" [ngClass]="{ 'is-invalid': submitted && f.articlename.errors }" formControlName="articlename" class="form-control col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.articlename.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.articlename.errors.required">articlename is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="authors" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Authors</label>
+                    <input type="text" [ngClass]="{ 'is-invalid': submitted && f.authors.errors }" formControlName="authors" class="form-control  col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.authors.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.authors.errors.required">Authors is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="aboutauthor" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">About Authors</label>
+                    <input type="text" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" formControlName="aboutauthor" class="form-control  col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.aboutauthor.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.aboutauthor.errors.required">About Author is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="keywords" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Keywords</label>
+                    <input type="text" [ngClass]="{ 'is-invalid': submitted && f.keywords.errors }" formControlName="keywords" class="form-control col-md-8 col-lg-8 col-sm-10"> <br>
+                    <div *ngIf="submitted && f.keywords.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.keywords.errors.required">keyword is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="abstract" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Abstract</label>
+                    <textarea type="text" [ngClass]="{ 'is-invalid': submitted && f.abstract.errors }" formControlName="abstract" class="form-control  col-md-8 col-lg-8 col-sm-10" rows="10"> </textarea><br>
+                    <div *ngIf="submitted && f.abstract.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.abstract.errors.required">Abstract is required
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="form-group d-flex align-items-center">
+                    <label for="upload" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">File upload</label>
+                    <form #ref="ngForm">
+                        <input type="file" name="image" id="" ngModel #f>
+                    </form> <br>
+                    <div *ngIf="submitted && f.upload.errors" class="invalid-feedback ml-2">
+                        <div class="d-flex align-items-end" *ngIf="f.upload.errors.required">File is required
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- <div class="form-group d-flex align-items-center">
+                        <label for="date" class="d-flex align-items-center col-md-2 col-lg-2 col-sm-2">Date Recieved</label>
+                        <input type="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" formControlName="date" class="form-control  col-md-8 col-lg-8 col-sm-10"> <br>
+                        <div *ngIf="submitted && f.date.errors" class="invalid-feedback ml-2">
+                            <div class="d-flex align-items-end" *ngIf="f.date.errors.required">Date is required
+                            </div>
+
+                        </div>
+                    </div> -->
+
+
+
+                <br>
+                <p style="text-align: center;">
+                    <button mat-raised-button color="primary" type="submit" class="my-2 mx-2" role="group" (click)="submit()">Submit</button>
+
+
+                </p>
+            </form>
         </div>
 
+        <!-- <div class="col-lg-9 col-md-9 col-sm-12 description mt-2">
+             col-md-10 col-lg-10 col-sm-12
+            
+            <br>
 
+
+
+        </div> -->
     </div>
+
 </div>
