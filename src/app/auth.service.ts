@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  path = 'https://jisst.vercel.app';
+  path = 'https://jisstprod.vercel.app';
 
   // path = 'http://localhost:3000';
   TOKEN_KEY = 'token';
