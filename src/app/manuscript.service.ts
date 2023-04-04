@@ -11,7 +11,7 @@ export class ManuscriptService {
 
   constructor(private http: HttpClient) { }
   item_id;
-  url='https://jisst.vercel.app'
+  url='https://jisstprod.vercel.app'
   //url = 'https://epsbackend.herokuapp.com';
   //url = 'http://localhost:5000';
   newsubmissiondata: any = {};
