@@ -77,7 +77,7 @@ export class SubmissionComponent implements OnInit {
     //this.manudata.image=this.file;
     this.data.articleData(this.adminForm.value);
     let formData = new FormData();
-    formData.append("article", this.upload);
+    formData.append("test", this.upload);
     console.log('file data  ' + formData);
     this.data.articleFileData(formData);
   }
