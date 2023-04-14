@@ -63,7 +63,7 @@ export class SubmissionComponent implements OnInit {
       phoneno: ['', Validators.required],
       articlename: ['', Validators.required],
       authors: ['', Validators.required],
-      aboutauthor: ['', Validators.required],
+//       aboutauthor: ['', Validators.required],
       keywords: ['', Validators.required],
       abstract: ['', Validators.required],
       upload: ['', [Validators.required]],
