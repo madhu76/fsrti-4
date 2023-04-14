@@ -79,7 +79,7 @@ export class ManuscriptService {
 
   articleFileData(article) {
     console.log(article);
-    this.http.post<any>(this.url + '/author/articlefilesubmission', (article)).subscribe(res => {
+    this.http.post<any>(this.url + '/article/submit-article', (article)).subscribe(res => {
       console.log(res)
     },
       err => {
