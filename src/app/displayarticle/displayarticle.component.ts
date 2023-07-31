@@ -72,7 +72,7 @@ original="Original Research";
 
   }
 
-  downloadFile(event: Event,item_id, vol_issue)
+  downloadFile(event: Event,item_id)
   {
     event.preventDefault();
     console.log("downloding mthod");
