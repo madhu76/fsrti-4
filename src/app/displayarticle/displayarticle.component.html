@@ -50,7 +50,7 @@
                             <p style=" text-align: center; "><i class="fa fa-eye" style="float: left; font-size: larger;">&nbsp;&nbsp;&nbsp;  <b>{{select.views}}</b> </i>
                                 <i class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;  <b>{{select.downloads}}</b> </i>
                                 <!-- {{select.fileUrl}} -->
-                                <a id="downloadpass" href="{{select.fileUrl}}" download="" target="_blank" (click)="countDownloads()" style="float: right; font-size: larger;">
+                                <a id="downloadpass" href=""  (click)="downloadFile($event, select.item_id)" style="float: right; font-size: larger;">
                                     <i class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; <b>Download</b> </a>
 <!--                                 <button (click)="password()" style="border: #3f51b5;"><h3>CLick here to download</h3> </button> -->
                                             <!-- <a id="downloadpass" href="{{item.fileUrl}}" style="display: none" download="" target="_blank" style="float: right; font-size: larger;" (click)="countDownloads()" ><i

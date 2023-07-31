@@ -3,6 +3,7 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {ActivatedRoute} from '@angular/router';
 import { ApiDataService} from '../Services/api-data.service';
+import { DownloadFileService } from '../Services/download-file.service';
 
 interface FoodNode {
   name: string;
@@ -34,7 +35,7 @@ article : [];
 // id; 
 isloading =  true;
 original="Original Research";
-  constructor(private activatedRoute: ActivatedRoute,private apidata: ApiDataService) 
+  constructor(private activatedRoute: ActivatedRoute,private apidata: ApiDataService, private downloadFileService: DownloadFileService) 
               { this.dataSource.data = TREE_DATA;}
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -71,25 +72,15 @@ original="Original Research";
 
   }
 
-  countDownloads()
+  downloadFile(event: Event,item_id, vol_issue)
   {
+    event.preventDefault();
     console.log("downloding mthod");
     // this.activatedRoute.queryParams.subscribe(params => {
     //   const itemId = params['item_id'];
     // this.apidata.getData(`/author/downloads/${itemId}`).subscribe();
     // })
+    this.downloadFileService.downloadFileByItemId(item_id);
+    this.apidata.getData(`/author/downloads/${item_id}`).subscribe();
   }
-  
-  
-    password() {
-    var password = prompt("Please enter the password");
-    if (password === "fsrti@23") {
-      document.getElementById('downloadpass').click();
-    }
-    else {
-      alert("Password incorrect");
-    }
-  }
-  
-
 }

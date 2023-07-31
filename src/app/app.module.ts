@@ -53,11 +53,6 @@ import { JournalInfoComponent } from './journal-info/journal-info.component';
 import { JournalOrderComponent } from './journal-order/journal-order.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AbstractingComponent } from './abstracting/abstracting.component';
-import { Vol1Issue2Component } from './vol1-issue2/vol1-issue2.component';
-import { Vol1Issue3Component } from './vol1-issue3/vol1-issue3.component';
-import { Vol1Issue4Component } from './vol1-issue4/vol1-issue4.component';
-import { Vol3Issue1Component } from './vol3-issue1/vol3-issue1.component';
-import { Vol3Issue2Component } from './vol3-issue2/vol3-issue2.component';
 import { ManagementComponent } from './management/management.component';
 import { AdvisoryComponent } from './advisory/advisory.component';
 import { AdvisoryeditorialComponent } from './advisoryeditorial/advisoryeditorial.component';
@@ -66,12 +61,8 @@ import { ConstructionComponent } from './construction/construction.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsComponent } from './terms/terms.component';
 import { ContactComponent } from './contact/contact.component';
-import { Vol2Issue1Component } from './vol2-issue1/vol2-issue1.component';
-import { Vol2Issue2Component } from './vol2-issue2/vol2-issue2.component';
 import { AboutComponent } from './about/about.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
-import { Vol2Issue3Component } from './vol2-issue3/vol2-issue3.component';
-import { Vol2Issue4Component } from './vol2-issue4/vol2-issue4.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 
@@ -109,9 +100,6 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     JournalOrderComponent,
     SidenavComponent,
     AbstractingComponent,
-    Vol1Issue2Component,
-    Vol1Issue3Component,
-    Vol1Issue4Component,
     ManagementComponent,
     AdvisoryComponent,
     AdvisoryeditorialComponent,
@@ -120,14 +108,8 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     PrivacypolicyComponent,
     TermsComponent,
     ContactComponent,
-    Vol2Issue1Component,
-    Vol2Issue2Component,
-    Vol2Issue4Component,
-    Vol3Issue1Component,
-    Vol3Issue2Component,
     AboutComponent,
     TestSigninComponent,
-    Vol2Issue3Component,
     ArchiveComponent,
     PublicationpoliciesComponent
 
