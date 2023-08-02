@@ -20,9 +20,6 @@ import { JournalInfoComponent } from './journal-info/journal-info.component';
 import { JournalOrderComponent } from './journal-order/journal-order.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AbstractingComponent } from './abstracting/abstracting.component';
-import { Vol1Issue2Component } from './vol1-issue2/vol1-issue2.component';
-import { Vol1Issue3Component } from './vol1-issue3/vol1-issue3.component';
-import { Vol1Issue4Component } from './vol1-issue4/vol1-issue4.component';
 import { ManagementComponent } from './management/management.component';
 import { AdvisoryComponent } from './advisory/advisory.component';
 import { AdvisoryeditorialComponent } from './advisoryeditorial/advisoryeditorial.component';
@@ -31,12 +28,6 @@ import { ConstructionComponent } from './construction/construction.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsComponent } from './terms/terms.component';
 import { ContactComponent } from './contact/contact.component';
-import { Vol2Issue1Component } from './vol2-issue1/vol2-issue1.component';
-import { Vol2Issue2Component } from './vol2-issue2/vol2-issue2.component';
-import { Vol2Issue3Component } from './vol2-issue3/vol2-issue3.component';
-import { Vol2Issue4Component } from './vol2-issue4/vol2-issue4.component';
-import { Vol3Issue1Component } from './vol3-issue1/vol3-issue1.component';
-import { Vol3Issue2Component } from './vol3-issue2/vol3-issue2.component';
 import { AboutComponent } from './about/about.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
@@ -101,13 +92,6 @@ const routes: Routes = [
   { path: 'order', component: JournalOrderComponent },
   { path: 'sidenav', component: SidenavComponent },
   { path: 'abstracting', component: AbstractingComponent },
-  { path: 'vol1_issue2', component: Vol1Issue2Component },
-  { path: 'vol1_issue3', component: Vol1Issue3Component },
-  { path: 'vol1_issue4', component: Vol1Issue4Component },
-  { path: 'vol2_issue1', component: Vol2Issue1Component },
-  { path: 'vol2_issue4', component: Vol2Issue4Component },
-  { path: 'vol3_issue1', component: Vol3Issue1Component },
-  { path: 'vol3_issue2', component: Vol3Issue2Component },
   { path: 'management', component: ManagementComponent },
   { path: 'advisory', component: AdvisoryComponent },
   { path: 'advisoryeditorial', component: AdvisoryeditorialComponent },
@@ -116,14 +100,9 @@ const routes: Routes = [
   { path: 'privacypolicy', component: PrivacypolicyComponent },
   { path: 'terms', component: TermsComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'vol2_issue2', component: Vol2Issue2Component },
-  { path: 'vol2_issue3', component: Vol2Issue3Component },
   { path: 'about', component: AboutComponent },
   { path: "archive", component: ArchiveComponent },
   { path: 'publicationpolicies', component: PublicationpoliciesComponent }
-
-
-
 
 ];
 

@@ -12,42 +12,42 @@
               <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
                 <!-- use a disabled button to provide padding for tree leaf -->
                 <button mat-icon-button disabled></button>
-                <a routerLink="/articles" *ngIf="node.name=='Volume 1, Issue 1'"><span  
+                <a routerLink="/articles" [queryParams]="{vol_issue:1.1}" *ngIf="node.name=='Volume 1, Issue 1'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                   
-                  <a routerLink="/vol1_issue2" *ngIf="node.name=='Volume 1, Issue 2'">
+                  <a routerLink="/articles" [queryParams]="{vol_issue:1.2}" *ngIf="node.name=='Volume 1, Issue 2'">
                     <span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
                   </a>
 
-                  <a routerLink="/vol1_issue3" *ngIf="node.name=='Volume 1, Issue 3'">
+                  <a routerLink="/articles" [queryParams]="{vol_issue:1.3}" *ngIf="node.name=='Volume 1, Issue 3'">
                     <span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
                   </a>
 
-                  <a routerLink="/vol1_issue4" *ngIf="node.name=='Volume 1, Issue 4'">
+                  <a routerLink="/articles" [queryParams]="{vol_issue:1.4}" *ngIf="node.name=='Volume 1, Issue 4'">
                     <span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span>
                   </a>
 
                   <!-- added volume2 2022 -->
-                  <a routerLink="/vol2_issue1" *ngIf="node.name=='Volume 2, Issue 1'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:2.1}" *ngIf="node.name=='Volume 2, Issue 1'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                    
-                  <a routerLink="/vol2_issue2" *ngIf="node.name=='Volume 2, Issue 2'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:2.2}" *ngIf="node.name=='Volume 2, Issue 2'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                     
-                  <a routerLink="/vol2_issue3" *ngIf="node.name=='Volume 2, Issue 3'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:2.3}" *ngIf="node.name=='Volume 2, Issue 3'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
 
-                  <a routerLink="/vol2_issue4" *ngIf="node.name=='Volume 2, Issue 4'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:2.4}" *ngIf="node.name=='Volume 2, Issue 4'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
 
                   <!-- added volume3 2023 -->
-                  <a routerLink="/vol3_issue1" *ngIf="node.name=='Volume 3, Issue 1'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:3.1}" *ngIf="node.name=='Volume 3, Issue 1'"><span  
                   style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                   
-                  <a routerLink="/vol3_issue2" *ngIf="node.name=='Volume 3, Issue 2'"><span  
+                  <a routerLink="/articles" [queryParams]="{vol_issue:3.2}" *ngIf="node.name=='Volume 3, Issue 2'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
 
               </mat-tree-node>

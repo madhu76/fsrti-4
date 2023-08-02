@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { HttpHeaders } from '@angular/common/http';
+import { DownloadFileService } from '../Services/download-file.service';
 interface FoodNode {
   name: string;
   children?: FoodNode[];
@@ -32,12 +34,14 @@ export class ArticlesComponent implements OnInit {
   original = "Original Research";
   isLoading = true;
   articles = [];
+  vol_issue = '';
   select: any;
   Data: any = {};
   mostView = [];
   permission: string = "";
 
-  constructor(private apiData: ApiDataService, public auth: AuthService, public router: Router, private activatedRoute: ActivatedRoute) { this.dataSource.data = TREE_DATA; }
+  constructor(private apiData: ApiDataService, public auth: AuthService,
+    public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService) { this.dataSource.data = TREE_DATA; }
   private _transformer = (node: FoodNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -57,8 +61,10 @@ export class ArticlesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.vol_issue = params['vol_issue'];
+    });
     this.getData();
-
     this.activatedRoute.queryParams.subscribe(params => {
       const itemId = params['item_id'];
       console.log("item id = ", itemId);
@@ -91,31 +97,6 @@ export class ArticlesComponent implements OnInit {
 
       })
   }
-
-
-  countDownloads() {
-    // this.apiData.getData(`/author/articles/${fileurl}`)
-    // console.log(e.target.parentElement,item.fileUrl);
-    // e.target.parentElement.href=item.fileUrl;
-
-    console.log("downloding mthod");
-    this.activatedRoute.queryParams.subscribe(params => {
-      const itemId = params['item_id'];
-      this.apiData.getData(`/author/downloads/${itemId}`).subscribe();
-    })
-  }
-
-  password() {
-    var password = prompt("Please enter the password");
-    if (password === "fsrti@23") {
-      document.getElementById('downloadpass').click();
-    }
-    else {
-      alert("Password incorrect");
-    }
-  }
-
-
 }
 
 
