@@ -12,7 +12,7 @@
                     <div class="container pb-2 ">
                         <!-- <p class="mt-3" style="font-size: 30px;"><b> All Articles</b></p>  -->
                         <br>
-                        <div style="background-color: #3f51b5; padding:1%; color: white;"><b style="align-items: center;">Volume 1, Issue 1, January 2021</b>
+                        <div style="background-color: #3f51b5; padding:1%; color: white;"><b style="align-items: center;">{{mappings[vol_issue]["Name"]}}</b>
                             <b style="margin-left: 55%;">ISSN: 2583-3324</b>
                         </div>
                         <br>
@@ -27,18 +27,20 @@
                                     <div class="card-body">
 
                                         <p class="card-text" style="text-align: justify;">
-
+                                            <b><a href="{{mappings[vol_issue]['Contents']}}"
+                                                target="_blank" download style="float: right;"><i
+                                                    class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp;Download</a> </b>
                                         </p>
                                     </div>
                             </div>
                         </div>
 
                         <div *ngIf="!isLoading" class="row justify-content-center">
-                            <div class="card col-lg-12 text-dark bg-light md-1 mt-1 mb-3">
+                            <div *ngIf="vol_issue==='1.1' || vol_issue=='3.2'" class="card col-lg-12 text-dark bg-light md-1 mt-1 mb-3">
                                 <a [routerLink]="['/article']" [queryParams]="{item_id:2021001001}">
                                     <p id="editorial"><b>A. Editorial</b></p>
                                 </a>
-                                <div class="card-body">
+                                <div *ngIf="vol_issue==='1.1'" class="card-body">
                                     <div class="card-text" style="text-align: justify;">
                                         <p class="card-title">V.Sree Hari Rao and M.V. Altaisky</p>
                                         <p class="card-title">J. Innovation Sciences and Sustainable Technologies,1(1)(2021), 1-2.
@@ -50,12 +52,25 @@
                                     <b><a id="downloadpass" href="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf" target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
                                 </div>
+
+                                <div *ngIf="vol_issue==='3.2'" class="card-body">
+                                    <div class="card-text" style="text-align: justify;">
+                                        <p class="card-title">Series Editors</p>
+                                        <p class="card-title">J. Innovation Sciences and Sustainable
+                                            Technologies,3(2)(2023),
+                                            51.
+                                        </p>
+                                    </div>
+                                    <b><a href="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf"
+                                            target="_blank" download style="float: right;"><i
+                                                class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="!isLoading" class="row justify-content-center">
-                            <div *ngFor="let item of articles ; let i = index" class="card text-dark bg-light md-1 mt-1 mb-3">
+                            <div *ngFor="let item of currArticles ; let i = index" class="card text-dark bg-light md-1 mt-1 mb-3">
 
-                                <div *ngIf="item.vol_issue==vol_issue">
+                                <div>
                                     <div class="card-header">
 
                                         <span class="bg-warning tag" *ngIf="item.research==original">

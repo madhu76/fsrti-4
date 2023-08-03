@@ -4,7 +4,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
-
+import mappings from '../common/vol_issue_to_props_mapping'
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { HttpHeaders } from '@angular/common/http';
 import { DownloadFileService } from '../Services/download-file.service';
@@ -39,9 +39,13 @@ export class ArticlesComponent implements OnInit {
   Data: any = {};
   mostView = [];
   permission: string = "";
+  mappings:any = {};
+  currArticles:any = [];
 
   constructor(private apiData: ApiDataService, public auth: AuthService,
-    public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService) { this.dataSource.data = TREE_DATA; }
+    public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService) { this.dataSource.data = TREE_DATA;
+    this.mappings = mappings;
+    }
   private _transformer = (node: FoodNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -61,13 +65,10 @@ export class ArticlesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.vol_issue = params['vol_issue'];
-    });
     this.getData();
+
     this.activatedRoute.queryParams.subscribe(params => {
       const itemId = params['item_id'];
-      console.log("item id = ", itemId);
       this.apiData.getData(`/author/articles/${itemId}`)
         .subscribe((res: any) => {
           this.select = JSON.parse(res);
@@ -82,12 +83,14 @@ export class ArticlesComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
   showShortDesciption = true;
   getData() {
-    this.apiData.getData('/author/articles')
+     this.apiData.getData('/author/articles')
       .subscribe((result: any) => {
         this.articles = result;
-        console.log(this.articles);
         this.isLoading = false;
-
+        this.activatedRoute.queryParams.subscribe(params => {
+          this.vol_issue = params['vol_issue'];
+          this.currArticles = this.articles.filter(article => article.vol_issue === this.vol_issue);
+        }); 
         this.apiData.getData('/author/views')
           .subscribe((result: any) => {
             this.mostView = result;
