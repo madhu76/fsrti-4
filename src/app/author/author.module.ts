@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { AuthorRoutingModule } from './author-routing.module';
 import { AuthorMenuComponent } from './author-menu/author-menu.component';
 import { AuthorComponent } from './author.component';
-import { NewSubmissionComponent } from './new-submission/new-submission.component';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {MatStepperModule } from '@angular/material/stepper';
@@ -26,7 +25,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 
 
 @NgModule({
-  declarations: [AuthorMenuComponent, AuthorComponent, NewSubmissionComponent],
+  declarations: [AuthorMenuComponent, AuthorComponent],
   imports: [
     CommonModule,
     AuthorRoutingModule,

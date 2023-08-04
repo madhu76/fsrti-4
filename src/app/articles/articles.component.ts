@@ -41,6 +41,7 @@ export class ArticlesComponent implements OnInit {
   permission: string = "";
   mappings:any = {};
   currArticles:any = [];
+  isEditorialIssue:boolean = false; 
 
   constructor(private apiData: ApiDataService, public auth: AuthService,
     public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService) { this.dataSource.data = TREE_DATA;
@@ -90,12 +91,11 @@ export class ArticlesComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(params => {
           this.vol_issue = params['vol_issue'];
           this.currArticles = this.articles.filter(article => article.vol_issue === this.vol_issue);
+          this.isEditorialIssue = this.vol_issue==='1.1' || this.vol_issue=='3.2'
         }); 
         this.apiData.getData('/author/views')
           .subscribe((result: any) => {
             this.mostView = result;
-            console.log(this.articles);
-
           })
 
       })

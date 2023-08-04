@@ -39,25 +39,20 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a mat-button class="nav-link" routerLink="/contact">
-          Contact Us
+          Contact
         </a>
             </li>
             <li class="nav-item active">
-                <a mat-raised-button class="nav-link" routerLink="login" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!authService.isAuthenticated">
-          Login <i class="fas fa-sign-in-alt"></i>
-        </a>
+                <div  id="googleLoginButton">
+                    <!-- This will be placeholder where button will be injected through js -->
+                </div>
+
             </li>
             <li class="nav-item active">
                 <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="authService.isAuthenticated">
-
-                    <i class="fas fa-user-tie"> </i> &nbsp; <span style="color:blue;">{{authService.getUserName}}</span>
+                     Hello {{user.name}}!
                 </a>
-            </li>
-            <li class="nav-item active">
-                <a mat-raised-button class="nav-link" routerLink="signup/pre-registration" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="!authService.isAuthenticated">
-          Register <i class="fas fa-sign-in-alt"></i>
-        </a>
-            </li>
+            </li>           
             <li class="nav-item active">
                 <a mat-raised-button class="nav-link" routerLink="" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="authService.isAuthenticated" (click)="authService.logout()">
           logout <i class="fas fa-sign-in-alt"></i>

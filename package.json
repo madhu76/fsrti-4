@@ -1,7 +1,8 @@
 {
   "name": "eps",
   "version": "0.0.0",
-  "scripts": {"ng": "ng",
+  "scripts": {
+    "ng": "ng",
     "start": "node server.js",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider && ng build",
     "test": "ng test",
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
+    "@types/google-one-tap": "^1.2.2",
     "angular": "^1.8.2",
     "angular-bootstrap-md": "^9.4.0",
     "angular2-flash-messages": "^3.0.1",
