@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
+
 
 namespace JISST.IpAllowlist
 {
@@ -29,6 +31,18 @@ namespace JISST.IpAllowlist
     public List<string> Volumes { get; set; }
   }
 
+  public class EmailAddressConfig
+  {
+    [BsonElement("Name")]
+    public string Name { get; set; }
+
+    [BsonElement("Volume")]
+    public string Volume { get; set; }
+
+    [BsonElement("EmailIds")]
+    public List<string> EmailIds { get; set; }
+  }
+
   public class AllowedIpRangeDocument
   {
     [BsonId]
@@ -37,6 +51,16 @@ namespace JISST.IpAllowlist
 
     [BsonElement("AllowList")]
     public List<IpRange> AllowList { get; set; }
+  }
+
+  public class AllowedEmailAddressesDocument
+  {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
+
+    [BsonElement("AllowList")]
+    public List<EmailAddressConfig> AllowList { get; set; }
   }
 
   public static class GetPdfUrl
@@ -57,31 +81,23 @@ namespace JISST.IpAllowlist
       // Create a new client and connect to the server
       var client = new MongoClient(settings);
 
-      var ipRangesDocument = await client.GetDatabase("eps").GetCollection<AllowedIpRangeDocument>("AllowedIpAddresses").Find(Builders<AllowedIpRangeDocument>.Filter.Empty).ToListAsync();
+      var allowedIPRanges = await GetAllowedIpRanges(log, client);
 
-      var ipRanges = ipRangesDocument.FirstOrDefault().AllowList;
-
-      List<(IPAddress, IPAddress, List<string>)> allowedIPRanges;
-      // Convert to IP ranges
-      try
-      {
-        allowedIPRanges = ipRanges.Select(x => (IPAddress.Parse(x.IpRangeStart), IPAddress.Parse(x.IpRangeEnd), x.Volumes)).ToList();
-      }
-      catch(Exception e)
-      {
-        log.LogError(e.ToString());
-        throw;
-      }
       // Get the request IP
       var requestIP = IPAddress.Parse(req.HttpContext.Connection.RemoteIpAddress.ToString());
 
       (IPAddress, IPAddress, List<string>) allowedIpConfig;
-      // Check if the IP is within any allowed range
-      if (!IsIPInAllowedRanges(requestIP, allowedIPRanges, out allowedIpConfig))
-      {
-        return new BadRequestObjectResult($"{requestIP} is not allowed");
-      }
 
+      var allowUsingIp = IsIPInAllowedRanges(requestIP, allowedIPRanges, out allowedIpConfig);
+
+      // Check if the IP is within any allowed range
+      if (!allowUsingIp)
+      {
+        if (string.IsNullOrEmpty(req.Headers["AccessToken"].ToString()))
+        {
+          return new BadRequestObjectResult($"{requestIP} is not allowed. Please login if you have individual access.");
+        }
+      }
       
       // Send a ping to confirm a successful connection
       string fileUrl = string.Empty;
@@ -92,9 +108,14 @@ namespace JISST.IpAllowlist
 
         var volume = result.FirstOrDefault()["vol_issue"].ToString().Split('.').First();
 
-        if (allowedIpConfig.Item3 != null && !allowedIpConfig.Item3.Contains(volume))
+        if (allowedIpConfig.Item3 == null || (allowedIpConfig.Item3 != null && !allowedIpConfig.Item3.Contains(volume)))
         {
-          return new BadRequestObjectResult($"{requestIP} is not allowed for this volume");
+          var allowedEmailAddresses = await GetAllowedEmailAddresses(log, client);
+          var requestEmail = await GetRequestEmail(req);
+          if(!IsEmailInAllowedList(requestEmail, allowedEmailAddresses,volume))
+          {
+            return new BadRequestObjectResult($"IP:{requestIP} and {requestEmail} is not allowed for this volume");
+          }
         }
 
         fileUrl = result.FirstOrDefault()["fileUrl"].ToString();
@@ -113,6 +134,72 @@ namespace JISST.IpAllowlist
 
       // return a response or call your Logic App, etc.
       return new OkObjectResult(fileUrl);
+    }
+
+    private static bool IsEmailInAllowedList(string requestEmail, List<(string, List<string>)> allowedEmailAddresses, string volume)
+    {
+      var masterListEmails = allowedEmailAddresses.FirstOrDefault((emailEmtry) => emailEmtry.Item1 == "*").Item2;
+      if(masterListEmails != null && masterListEmails.Contains(requestEmail))
+      {
+        return true;
+      }
+
+      var emailIdsForTheVolume = allowedEmailAddresses.FirstOrDefault((emailEmtry) => emailEmtry.Item1 == volume).Item2;
+      if(emailIdsForTheVolume == null) { return false; }
+      return emailIdsForTheVolume.Contains(requestEmail);
+    }
+
+    private static async Task<string> GetRequestEmail(HttpRequest req)
+    {
+      var payload = await GoogleJsonWebSignature.ValidateAsync(req.Headers["AccessToken"].ToString(), new GoogleJsonWebSignature.ValidationSettings()
+      {
+        Audience = null
+      });
+
+      var requestEmail = payload.Email;
+      return requestEmail;
+    }
+
+    private static async Task<List<(string, List<string>)>> GetAllowedEmailAddresses(ILogger log, MongoClient client)
+    {
+      var emailIdsDocument = await client.GetDatabase("eps").GetCollection<AllowedEmailAddressesDocument>("AllowedEmailAddresses").Find(Builders<AllowedEmailAddressesDocument>.Filter.Empty).ToListAsync();
+
+      var emailAddresses= emailIdsDocument.FirstOrDefault().AllowList;
+
+      List<(string, List<string>)> allowedEmailIds;
+      // Convert to IP ranges
+      try
+      {
+        allowedEmailIds = emailAddresses.Select(x => (x.Volume, x.EmailIds)).ToList();
+      }
+      catch (Exception e)
+      {
+        log.LogError(e.ToString());
+        throw;
+      }
+
+      return allowedEmailIds;
+    }
+
+    private static async Task<List<(IPAddress, IPAddress, List<string>)>> GetAllowedIpRanges(ILogger log, MongoClient client)
+    {
+      var ipRangesDocument = await client.GetDatabase("eps").GetCollection<AllowedIpRangeDocument>("AllowedIpAddresses").Find(Builders<AllowedIpRangeDocument>.Filter.Empty).ToListAsync();
+
+      var ipRanges = ipRangesDocument.FirstOrDefault().AllowList;
+
+      List<(IPAddress, IPAddress, List<string>)> allowedIPRanges;
+      // Convert to IP ranges
+      try
+      {
+        allowedIPRanges = ipRanges.Select(x => (IPAddress.Parse(x.IpRangeStart), IPAddress.Parse(x.IpRangeEnd), x.Volumes)).ToList();
+      }
+      catch (Exception e)
+      {
+        log.LogError(e.ToString());
+        throw;
+      }
+
+      return allowedIPRanges;
     }
 
     public static bool IsIPInAllowedRanges(IPAddress requestIP, List<(IPAddress, IPAddress, List<string>)> allowedIPRanges, out (IPAddress,IPAddress,List<string>) allowedIpConfig )
