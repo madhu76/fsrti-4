@@ -14,7 +14,7 @@ export class FileUrlService {
   getPdfUrlByItemId(item_id) {
     return this.http.get(this.url + '?item_id=' + item_id,{
       responseType : 'text', headers:{
-        'AccessToken': this.authService.accessToken
+        'AccessToken': this.authService.accessToken ?? ""
       }      
     });
   }
