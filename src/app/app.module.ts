@@ -28,21 +28,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTreeModule } from '@angular/material/tree';
-import { SignupComponent } from './signup/signup.component';
-import { RegistrationComponent } from './registration/registration.component';
 import { EditorialboardComponent } from './editorialboard/editorialboard.component';
-import { LoginComponent } from './login/login.component';
-import { ConfirmComponent } from './confirm/confirm.component';
-import { RegistrationCompleteComponent } from './registration-complete/registration-complete.component';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { ConfirmPasswordMatchDirective } from './customvalidators/confirm-pswrd-match.directive'
 
 import { AuthorModule } from './author/author.module';
-import { PdfComponent } from './pdf/pdf.component';
 
-import { EmailformComponent } from './emailform/emailform.component';
-import { ForgotpasswordemailComponent } from './forgotpasswordemail/forgotpasswordemail.component';
-import { NewpasswordComponent } from './newpassword/newpassword.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { AdminComponent } from './admin/admin.component';
 import { AuthorguidelineComponent } from './authorguideline/authorguideline.component';
@@ -66,11 +57,6 @@ import { TestSigninComponent } from './test-signin/test-signin/test-signin.compo
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,19 +64,9 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     JournalComponent,
     FooterComponent,
     NavComponent,
-    SignupComponent,
-    RegistrationComponent,
     EditorialboardComponent,
-    LoginComponent,
-    ConfirmComponent,
-    RegistrationCompleteComponent,
     ConfirmPasswordMatchDirective,
 
-    PdfComponent,
-
-    EmailformComponent,
-    ForgotpasswordemailComponent,
-    NewpasswordComponent,
     ArticlesComponent,
     AdminComponent,
     AuthorguidelineComponent,
@@ -145,7 +121,9 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     FlashMessagesModule.forRoot(),
     MatTreeModule
   ],
-  providers: [Meta],
+  providers: [
+    Meta
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

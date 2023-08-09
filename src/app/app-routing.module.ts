@@ -1,16 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { SignupComponent } from './signup/signup.component';
-import { RegistrationComponent } from './registration/registration.component';
 import { EditorialboardComponent } from './editorialboard/editorialboard.component';
-import { LoginComponent } from './login/login.component';
-import { ConfirmComponent } from './confirm/confirm.component';
-import { RegistrationCompleteComponent } from './registration-complete/registration-complete.component';
-import { PdfComponent } from './pdf/pdf.component';
-import { EmailformComponent } from './emailform/emailform.component';
-import { ForgotpasswordemailComponent } from './forgotpasswordemail/forgotpasswordemail.component';
-import { NewpasswordComponent } from './newpassword/newpassword.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { AdminComponent } from './admin/admin.component';
 import { AuthorguidelineComponent } from './authorguideline/authorguideline.component';
@@ -44,34 +35,8 @@ const routes: Routes = [
     component: TestSigninComponent
   },
   {
-    path: 'pdf',
-    component: PdfComponent
-  },
-  {
     path: 'help',
     component: HomeComponent
-  },
-
-  {
-    path: 'signup',
-    children: [
-      {
-        path: 'pre-registration',
-        component: SignupComponent
-      },
-      {
-        path: 'registration',
-        component: RegistrationComponent
-      },
-      {
-        path: 'confirm',
-        component: ConfirmComponent
-      },
-      {
-        path: 'complete',
-        component: RegistrationCompleteComponent
-      }
-    ]
   },
   {
     path: 'author',
@@ -79,10 +44,6 @@ const routes: Routes = [
 
   },
   { path: 'editorial', component: EditorialboardComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'emailform', component: EmailformComponent },
-  { path: 'forgotpasswordemail', component: ForgotpasswordemailComponent },
-  { path: 'resetpassword/:id', component: NewpasswordComponent },
   { path: 'articles', component: ArticlesComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'guideliness', component: AuthorguidelineComponent },
