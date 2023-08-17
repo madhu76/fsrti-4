@@ -38,6 +38,10 @@ const mappings = {
     "3.2": {
         "Name": "Volume 3, Issue 2, April 2023",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1690291225/Cont03-02_afmceh.pdf"
+    },
+    "3.3": {
+        "Name": "Volume 3, Issue 3, July 2023",
+        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1690291225/Cont03-02_afmceh.pdf"
     }
 }
 
