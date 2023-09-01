@@ -42,6 +42,10 @@ const mappings = {
     "3.3": {
         "Name": "Volume 3, Issue 3, July 2023",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1693574655/Cont03-03_aqnz1l.pdf"
+    },
+    "3.4": {
+        "Name": "Volume 3, Issue 4, October 2023",
+        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1693574655/Cont03-03_aqnz1l.pdf"
     }
 }
 
