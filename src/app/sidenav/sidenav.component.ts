@@ -35,7 +35,15 @@ const TREE_DATA: FoodNode[] = [
       {name: 'Volume 3, Issue 4'}
     ]
   }
-
+  {
+    name: 'Special Issues',
+    children: [
+      {name: 'Issue 1'},
+      // {name: 'Volume 3, Issue 2'},
+      // {name: 'Volume 3, Issue 3'},
+      // {name: 'Volume 3, Issue 4'}
+    ]
+  }
 ];
 
   interface ExampleFlatNode {
