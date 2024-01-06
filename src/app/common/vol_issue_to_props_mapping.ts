@@ -48,7 +48,11 @@ const mappings = {
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1703322699/Cont_V3_4_sxf0vp.pdf"
     },
     "Special Issues": {
-        "Name": "January 2024",
+        "Name": "Published",
+        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
+    },
+    "Special Issues": {
+        "Name": "Fractional Calculus: Call for Papers",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
     }
 }
