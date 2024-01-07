@@ -52,8 +52,8 @@ const mappings = {
     //     "Contents": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
     // },
     "Special Issues": {
-        "Name": "Fractional Calculus: Call for Papers",
-        "Focus Theme - Advances in Fractional Calculus - Theory, Models and Applications": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
+        "Name": "Fractional Calculus",
+        "Call for Papers": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
     }
 }
 
