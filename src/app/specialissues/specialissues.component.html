@@ -1,0 +1,35 @@
+<div class="container"> <br><br>
+    <div class="row">
+
+        <div class="col-lg-3 col-md-3 col-sm-12" style="display: flex;justify-content: center;">
+            <app-sidenav></app-sidenav>
+        </div>
+        <div *ngIf="displayedIssues.length > 0; else noData" class="col-lg-9 col-md-9 col-sm-12 description mt-2 pl-5 ">
+            <h3>Status: <span class="badge badge-success" *ngIf="volIssue === 'Open'">Open</span>
+                <span class="badge badge-success" *ngIf="volIssue === 'Published'">Published</span>
+            </h3>
+            <table class="table table-striped table-bordered table-hover" >
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Submission Deadline</th>
+                        <th>Editors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let issue of displayedIssues">
+                        <td><a [href]="issue.File" target="_blank">{{ issue.Title }}</a></td>
+                        <td>{{ issue.SubmissionDeadLine }}</td>
+                        <td>{{ issue.Editors }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ng-template #noData>
+        <div class="alert alert-warning description" role="alert">
+          No issues to display.
+        </div>
+      </ng-template>
+
+</div>

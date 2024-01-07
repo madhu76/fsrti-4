@@ -46,14 +46,6 @@ const mappings = {
     "3.4": {
         "Name": "Volume 3, Issue 4, October 2023",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1703322699/Cont_V3_4_sxf0vp.pdf"
-    },
-    "Published": {
-        "Name": "Published",
-        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
-    },
-    "Open": {
-        "Name": "Fractional Calculus",
-        "Call for Papers": "https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf"
     }
 }
 

@@ -56,10 +56,10 @@
                   <a routerLink="/articles" [queryParams]="{vol_issue:3.4}" *ngIf="node.name=='Volume 3, Issue 4'"><span  
                     style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                  <!-- added Spl Issue 2024 -->
-                  <a routerLink="/articles" [queryParams]="{vol_issue: 'Published'}" *ngIf="node.name == 'Published'">
+                  <a routerLink="/specialissues" [queryParams]="{vol_issue: 'Published'}" *ngIf="node.name == 'Published'">
                   <span style="background-color: white; color: black; font-size: 17px; color: #ff7f50; font-weight: 1000;">{{ node.name }}</span></a>
 
-                  <a routerLink="/articles" [queryParams]="{vol_issue: 'Open'}" *ngIf="node.name == 'Open'"> <span 
+                  <a routerLink="/specialissues" [queryParams]="{vol_issue: 'Open'}" *ngIf="node.name == 'Open'"> <span 
                     style="background-color: white; color: black; font-size: 17px; color: #ff7f50; font-weight: 1000;">{{ node.name }}</span> </a>
 
                                     

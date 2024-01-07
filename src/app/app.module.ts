@@ -56,6 +56,7 @@ import { AboutComponent } from './about/about.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
+import { SpecialIssuesComponent } from './specialissues/specialissues.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { PublicationpoliciesComponent } from './publicationpolicies/publicationp
     ConfirmPasswordMatchDirective,
 
     ArticlesComponent,
+    SpecialIssuesComponent,
     AdminComponent,
     AuthorguidelineComponent,
     SubmissionComponent,

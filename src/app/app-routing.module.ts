@@ -23,6 +23,7 @@ import { AboutComponent } from './about/about.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
+import { SpecialIssuesComponent } from './specialissues/specialissues.component';
 
 
 const routes: Routes = [
@@ -45,6 +46,7 @@ const routes: Routes = [
   },
   { path: 'editorial', component: EditorialboardComponent },
   { path: 'articles', component: ArticlesComponent },
+  { path: 'specialissues', component: SpecialIssuesComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'guideliness', component: AuthorguidelineComponent },
   { path: 'submission', component: SubmissionComponent },
