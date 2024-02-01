@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class ApiDataService {
   // url='http://localhost:3000';
   //url='https://epsbackend.herokuapp.com';
-  url='https://jisst.vercel.app' 
+  url='https://jisst-backend.vercel.app' 
   constructor(private http:HttpClient) { }
 
   getData(route) {
