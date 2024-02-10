@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { EditorialboardComponent } from './editorialboard/editorialboard.component';
 import { ArticlesComponent } from './articles/articles.component';
-import { AdminComponent } from './admin/admin.component';
 import { AuthorguidelineComponent } from './authorguideline/authorguideline.component';
 import { SubmissionComponent } from './submission/submission.component';
 import { DisplayarticleComponent } from './displayarticle/displayarticle.component';
@@ -24,6 +23,7 @@ import { ArchiveComponent } from './archive/archive.component';
 import { TestSigninComponent } from './test-signin/test-signin/test-signin.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 import { SpecialIssuesComponent } from './specialissues/specialissues.component';
+import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
 
 
 const routes: Routes = [
@@ -47,7 +47,6 @@ const routes: Routes = [
   { path: 'editorial', component: EditorialboardComponent },
   { path: 'articles', component: ArticlesComponent },
   { path: 'specialissues', component: SpecialIssuesComponent },
-  { path: 'admin', component: AdminComponent },
   { path: 'guideliness', component: AuthorguidelineComponent },
   { path: 'submission', component: SubmissionComponent },
   { path: "article", component: DisplayarticleComponent },
@@ -65,7 +64,8 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'about', component: AboutComponent },
   { path: "archive", component: ArchiveComponent },
-  { path: 'publicationpolicies', component: PublicationpoliciesComponent }
+  { path: 'publicationpolicies', component: PublicationpoliciesComponent },
+  {path:'my-submissions',component:MySubmissionsComponent}
 
 ];
 

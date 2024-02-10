@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiDataService } from '../Services/api-data.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../Services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import mappings from '../common/vol_issue_to_props_mapping'

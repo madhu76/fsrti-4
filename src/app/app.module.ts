@@ -35,7 +35,6 @@ import { ConfirmPasswordMatchDirective } from './customvalidators/confirm-pswrd-
 import { AuthorModule } from './author/author.module';
 
 import { ArticlesComponent } from './articles/articles.component';
-import { AdminComponent } from './admin/admin.component';
 import { AuthorguidelineComponent } from './authorguideline/authorguideline.component';
 import { SubmissionComponent } from './submission/submission.component';
 
@@ -57,6 +56,7 @@ import { TestSigninComponent } from './test-signin/test-signin/test-signin.compo
 import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 import { SpecialIssuesComponent } from './specialissues/specialissues.component';
+import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
 
 @NgModule({
   declarations: [
@@ -67,10 +67,9 @@ import { SpecialIssuesComponent } from './specialissues/specialissues.component'
     NavComponent,
     EditorialboardComponent,
     ConfirmPasswordMatchDirective,
-
+    MySubmissionsComponent,
     ArticlesComponent,
     SpecialIssuesComponent,
-    AdminComponent,
     AuthorguidelineComponent,
     SubmissionComponent,
     DisplayarticleComponent,

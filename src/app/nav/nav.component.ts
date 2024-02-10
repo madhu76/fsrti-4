@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import {AuthService} from '../auth.service';
+import {AuthService} from '../Services/auth.service';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-nav',

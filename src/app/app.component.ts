@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { CredentialResponse, PromptMomentNotification } from 'google-one-tap';
-import { AuthService } from './auth.service';
+import { AuthService } from './Services/auth.service';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent {
   title = 'EPS';
-  constructor(private authService:AuthService){}
+  constructor(private authService:AuthService, private ngZone: NgZone){}
   ngOnInit() {
     // @ts-ignore
     window.onGoogleLibraryLoad = () => {
@@ -19,7 +19,7 @@ export class AppComponent {
       // @ts-ignore
       google.accounts.id.initialize({
         // Ref: https://developers.google.com/identity/gsi/web/reference/js-reference#IdConfiguration
-        client_id: '214685469754-rjtln9aho6rpbs22gkg4fjqsvjck4cvp.apps.googleusercontent.com',
+        client_id: '1065141553028-db2mo9v7a9g9q2a9skqu3jsnf068ovm8.apps.googleusercontent.com',
         callback: this.handleCredentialResponse.bind(this), // Whatever function you want to trigger...
         auto_select: true,
         cancel_on_tap_outside: false        
@@ -40,6 +40,8 @@ export class AppComponent {
   }
 
   handleCredentialResponse(response: CredentialResponse) {
-    this.authService.handleCredentialResponse(response);
+    this.ngZone.run(() => {
+      this.authService.handleCredentialResponse(response);
+    }); 
   }
 }

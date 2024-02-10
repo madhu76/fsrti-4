@@ -1,0 +1,18 @@
+/* Optional custom styles */
+.table td, .table th {
+    vertical-align: middle;
+  }
+  
+  .table thead th {
+    vertical-align: bottom;
+  }
+
+  
+  .container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+ .td{
+    resize: both;
+ }

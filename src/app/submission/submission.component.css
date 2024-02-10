@@ -1,52 +1,33 @@
+/* Custom CSS for Article Submission Page */
 
-.sidenav{
-    text-align: center;
-    padding: 20px;
-}
-.sidenav .btn{
-    background-color: #3f51b5;
-    color: white;
-    font-size: 20px;
-}
-
-
-.btn{
-    width: 250px; 
-    font-family: NexusSerif,Georgia,serif;
-    font-size: 16px; 
-    
-}
-.btn:focus{
-    box-shadow:none !important;
+.container {
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  padding: 15px;
+  /* Add some padding inside the container */
+  width: 100%;
+  /* Make sure it takes up to 100% of the flex container */
+  margin: auto;
+  /* Additional centering for older browsers */
 }
 
-#title{
-    letter-spacing: 1px;
-    font-size: 20px;
-    
-    font-weight: 600;
-}
-h1{
-    font-size: 28px;
-    letter-spacing: 2px;
-    font-weight: 800;
-    text-align: center;
-    color: #3f51b5;
+
+h2 {
+  color: #0056b3;
+  /* Bootstrap primary color */
 }
 
-.description{
-    font-family: NexusSerif,Georgia,serif;
-    text-align: justify;
-    font-size:20px;
- 
-    line-height: 25px;
-    
- }
- p{
-    font-size:20px;
- 
-    line-height: 25px;
- }
- #download{
-     align-items: center;
- }
+.form-label {
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #0056b3;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #004494;
+}

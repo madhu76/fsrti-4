@@ -1,0 +1,89 @@
+<div class="container m-5">
+    <!-- Show Login Error -->
+    <div *ngIf="showLoginError" class="alert alert-danger" role="alert">
+        You must be logged in to view the articles. Please log in and try again.
+    </div>
+
+    <!-- Show Error -->
+    <div *ngIf="showError" class="alert alert-danger" role="alert">
+        There was an error retrieving your articles. Please try again.
+    </div>
+    <!-- Add a refresh page button icon -->
+    <div *ngIf="showLoginError || showError" class="text-end mb-3">
+        <button class="btn btn-primary" (click)="onRefresh()">
+            Refresh
+        </button>
+    </div>
+    <div *ngIf="isLoading">
+        <p>...Loading</p>
+    </div>
+    <h2 *ngIf='!isAdmin' class="text-center mb-4">My Submissions</h2>
+    <h2 *ngIf='isAdmin' class="text-center mb-4">Manage Submissions</h2>
+
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Filter..." [(ngModel)]="filter"
+            (ngModelChange)="onFilterChange()">
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" (click)="onSort('id')">Id</th>
+                    <th scope="col" (click)="onSort('title')">Title</th>
+                    <th scope="col" (click)="onSort('authors')">Authors</th>
+                    <th scope="col" (click)="onSort('status')">Status</th>
+                    <!-- Additional headers for admin -->
+                    <th *ngIf="isAdmin" scope="col" (click)="onSort('submittedBy')">Submitted By</th>
+                    <th *ngIf="isAdmin" scope="col" (click)="onSort('abstract')">Abstract</th>
+                    <th *ngIf="isAdmin" scope="col" (click)="onSort('keywords')">Keywords</th>
+                    <th *ngIf="isAdmin" scope="col" (click)="onSort('articleUrl')">Article URL</th>
+                    <th *ngIf="isAdmin" scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="filteredSubmissions.length === 0">
+                    <td colspan="8" class="text-center">No submissions found</td>
+                </tr>
+                <tr *ngFor="let submission of filteredSubmissions">
+                    <td>{{ submission._id }}</td>
+                    <td>{{ submission.title }}</td>
+                    <td>{{ submission.authors }}</td>
+                    <td *ngIf="!isAdmin">{{ submission.status }}</td>
+                    <!-- Editable status field for admin -->
+                    <td  *ngIf="isAdmin">
+                        <select class="form-control" [(ngModel)]="submission.status">
+                            <option value="Submitted">Submitted</option>
+                            <option value="In Review">In Review</option>
+                            <option value="Waiting for Authors">Waiting for Authors</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </td>
+                    <!-- Additional columns for admin -->
+                    <td *ngIf="isAdmin">{{ submission.submittedBy }}</td>
+                    <td *ngIf="isAdmin">{{ submission.abstract }}</td>
+                    <td *ngIf="isAdmin">{{ submission.keywords }}</td>
+                    <td *ngIf="isAdmin">
+                        <a href="{{ submission.articleUrl }}" target="_blank">View Article</a>
+                    </td>
+                    <!-- Submit button for changes -->
+                    <td *ngIf="isAdmin">
+                        <button class="btn btn-success" (click)="onSubmit(submission)"
+                            [disabled]="submission.isLoading">
+                            Submit
+                        </button>
+                        <div *ngIf="submission.isLoading" class="spinner-border text-primary" role="status">
+                        </div>
+                        <div *ngIf="submission.updateStatus === 'success'" class="text-success">
+                            Success
+                        </div>
+                        <div *ngIf="submission.updateStatus === 'error'" class="text-danger">
+                            Error
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

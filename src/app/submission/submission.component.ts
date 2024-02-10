@@ -1,86 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
-import { ManuscriptService } from '../manuscript.service';
-
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
-const TREE_DATA: FoodNode[] = [
-  {
-    name: '2021',
-    children: [
-      { name: 'Volume 1, Issue 1' },
-
-    ]
-  }];
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
-
+import { Component } from '@angular/core';
+import { AuthService } from '../Services/auth.service'; // Adjust the path as necessary
+import { ApiDataService } from '../Services/api-data.service';
 
 @Component({
-  selector: 'app-submission',
+  selector: 'app-article-submission',
   templateUrl: './submission.component.html',
   styleUrls: ['./submission.component.css']
 })
-export class SubmissionComponent implements OnInit {
+export class SubmissionComponent {
+  showLoginError = false; // Tracks if the submit attempt was made without being logged in
+  showSuccess = false; // Tracks if the submit attempt was made without being logged in
+  submissionId = ''; // Tracks the ID of the submission, if successful
+  showError = false; // Tracks if there was an error during submission
+  constructor(private authService: AuthService, private articleSubmissionService: ApiDataService) { }
 
-  adminForm: FormGroup;
-  submitted = false;
-  upload: File;
-  articleData: any = {};
-  constructor(private data: ManuscriptService, private formBuilder: FormBuilder) { this.dataSource.data = TREE_DATA; }
-  get f() { return this.adminForm.controls; }
-  private _transformer = (node: FoodNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-    };
+  onSubmit(event: any) {
+    if (!this.authService.isAuthenticated) {
+      this.showLoginError = true;
+    } else {
+      this.showLoginError = false;
+      // Proceed with submission logic
+      event.preventDefault(); // Prevent the form from submitting in the traditional way
+      const formData: FormData = new FormData();
+      formData.append('title', event.target.articleTitle.value);
+      formData.append('authors', event.target.articleAuthors.value);
+      formData.append('abstract', event.target.articleAbstract.value);
+      formData.append('keywords', event.target.articleKeywords.value);
+      formData.append('file', event.target.articleFile.files[0]);
+
+      this.articleSubmissionService.submitArticle(formData).subscribe({
+        next: (response) => {
+          this.showError = false; 
+          this.showSuccess = true;
+          this.submissionId = response['submissionId'];
+        },
+        error: (error) => {
+          this.showError = true;
+        }
+      });
+    }
   }
-
-
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer, node => node.level, node => node.expandable, node => node.children);
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
-
-
-
-  ngOnInit(): void {
-    this.adminForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', Validators.required],
-      phoneno: ['', Validators.required],
-      articlename: ['', Validators.required],
-      authors: ['', Validators.required],
-//       aboutauthor: ['', Validators.required],
-      keywords: ['', Validators.required],
-      abstract: ['', Validators.required],
-      upload: ['', [Validators.required]],
-
-    })
-  }
-
-  submit() {
-    console.log('data ' + this.adminForm.value);
-    alert("Saved Successfully")
-    //this.manudata.image=this.file;
-    this.data.articleData(this.adminForm.value);
-    let formData = new FormData();
-    formData.append("test", this.upload);
-    console.log('file data  ' + formData);
-    this.data.articleFileData(formData);
-  }
-
 }
 
