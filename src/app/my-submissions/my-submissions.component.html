@@ -53,7 +53,15 @@
                     </td>
                     <td>{{ submission.submissionFor ? submission.submissionFor : "JISST" }}</td>
                     <!-- <td>{{ submission.authors }}</td> -->
-                    <td *ngIf="!isAdmin">{{ submission.status }}</td>
+                    <td *ngIf="!isAdmin">
+                        <select disabled class="form-control" [(ngModel)]="submission.status">
+                            <option value="Submitted">Submission Received</option>
+                            <option value="In Review">Under Review</option>
+                            <option value="Waiting for Authors">Under Revision</option>
+                            <option value="Approved">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </td>
                     <!-- Editable status field for admin -->
                     <td *ngIf="isAdmin">
                         <select class="form-control" [(ngModel)]="submission.status">
