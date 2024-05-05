@@ -2,7 +2,7 @@
         <h2>Article Submission Form</h2>
         <!-- My Submissions Button -->
         <span class="mb-3">
-            Already submitted? Go to <a routerLink="/my-submissions">My Submissions</a>
+            Already submitted? Go to <a routerLink="/my-submissions">Submissions</a>
 
         </span>
     
@@ -10,33 +10,56 @@
         <!-- Article Title -->
         <div class="mb-3">
             <label for="articleTitle" class="form-label">Article Title</label>
-            <input type="text" class="form-control" id="articleTitle" placeholder="Enter the title of your article">
+            <input type="text" class="form-control" id="articleTitle" placeholder="Enter the title of your article" required>
         </div>
+
+        <div class="mb-3">
+            <label for="submissionFor" class="form-label">Submission For</label>
+            <select class="form-control" id="submissionFor">
+                <option value="JISST">JISST</option>
+                <option value="SI on Dynamical Systems">SI on Dynamical Systems</option>
+                <option value="SI on Financial Engineering">SI on Financial Engineering</option>
+                <option value="SI on Fluid Mechanics">SI on Fluid Mechanics</option>
+                <option value="SI on Neural Networks">SI on Neural Networks</option>
+            </select>
+        </div>
+
+        <!-- Corresponsing Author -->
+        <div class="mb-3">
+            <label for="correspondingAuthorName" class="form-label">Corresponding Author Name</label>
+            <input type="text" class="form-control" id="correspondingAuthorName" placeholder="Corresponding Author Name" required>
+        </div>
+
 
         <!-- Authors -->
         <div class="mb-3">
-            <label for="articleAuthors" class="form-label">Author(s)</label>
-            <input type="text" class="form-control" id="articleAuthors" placeholder="Author names separated by commas">
+            <label for="articleAuthors" class="form-label">Other Author(s) Name(s)</label>
+            <input type="text" class="form-control" id="articleAuthors" placeholder="Author names separated by commas" required>
         </div>
+
+        <div class="mb-3">
+            <label for="articleAuthorEmails" class="form-label">Other Author(s) Email(s)</label>
+            <input type="text" class="form-control" id="articleAuthorEmails" placeholder="Author Email Ids separated by commas" required>
+        </div>        
 
         <!-- Abstract -->
         <div class="mb-3">
             <label for="articleAbstract" class="form-label">Abstract</label>
             <textarea class="form-control" id="articleAbstract" rows="3"
-                placeholder="Enter the abstract of your article"></textarea>
+                placeholder="Enter the abstract of your article" required></textarea>
         </div>
 
         <!-- Keywords -->
         <div class="mb-3">
             <label for="articleKeywords" class="form-label">Keywords</label>
             <input type="text" class="form-control" id="articleKeywords"
-                placeholder="Enter keywords separated by commas">
+                placeholder="Enter keywords separated by commas" required>
         </div>
 
         <!-- File Upload -->
         <div class="mb-3">
             <label for="articleFile" class="form-label">Upload Article</label>
-            <input class="form-control" type="file" id="articleFile">
+            <input class="form-control" type="file" id="articleFile" required>
         </div>
 
         <!-- Submission Button -->

@@ -106,7 +106,7 @@ public class ManuscriptEmailAddressConfig
       {
         if (string.IsNullOrEmpty(req.Headers["AccessToken"].ToString()))
         {
-          return new BadRequestObjectResult($"{requestIP} is not allowed. Please login if you have individual access.");
+          return new BadRequestObjectResult($"Your IP is not allowed. Please login/sign-up with google if you have individual access.");
         }
       }
       
@@ -125,7 +125,7 @@ public class ManuscriptEmailAddressConfig
           var requestEmail = await GetRequestEmail(req);
           if(!IsEmailInAllowedList(requestEmail, allowedEmailAddresses,volume))
           {
-            return new BadRequestObjectResult($"IP:{requestIP} and {requestEmail} is not allowed for this volume");
+            return new BadRequestObjectResult($"Your IP and {requestEmail} is not allowed for this volume");
           }
         }
 

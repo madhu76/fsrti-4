@@ -17,8 +17,8 @@
     <div *ngIf="isLoading">
         <p>...Loading</p>
     </div>
-    <h2 *ngIf='!isAdmin' class="text-center mb-4">My Submissions</h2>
-    <h2 *ngIf='isAdmin' class="text-center mb-4">Manage Submissions</h2>
+    <h2 *ngIf='!isAdmin' class="text-center mb-4">Submissions</h2>
+    <h2 *ngIf='isAdmin' class="text-center mb-4">Editorial Manager System</h2>
 
     <div class="mb-3">
         <input type="text" class="form-control" placeholder="Filter..." [(ngModel)]="filter"
@@ -29,15 +29,16 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" (click)="onSort('id')">Id</th>
+                    <th scope="col" (click)="onSort('id')">Manuscript No</th>
                     <th scope="col" (click)="onSort('title')">Title</th>
-                    <th scope="col" (click)="onSort('authors')">Authors</th>
+                    <!-- <th scope="col" (click)="onSort('authors')">Authors</th> -->
+                    <th scope="col" (click)="onSort('submissionFor')">Submission For</th>
                     <th scope="col" (click)="onSort('status')">Status</th>
                     <!-- Additional headers for admin -->
-                    <th *ngIf="isAdmin" scope="col" (click)="onSort('submittedBy')">Submitted By</th>
-                    <th *ngIf="isAdmin" scope="col" (click)="onSort('abstract')">Abstract</th>
-                    <th *ngIf="isAdmin" scope="col" (click)="onSort('keywords')">Keywords</th>
-                    <th *ngIf="isAdmin" scope="col" (click)="onSort('articleUrl')">Article URL</th>
+                    <th *ngIf="isAdmin" scope="col" (click)="onSort('submittedBy')">Corresponding Author</th>
+                    <!-- <th *ngIf="isAdmin" scope="col" (click)="onSort('abstract')">Abstract</th> -->
+                    <!-- <th *ngIf="isAdmin" scope="col" (click)="onSort('keywords')">Keywords</th> -->
+                    <!-- <th *ngIf="isAdmin" scope="col" (click)="onSort('articleUrl')">Article URL</th> -->
                     <th *ngIf="isAdmin" scope="col">Actions</th>
                 </tr>
             </thead>
@@ -47,26 +48,29 @@
                 </tr>
                 <tr *ngFor="let submission of filteredSubmissions">
                     <td>{{ submission._id }}</td>
-                    <td>{{ submission.title }}</td>
-                    <td>{{ submission.authors }}</td>
+                    <td>
+                        <a href="{{ submission.articleUrl }}" target="_blank">{{ submission.title }}</a>
+                    </td>
+                    <td>{{ submission.submissionFor ? submission.submissionFor : "JISST" }}</td>
+                    <!-- <td>{{ submission.authors }}</td> -->
                     <td *ngIf="!isAdmin">{{ submission.status }}</td>
                     <!-- Editable status field for admin -->
-                    <td  *ngIf="isAdmin">
+                    <td *ngIf="isAdmin">
                         <select class="form-control" [(ngModel)]="submission.status">
-                            <option value="Submitted">Submitted</option>
-                            <option value="In Review">In Review</option>
-                            <option value="Waiting for Authors">Waiting for Authors</option>
-                            <option value="Approved">Approved</option>
+                            <option value="Submitted">Submission Received</option>
+                            <option value="In Review">Under Review</option>
+                            <option value="Waiting for Authors">Under Revision</option>
+                            <option value="Approved">Accepted</option>
                             <option value="Rejected">Rejected</option>
                         </select>
                     </td>
                     <!-- Additional columns for admin -->
-                    <td *ngIf="isAdmin">{{ submission.submittedBy }}</td>
-                    <td *ngIf="isAdmin">{{ submission.abstract }}</td>
-                    <td *ngIf="isAdmin">{{ submission.keywords }}</td>
-                    <td *ngIf="isAdmin">
+                    <td *ngIf="isAdmin">{{ submission.correspondingAuthorName ? submission.correspondingAuthorName : "Not Available" }}</td>
+                    <!-- <td *ngIf="isAdmin">{{ submission.abstract }}</td> -->
+                    <!-- <td *ngIf="isAdmin">{{ submission.keywords }}</td> -->
+                    <!-- <td *ngIf="isAdmin">
                         <a href="{{ submission.articleUrl }}" target="_blank">View Article</a>
-                    </td>
+                    </td> -->
                     <!-- Submit button for changes -->
                     <td *ngIf="isAdmin">
                         <button class="btn btn-success" (click)="onSubmit(submission)"

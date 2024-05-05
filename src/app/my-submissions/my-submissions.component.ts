@@ -69,7 +69,9 @@ export class MySubmissionsComponent implements OnInit {
             this.showError = false;
             this.apiService.getData('/author/manuscript').subscribe({
                 next: (response: Submission[]) => {
-                    this.submissions = response['submissions'];
+                    this.submissions = response['submissions'].filter(submission =>
+                        submission.status !== 'Approved' && submission.status !== 'Rejected'
+                    );
                     this.isAdmin = response['isAdmin'];
                     this.filteredSubmissions = [...this.submissions];
                     this.isLoading = false;
@@ -102,10 +104,11 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     onFilterChange(): void {
-        this.filteredSubmissions = this.submissions.filter(submission =>
-            submission.title.toLowerCase().includes(this.filter.toLowerCase()) ||
-            submission.authors.toLowerCase().includes(this.filter.toLowerCase()) ||
-            submission.status.toLowerCase().includes(this.filter.toLowerCase())
-        );
+        this.filteredSubmissions = this.submissions.filter(submission => {
+            // Convert each submission object to a lowercase JSON string
+            const submissionString = JSON.stringify(submission).toLowerCase();
+            // Check if the stringified object includes the lowercase filter
+            return submissionString.includes(this.filter.toLowerCase());
+        });
     }
 }
