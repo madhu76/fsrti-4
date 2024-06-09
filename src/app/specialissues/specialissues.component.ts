@@ -16,7 +16,10 @@ export class SpecialIssuesComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.volIssue = params['vol_issue'];
       if (this.volIssue === 'Published' || this.volIssue === 'Open') {
-        this.displayedIssues = specialissues[this.volIssue];
+        // Sort based on submission deadline descending order
+        this.displayedIssues = specialissues[this.volIssue].sort((a, b) => {
+          return new Date(b.SubmissionDeadLine).getTime() - new Date(a.SubmissionDeadLine).getTime();
+        });
       }
     });
   }

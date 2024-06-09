@@ -91,7 +91,7 @@ export class ArticlesComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(params => {
           this.vol_issue = params['vol_issue'];
           this.currArticles = this.articles.filter(article => article.vol_issue === this.vol_issue);
-          this.isEditorialIssue = this.vol_issue==='1.1' || this.vol_issue=='3.2' || this.vol_issue==='3.3';
+          this.isEditorialIssue = this.vol_issue==='1.1' || this.vol_issue=='3.2' || this.vol_issue==='3.3' || this.vol_issue == '4.2';
         }); 
         this.apiData.getData('/author/views')
           .subscribe((result: any) => {
