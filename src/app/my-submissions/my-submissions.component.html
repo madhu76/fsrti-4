@@ -98,4 +98,49 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Archived Submissions Section -->
+    <div *ngIf="isAdmin" class="mt-5">
+        <h2 class="text-center mb-4">Archived Submissions</h2>
+        <button class="btn btn-secondary" (click)="archivedSubmissionsTableVisibility = !archivedSubmissionsTableVisibility">
+            > Archived Submissions
+        </button>
+        <div *ngIf="archivedSubmissionsTableVisibility">
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Manuscript No</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Submission For</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Corresponding Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="archivedSubmissions.length === 0">
+                            <td colspan="5" class="text-center">No archived submissions found</td>
+                        </tr>
+                        <tr *ngFor="let submission of archivedSubmissions">
+                            <td>{{ submission._id }}</td>
+                            <td>
+                                <a href="{{ submission.articleUrl }}" target="_blank">{{ submission.title }}</a>
+                            </td>
+                            <td>{{ submission.submissionFor ? submission.submissionFor : "JISST" }}</td>
+                            <td>
+                                <select disabled class="form-control" [(ngModel)]="submission.status">
+                                    <option value="Submitted">Submission Received</option>
+                                    <option value="In Review">Under Review</option>
+                                    <option value="Waiting for Authors">Under Revision</option>
+                                    <option value="Approved">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </td>
+                            <td>{{ submission.correspondingAuthorName ? submission.correspondingAuthorName : "Not Available" }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
