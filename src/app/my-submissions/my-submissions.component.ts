@@ -22,7 +22,9 @@ interface Submission {
 })
 export class MySubmissionsComponent implements OnInit {
     submissions: Submission[] = [];
+    archivedSubmissions: Submission[] = [];
     filteredSubmissions: Submission[] = [];
+    archivedSubmissionsTableVisibility = false;
     showLoginError = false;
     showError = false;
     isLoading = false;
@@ -71,6 +73,9 @@ export class MySubmissionsComponent implements OnInit {
                 next: (response: Submission[]) => {
                     this.submissions = response['submissions'].filter(submission =>
                         submission.status !== 'Approved' && submission.status !== 'Rejected'
+                    );
+                    this.archivedSubmissions = response['submissions'].filter(submission =>
+                        submission.status === 'Approved' || submission.status === 'Rejected'
                     );
                     this.isAdmin = response['isAdmin'];
                     this.filteredSubmissions = [...this.submissions];
