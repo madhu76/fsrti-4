@@ -18,6 +18,10 @@ export class SubmissionComponent {
     return regex.test(email.trim());
   }
   private validateEmails(emails) {
+    // If emails field is empty or whitespace, return false
+    if (!emails || !emails.trim()) {
+      return false;
+    }
     const emailArray = emails.split(',');
     for (let email of emailArray) {
       if (!this.validateEmail(email)) {
