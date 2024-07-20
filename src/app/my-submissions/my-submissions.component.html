@@ -34,6 +34,7 @@
                     <!-- <th scope="col" (click)="onSort('authors')">Authors</th> -->
                     <th scope="col" (click)="onSort('submissionFor')">Submission For</th>
                     <th scope="col" (click)="onSort('status')">Status</th>
+                    <th scope="col">Reviews</th>
                     <!-- Additional headers for admin -->
                     <th *ngIf="isAdmin" scope="col" (click)="onSort('submittedBy')">Corresponding Author</th>
                     <!-- <th *ngIf="isAdmin" scope="col" (click)="onSort('abstract')">Abstract</th> -->
@@ -49,31 +50,55 @@
                 <tr *ngFor="let submission of filteredSubmissions">
                     <td>{{ submission._id }}</td>
                     <td>
-                        <a href="{{ submission.articleUrl }}" target="_blank">{{ submission.title }}</a>
+                        <button class="btn btn-link p-0" (click)="openRevisionModal(submission)">
+                            {{ submission.title }}
+                        </button>
                     </td>
                     <td>{{ submission.submissionFor ? submission.submissionFor : "JISST" }}</td>
                     <!-- <td>{{ submission.authors }}</td> -->
                     <td *ngIf="!isAdmin">
                         <select disabled class="form-control" [(ngModel)]="submission.status">
-                            <option value="Submitted">Submission Received</option>
-                            <option value="In Review">Under Review</option>
-                            <option value="Waiting for Authors">Under Revision</option>
-                            <option value="Approved">Accepted</option>
+                            <option value="Submission Received">Submission Received</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Under Revision">Under Revision</option>
+                            <option value="Accepted">Accepted</option>
                             <option value="Rejected">Rejected</option>
                         </select>
+                        <!--If submission.status is Under Revision, provide option to openRevisionFileUploadModal -->
+
+                        <button *ngIf="submission.status === 'Under Revision'" class="btn btn-link p-0"
+                            (click)="openRevisionFileUploadModal(submission)">
+                            Upload Revision <div *ngIf="submission.isLoading" class="spinner-border text-primary" role="status">
+                            </div>
+                            <div *ngIf="submission.updateStatus === 'success'" class="text-success">
+                                Success
+                            </div>
+                            <div *ngIf="submission.updateStatus === 'error'" class="text-danger">
+                                Error
+                            </div>
+    
+                        </button>
+                        
                     </td>
                     <!-- Editable status field for admin -->
                     <td *ngIf="isAdmin">
-                        <select class="form-control" [(ngModel)]="submission.status">
-                            <option value="Submitted">Submission Received</option>
-                            <option value="In Review">Under Review</option>
-                            <option value="Waiting for Authors">Under Revision</option>
-                            <option value="Approved">Accepted</option>
+                        <select class="form-control" [(ngModel)]="submission.status"
+                            (change)="onStatusChange(submission)">
+                            <option value="Submission Received">Submission Received</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Under Revision">Under Revision</option>
+                            <option value="Accepted">Accepted</option>
                             <option value="Rejected">Rejected</option>
                         </select>
                     </td>
+                    <td>
+                        <button class="btn btn-link p-0" (click)="openReviewModal(submission)">
+                            View Reviews
+                        </button>
+                    </td>
                     <!-- Additional columns for admin -->
-                    <td *ngIf="isAdmin">{{ submission.correspondingAuthorName ? submission.correspondingAuthorName : "Not Available" }}</td>
+                    <td *ngIf="isAdmin">{{ submission.correspondingAuthorName ? submission.correspondingAuthorName :
+                        "Not Available" }}</td>
                     <!-- <td *ngIf="isAdmin">{{ submission.abstract }}</td> -->
                     <!-- <td *ngIf="isAdmin">{{ submission.keywords }}</td> -->
                     <!-- <td *ngIf="isAdmin">
@@ -102,7 +127,8 @@
     <!-- Archived Submissions Section -->
     <div *ngIf="isAdmin" class="mt-5">
         <h2 class="text-center mb-4">Archived Submissions</h2>
-        <button class="btn btn-secondary" (click)="archivedSubmissionsTableVisibility = !archivedSubmissionsTableVisibility">
+        <button class="btn btn-secondary"
+            (click)="archivedSubmissionsTableVisibility = !archivedSubmissionsTableVisibility">
             > Archived Submissions
         </button>
         <div *ngIf="archivedSubmissionsTableVisibility">
@@ -124,23 +150,93 @@
                         <tr *ngFor="let submission of archivedSubmissions">
                             <td>{{ submission._id }}</td>
                             <td>
-                                <a href="{{ submission.articleUrl }}" target="_blank">{{ submission.title }}</a>
+                                <button class="btn btn-link p-0" (click)="openRevisionModal(submission)">
+                                    {{ submission.title }}
+                                </button>
                             </td>
                             <td>{{ submission.submissionFor ? submission.submissionFor : "JISST" }}</td>
                             <td>
                                 <select disabled class="form-control" [(ngModel)]="submission.status">
-                                    <option value="Submitted">Submission Received</option>
-                                    <option value="In Review">Under Review</option>
-                                    <option value="Waiting for Authors">Under Revision</option>
-                                    <option value="Approved">Accepted</option>
+                                    <option value="Submission Received">Submission Received</option>
+                                    <option value="Under Review">Under Review</option>
+                                    <option value="Under Revision">Under Revision</option>
+                                    <option value="Accepted">Accepted</option>
                                     <option value="Rejected">Rejected</option>
                                 </select>
                             </td>
-                            <td>{{ submission.correspondingAuthorName ? submission.correspondingAuthorName : "Not Available" }}</td>
+                            <td>{{ submission.correspondingAuthorName ? submission.correspondingAuthorName : "Not
+                                Available" }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+
+    <!-- File Upload Modal -->
+    <ng-template #reviewsFileUploadModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title">Upload Review</h4>
+        </div>
+        <div class="modal-body">
+            <input type="file" (change)="onReviewFilesSelected($event)" multiple>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Close</button>
+            <button type="button" class="btn btn-primary" (click)="onUploadReviews()">Upload</button>
+        </div>
+    </ng-template>
+
+    <!-- File Upload Modal -->
+    <ng-template #revisionFileUploadModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title">Upload Revision</h4>
+        </div>
+        <div class="modal-body">
+            <input type="file" (change)="onRevisionFileSelected($event)">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Close</button>
+            <button type="button" class="btn btn-primary" (click)="onUploadRevision()">Upload</button>
+        </div>
+    </ng-template>
+
+    <!-- Modal Template -->
+    <ng-template #revisionModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title">{{ revisionSelectedSubmission.title }}</h4>
+        </div>
+        <div class="modal-body">
+            <p> <a [href]="revisionSelectedSubmission.articleUrl" target="_blank">Original Submission</a></p>
+            <div *ngIf="revisionSelectedSubmission.revisionUrls && revisionSelectedSubmission.revisionUrls.length">
+                <p *ngFor="let revisionUrl of revisionSelectedSubmission.revisionUrls; let i = index">
+                    <a [href]="revisionUrl" target="_blank">Revision {{ i + 1 }}</a>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+        </div>
+    </ng-template>
+
+    <ng-template #reviewModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title">Reviews</h4>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="reviewSelectedSubmission.reviewUrls && reviewSelectedSubmission.reviewUrls.length">
+                <p *ngFor="let reviewUrl of reviewSelectedSubmission.reviewUrls; let i = index">
+                    <a [href]="reviewUrl" target="_blank">Review {{ i + 1 }}</a>
+                </p>
+            </div>
+            <div *ngIf="!(reviewSelectedSubmission.reviewUrls && reviewSelectedSubmission.reviewUrls.length)">
+                No Reviews Yet
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+        </div>
+    </ng-template>
+
 </div>

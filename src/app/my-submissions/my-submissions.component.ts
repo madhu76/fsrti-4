@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from '../Services/auth.service';
 import { ApiDataService } from '../Services/api-data.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Submission {
-    _id: String,
+    _id: string,
     submittedBy: String,
     title: String,
     authors: String,
     abstract: String,
     keywords: String,
-    status: String,
+    status: string,
     articleUrl: String,
     isLoading: boolean,
-    updateStatus: String
+    updateStatus: String,
+    reviewUrls: String[],
+    revisionUrls: String[]
 }
 
 @Component({
@@ -21,7 +24,15 @@ interface Submission {
     styleUrls: ['./my-submissions.component.css']
 })
 export class MySubmissionsComponent implements OnInit {
+    @ViewChild('reviewsFileUploadModal') reviewsFileUploadModal: TemplateRef<any>;
+    @ViewChild('revisionFileUploadModal') revisionFileUploadModal: TemplateRef<any>;
+    @ViewChild('revisionModal') revisionModal: TemplateRef<any>;
+    @ViewChild('reviewModal') reviewModal: TemplateRef<any>;
+
     submissions: Submission[] = [];
+    changedSubmission: Submission | null = null;
+    reviewSelectedFiles: File[] = [];
+    revisionSelectedFile: File = null
     archivedSubmissions: Submission[] = [];
     filteredSubmissions: Submission[] = [];
     archivedSubmissionsTableVisibility = false;
@@ -32,7 +43,10 @@ export class MySubmissionsComponent implements OnInit {
     sortColumn: string = '';
     sortAscending: boolean = true;
     isAdmin: boolean = false;
-    constructor(private authService: AuthService, private apiService: ApiDataService) { }
+    reviewSelectedSubmission: Submission;
+    revisionSubmission: Submission;
+    revisionSelectedSubmission: Submission;
+    constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal) { }
 
     ngOnInit(): void {
         this.loadData();
@@ -115,5 +129,87 @@ export class MySubmissionsComponent implements OnInit {
             // Check if the stringified object includes the lowercase filter
             return submissionString.includes(this.filter.toLowerCase());
         });
+    }
+
+    onStatusChange(submission: Submission): void {
+        if (submission.status === 'Under Revision') {
+            this.changedSubmission = submission;
+            this.openReviewsFileUploadModal();
+        }
+    }
+
+    openReviewsFileUploadModal() {
+        this.modalService.open(this.reviewsFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    openRevisionFileUploadModal(submission: Submission): void {
+        this.revisionSubmission = submission;
+        this.modalService.open(this.revisionFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });        
+    }
+
+    openReviewModal(submission: Submission): void {
+        this.reviewSelectedSubmission = submission;
+        this.modalService.open(this.reviewModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    openRevisionModal(submission: Submission): void {
+        this.revisionSelectedSubmission = submission;
+        this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    onReviewFilesSelected(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (input.files) {
+            this.reviewSelectedFiles = Array.from(input.files);
+        }
+    }
+
+    onRevisionFileSelected(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (input.files) {
+            this.revisionSelectedFile = input.files[0];
+        }
+    }
+
+    onUploadReviews(): void {
+        if (this.changedSubmission) {
+            this.changedSubmission.isLoading = true;
+            this.apiService.updateSubmission(this.changedSubmission._id, this.changedSubmission.status,this.reviewSelectedFiles)
+                .subscribe({
+                    next: (result) => {
+                        this.changedSubmission.updateStatus = 'success';
+                        this.changedSubmission.isLoading = false;
+                        this.loadData();
+                        // Handle success, e.g., show success message
+                    },
+                    error: (error) => {
+                        this.changedSubmission.updateStatus = 'error';
+                        this.changedSubmission.isLoading = false;
+                        // Handle error, e.g., show error message
+                    }
+                });
+            this.modalService.dismissAll();
+        }
+    }
+
+    onUploadRevision(): void {
+        if (this.revisionSubmission) {
+            this.revisionSubmission.isLoading = true;
+            this.apiService.uploadFiles(this.revisionSubmission._id, this.revisionSubmission.submittedBy, this.revisionSelectedFile)
+                .subscribe({
+                    next: (result) => {
+                        this.revisionSubmission.updateStatus = 'success';
+                        this.revisionSubmission.isLoading = false;
+                        this.loadData();
+                        // Handle success, e.g., show success message
+                    },
+                    error: (error) => {
+                        this.revisionSubmission.updateStatus = 'error';
+                        this.revisionSubmission.isLoading = false;
+                        // Handle error, e.g., show error message
+                    }
+                });
+            this.modalService.dismissAll();
+        }
     }
 }
