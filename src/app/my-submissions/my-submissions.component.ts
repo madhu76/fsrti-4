@@ -86,10 +86,10 @@ export class MySubmissionsComponent implements OnInit {
             this.apiService.getData('/author/manuscript').subscribe({
                 next: (response: Submission[]) => {
                     this.submissions = response['submissions'].filter(submission =>
-                        submission.status !== 'Approved' && submission.status !== 'Rejected'
+                        submission.status !== 'Accepted' && submission.status !== 'Rejected'
                     );
                     this.archivedSubmissions = response['submissions'].filter(submission =>
-                        submission.status === 'Approved' || submission.status === 'Rejected'
+                        submission.status === 'Accepted' || submission.status === 'Rejected'
                     );
                     this.isAdmin = response['isAdmin'];
                     this.filteredSubmissions = [...this.submissions];
