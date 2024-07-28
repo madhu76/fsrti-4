@@ -12,6 +12,12 @@ export class SubmissionComponent {
   showSuccess = false; // Tracks if the submit attempt was made without being logged in
   submissionId = ''; // Tracks the ID of the submission, if successful
   showError = false; // Tracks if there was an error during submission
+  certified = false;
+
+  onCertifyChange(event: any) {
+    this.certified = event.target.checked;
+  }
+  
   constructor(private authService: AuthService, private articleSubmissionService: ApiDataService) { }
   private validateEmail(email) {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;

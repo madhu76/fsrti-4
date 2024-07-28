@@ -83,7 +83,7 @@
                     <!-- Editable status field for admin -->
                     <td *ngIf="isAdmin">
                         <select class="form-control" [(ngModel)]="submission.status"
-                            (change)="onStatusChange(submission)">
+                            >
                             <option value="Submission Received">Submission Received</option>
                             <option value="Under Review">Under Review</option>
                             <option value="Under Revision">Under Revision</option>
@@ -93,7 +93,11 @@
                     </td>
                     <td>
                         <button class="btn btn-link p-0" (click)="openReviewModal(submission)">
-                            View Reviews
+                            View
+                        </button>
+                        <span *ngIf="isAdmin">|</span>
+                        <button *ngIf="isAdmin" class="btn btn-link p-0" (click)="openReviewsFileUploadModal(submission)">
+                            Add 
                         </button>
                     </td>
                     <!-- Additional columns for admin -->

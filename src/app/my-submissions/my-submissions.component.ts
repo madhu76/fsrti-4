@@ -131,16 +131,10 @@ export class MySubmissionsComponent implements OnInit {
         });
     }
 
-    onStatusChange(submission: Submission): void {
-        if (submission.status === 'Under Revision') {
+    openReviewsFileUploadModal(submission: Submission): void {
             this.changedSubmission = submission;
-            this.openReviewsFileUploadModal();
+            this.modalService.open(this.reviewsFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
         }
-    }
-
-    openReviewsFileUploadModal() {
-        this.modalService.open(this.reviewsFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
-    }
 
     openRevisionFileUploadModal(submission: Submission): void {
         this.revisionSubmission = submission;
