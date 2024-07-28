@@ -56,11 +56,17 @@ const specialissues = {
             "File":"https://res.cloudinary.com/jisst/image/upload/v1704705591/Special_Issue-Fluid_Flows_Dead_Line_30_April_2024_icadvd.pdf",
             "Editors":"T.S.L. Radhika, BITS Pilani, Hyderabad campus, India, Jyotirmoy Rana, IIT Hyderabad, India, S. Srinivas, VIT-AP University, Amaravati, India"
         },
-      {
+        {
             "Title": "Advances in Fractional Calculus: Theory, Models and Applications",
             "SubmissionDeadLine":"31 December 2024",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1721872290/Advances_in_Fractional_Calculus_Theory_Models_and_Applications_ekc1lx.pdf",
             "Editors":"Rajesh K. Pandey, Indian Institute of Technology (BHU) Varanasi, India, Yufeng Xu, Central South University, Changsha, Hunan, P.R. China, Arvind K Misra, Banaras Hindu University, Varanasi, Uttar Pradesh, India"
+        },
+        {
+            "Title": "Synergizing Intelligence: Harnessing Advanced Data Technologies through Innovative Machine Learning Applications",
+            "SubmissionDeadLine":"31 December 2024",
+            "File":"https://res.cloudinary.com/jisst/image/upload/v1722137861/Synergizing_Intelligence_kjllma.pdf",
+            "Editors":"Manoj Sahni, Pandit Deendayal Energy University, Gandhinagar, Gujarat, India, G. Madhu, VNR Vignana Jyothi Institute of Engineering & Technology, Hyderabad, India, Ernesto Leon Castro, Universidad Católica de la Santísima Concepcion, Chile, Ritu Sahni, Foundation for Scientific Research and Technological Innovation, Hyderabad, India"
         }
       
         
