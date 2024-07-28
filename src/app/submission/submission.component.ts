@@ -14,10 +14,15 @@ export class SubmissionComponent {
   showError = false; // Tracks if there was an error during submission
   certified = false;
 
-  onCertifyChange(event: any) {
-    this.certified = event.target.checked;
+  onCertifyChange(event) {
+    if (event.target.value === 'agree') {
+      this.certified = true;
+    } else {
+      this.certified = false;
+    }
   }
-  
+
+
   constructor(private authService: AuthService, private articleSubmissionService: ApiDataService) { }
   private validateEmail(email) {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;

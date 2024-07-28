@@ -9,7 +9,7 @@
     <div class="alert alert-info mt-3">
         JISST is committed to maintaining the highest integrity level in the published content and has
         a Conflict of Interest Policy in place. JISST subscribes to the principles provided by the
-        Committee on Publications and Ethics (COPE).
+        <a href="https://publicationethics.org/">Committee on Publications and Ethics (COPE)</a>.
     </div>
 
     <form (ngSubmit)="onSubmit($event)">
@@ -28,6 +28,7 @@
                 <option value="SI: Financial Engineering">SI: Financial Engineering</option>
                 <option value="SI: Fluid Mechanics">SI: Fluid Mechanics</option>
                 <option value="SI: Neural Networks">SI: Neural Networks</option>
+                <option value="SI: Neural Networks">SI: Innovative Machine Learning Applications</option>
             </select>
         </div>
 
@@ -72,14 +73,19 @@
             <input class="form-control" type="file" id="articleFile" required>
         </div>
         <!-- Certification Statement -->
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="certifyCheck" (change)="onCertifyChange($event)">
-            <label class="form-check-label" for="certifyCheck">
-                We certify that the work embodied in this article is original and unpublished. It is not under
+        <div>
+            <strong>
+                The authors certify that the work embodied in this article is original and unpublished. It is not under
                 consideration for publication in any other journal or accepted for publication elsewhere.
-            </label>
+            </strong>
         </div>
-
+        <div class="mt-1">
+            <input type="radio" id="agree" name="certify" value="agree" (change)="onCertifyChange($event)">
+            <label for="agree">Agree</label>
+            &nbsp;
+            <input type="radio" id="disagree" name="certify"  value="disagree" (change)="onCertifyChange($event)">
+            <label for="disagree">Disagree</label>
+        </div>
         <!-- Submission Button -->
         <button type="submit" [disabled]="!certified" class="btn btn-primary">Submit Article</button>
     </form>
