@@ -47,7 +47,11 @@ export class MySubmissionsComponent implements OnInit {
     revisionSubmission: Submission;
     revisionSelectedSubmission: Submission;
     constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal) { }
-
+    archivedSubmissionStatuses = [
+        'Accepted',
+        'Rejected',
+        'Withdrawn'
+    ];
     ngOnInit(): void {
         this.loadData();
     }
@@ -74,8 +78,6 @@ export class MySubmissionsComponent implements OnInit {
             });
     }
 
-
-
     private loadData() {
         if (!this.authService.isAuthenticated) {
             this.showLoginError = true;
@@ -101,6 +103,10 @@ export class MySubmissionsComponent implements OnInit {
                 }
             });
         }
+    }
+
+    getSubmissionsByStatus(status: string) {
+        return this.archivedSubmissions.filter(submission => submission.status === status);
     }
 
     onSort(column: string): void {
@@ -132,13 +138,13 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     openReviewsFileUploadModal(submission: Submission): void {
-            this.changedSubmission = submission;
-            this.modalService.open(this.reviewsFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
-        }
+        this.changedSubmission = submission;
+        this.modalService.open(this.reviewsFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
 
     openRevisionFileUploadModal(submission: Submission): void {
         this.revisionSubmission = submission;
-        this.modalService.open(this.revisionFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });        
+        this.modalService.open(this.revisionFileUploadModal, { ariaLabelledBy: 'modal-basic-title' });
     }
 
     openReviewModal(submission: Submission): void {
@@ -168,7 +174,7 @@ export class MySubmissionsComponent implements OnInit {
     onUploadReviews(): void {
         if (this.changedSubmission) {
             this.changedSubmission.isLoading = true;
-            this.apiService.updateSubmission(this.changedSubmission._id, this.changedSubmission.status,this.reviewSelectedFiles)
+            this.apiService.updateSubmission(this.changedSubmission._id, this.changedSubmission.status, this.reviewSelectedFiles)
                 .subscribe({
                     next: (result) => {
                         this.changedSubmission.updateStatus = 'success';
