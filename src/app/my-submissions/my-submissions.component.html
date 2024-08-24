@@ -204,7 +204,7 @@
             <h4 class="modal-title">Upload Revision</h4>
         </div>
         <div class="modal-body">
-            <input type="file" (change)="onRevisionFileSelected($event)">
+            <input type="file" accept="application/pdf" (change)="onRevisionFileSelected($event)">
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Close</button>
