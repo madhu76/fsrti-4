@@ -205,6 +205,7 @@
         </div>
         <div class="modal-body">
             <input type="file" accept="application/pdf" (change)="onRevisionFileSelected($event)">
+            *Only Pdf files are allowed
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Close</button>
