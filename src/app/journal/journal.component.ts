@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { ApiDataService } from '../Services/api-data.service';
-
-
+import { announcements } from './announcement_data';
 
 interface FoodNode {
   name: string;
@@ -31,9 +30,13 @@ interface ExampleFlatNode {
 
 
 export class JournalComponent implements OnInit {
+  @ViewChild('scrollContent', { static: false }) scrollContent: ElementRef;
 
   articles = [];
   downloads = [];
+  announcements = announcements
+  scrollInterval: any;
+  isScrolling: boolean;
   constructor(private apiData: ApiDataService) {
     this.dataSource.data = TREE_DATA;
   }
@@ -60,9 +63,47 @@ export class JournalComponent implements OnInit {
     this.getData();
   }
 
+  ngAfterViewInit() {
+    this.startScrolling()
+  }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
   showShortDesciption = true;
+
+  startScrolling(resumeScrolling = false) {
+    if (this.isScrolling) {
+      return;  // Prevent multiple intervals from being created
+    }
+
+    this.isScrolling = true;
+
+    const scrollContent = this.scrollContent.nativeElement;
+    let totalHeight = scrollContent.scrollHeight;
+    if (!resumeScrolling) {
+      scrollContent.style.top = '100%';
+    }
+
+    const scroll = () => {
+      if (parseInt(scrollContent.style.top) < -totalHeight) {
+        scrollContent.style.top = '100%';
+      }
+      scrollContent.style.top = parseInt(scrollContent.style.top) - 1 + 'px';
+    };
+
+    this.scrollInterval = setInterval(scroll, 30);
+  }
+  
+  @HostListener('mouseenter')
+  pauseScrolling() {
+    if (this.isScrolling) {
+      clearInterval(this.scrollInterval);
+      this.isScrolling = false;
+    }
+  }
+  @HostListener('mouseleave')
+  resumeScrolling() {
+    this.startScrolling(true);
+  }
 
   alterDescriptionText() {
     this.showShortDesciption = !this.showShortDesciption

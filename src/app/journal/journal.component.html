@@ -166,47 +166,24 @@
     </div>  -->
       <!-- < class="col-lg-8 col-md-8 col-sm-12 description mt-1"> -->
       <br>
-
-
-      <div>
-        <mat-tab-group>
-          <mat-tab label="Most Downloaded Articles">
-            <br />
-
-
-            <div class="content ml-4" *ngFor="let item of downloads.reverse()| slice:0:10; let i = index">
-              <a style="text-decoration: none" [routerLink]="['/article']" [queryParams]="{ item_id: item.item_id }">
-                <p>
-                  <i class="fa fa-hand-point-right mr-3"></i>{{ item.title | slice: 0:65 }}...
-                </p>
-              </a>
+      <h2>Special Issue Announcements</h2>
+      <div class="scrolling-announcement">
+        <div class="scroll-content"  (mouseenter)="pauseScrolling()" (mouseleave)="resumeScrolling()" #scrollContent>
+          <div *ngFor="let announcement of announcements" class="announcement-item">
+            <div class="announcement-header">
+              <h3 class="link"><a href="{{ announcement.link }}" target="_blank"> {{ announcement.theme }} </a></h3>
             </div>
-
-          </mat-tab>
-          <mat-tab label="Recent Articles"><br />
-            <div class="content ml-4" *ngFor="let item of articles.reverse()| slice:0:10; let i = index">
-              <a style="text-decoration: none" [routerLink]="['/article']" [queryParams]="{ item_id: item.item_id }">
-                <p>
-                  <i class="fa fa-hand-point-right mr-3"></i>{{ item.title | slice: 0:65 }}...
-                </p>
-              </a>
+            <div class="announcement-body">
+              <b>Guest Editors:</b>
+              <ul class="editors-list">
+                <li *ngFor="let editor of announcement.editors">{{ editor }}</li>
+              </ul>
+              <div class="announcement-footer">
+                <p class="date">Submission Deadline: {{ announcement.lastDate }}</p>
+              </div>
             </div>
-          </mat-tab>
-          <mat-tab label="Most cited Articles"><br />
-            <!-- <div class="content">
-                    <p>Recent advances in convolutional neural networks</p>
-                    <p>Towards better exploiting convolutional neural networks for remote sensing scene classification</p>
-                    <p>Facial expression recognition with Convolutional Neural Networks: Coping with few data and the training sample order</p>
-                </div> -->
-          </mat-tab>
-          <mat-tab label="Recent Open Access Articles"><br />
-            <!-- <div class="content">
-                <p>Speed-up and multi-view extensions to subclass discriminant analysis</p>
-                <p>Multimodal subspace support vector data description</p>
-                <p>Probabilistic homogeneity for document image segmentation</p>
-               </div> -->
-          </mat-tab>
-        </mat-tab-group>
+          </div>
+        </div>
       </div>
     </div>
   </div>
