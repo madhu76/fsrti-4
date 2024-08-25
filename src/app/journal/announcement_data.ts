@@ -5,7 +5,7 @@ export const announcements = [
         "Neelesh Kumar, Dyal Singh College, University of Delhi, India",
         "Pankaj Mishra, Deshbandhu College, University of Delhi, India"
       ],
-      "link": "https://www.jisst.com/specialissues?vol_issue=Open/",
+      "link": "https://www.jisst.com/specialissues?vol_issue=Open",
       "lastDate": "December 31, 2024"
     },
     {

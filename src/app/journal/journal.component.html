@@ -167,24 +167,17 @@
       <!-- < class="col-lg-8 col-md-8 col-sm-12 description mt-1"> -->
       <br>
       <h2>Special Issue Announcements</h2>
-      <div class="scrolling-announcement">
-        <div class="scroll-content"  (mouseenter)="pauseScrolling()" (mouseleave)="resumeScrolling()" #scrollContent>
-          <div *ngFor="let announcement of announcements" class="announcement-item">
-            <div class="announcement-header">
-              <h3 class="link"><a href="{{ announcement.link }}" target="_blank"> {{ announcement.theme }} </a></h3>
-            </div>
-            <div class="announcement-body">
-              <b>Guest Editors:</b>
-              <ul class="editors-list">
-                <li *ngFor="let editor of announcement.editors">{{ editor }}</li>
-              </ul>
-              <div class="announcement-footer">
-                <p class="date">Submission Deadline: {{ announcement.lastDate }}</p>
-              </div>
-            </div>
+      <div class="marquee-container" [style.--scroll-end]="marqueeScrollPercentage">
+        <div class="marquee">
+          <div *ngFor="let announcement of announcements" class="announcement">
+            <h3 class="theme">{{ announcement.theme }}</h3>
+            <p class="editors">Editors: {{ announcement.editors.join(', ') }}</p>
+            <a [href]="announcement.link" target="_blank" class="read-more">Read More</a>
+            <p class="last-date">Submission Deadline: {{ announcement.lastDate }}</p>
           </div>
         </div>
       </div>
+                 
     </div>
   </div>
 </div>
