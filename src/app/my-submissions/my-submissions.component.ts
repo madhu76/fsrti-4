@@ -32,7 +32,7 @@ export class MySubmissionsComponent implements OnInit {
     submissions: Submission[] = [];
     changedSubmission: Submission | null = null;
     reviewSelectedFiles: File[] = [];
-    revisionSelectedFile: File = null
+    revisionSelectedFile: File = null;
     archivedSubmissions: Submission[] = [];
     filteredSubmissions: Submission[] = [];
     archivedSubmissionsTableVisibility = false;
@@ -91,7 +91,7 @@ export class MySubmissionsComponent implements OnInit {
                         submission.status !== 'Accepted' && submission.status !== 'Rejected'
                     );
                     this.archivedSubmissions = response['submissions'].filter(submission =>
-                        submission.status === 'Accepted' || submission.status === 'Rejected'
+                        this.archivedSubmissionStatuses.includes(submission.status)
                     );
                     this.isAdmin = response['isAdmin'];
                     this.filteredSubmissions = [...this.submissions];
