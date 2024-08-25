@@ -35,8 +35,8 @@ export class JournalComponent implements OnInit {
   articles = [];
   downloads = [];
   announcements = announcements
-  scrollInterval: any;
-  isScrolling: boolean;
+  scrollInterval: any = null;
+  isScrolling: boolean = false;
   constructor(private apiData: ApiDataService) {
     this.dataSource.data = TREE_DATA;
   }
