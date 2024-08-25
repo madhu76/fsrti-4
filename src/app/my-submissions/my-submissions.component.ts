@@ -88,7 +88,7 @@ export class MySubmissionsComponent implements OnInit {
             this.apiService.getData('/author/manuscript').subscribe({
                 next: (response: Submission[]) => {
                     this.submissions = response['submissions'].filter(submission =>
-                        submission.status !== 'Accepted' && submission.status !== 'Rejected'
+                        this.archivedSubmissionStatuses.includes(submission.status) === false
                     );
                     this.archivedSubmissions = response['submissions'].filter(submission =>
                         this.archivedSubmissionStatuses.includes(submission.status)
