@@ -15,7 +15,9 @@ interface Submission {
     isLoading: boolean,
     updateStatus: String,
     reviewUrls: String[],
-    revisionUrls: String[]
+    revisionUrls: String[],
+    associateEditor?: string;
+    managingEditor?: string;
 }
 
 @Component({
@@ -28,7 +30,13 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('revisionFileUploadModal') revisionFileUploadModal: TemplateRef<any>;
     @ViewChild('revisionModal') revisionModal: TemplateRef<any>;
     @ViewChild('reviewModal') reviewModal: TemplateRef<any>;
+    @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
 
+
+    associateEditors: any[] = [];
+    assignEditorErrorMessage: string;
+    selectedSubmission: Submission;
+    selectedAssociateEditor: string;
     submissions: Submission[] = [];
     changedSubmission: Submission | null = null;
     reviewSelectedFiles: File[] = [];
@@ -59,6 +67,25 @@ export class MySubmissionsComponent implements OnInit {
     onRefresh(): void {
         this.loadData();
     }
+
+    assignAssociateEditor(): void {
+        const data = {
+            associateEditor: this.selectedAssociateEditor
+        };
+        this.apiService.patchData(`/author/manuscript/editors/${this.selectedSubmission._id}`, data).subscribe({
+            next: (response) => {
+                // On success, update managingEditor to current user email
+                this.selectedSubmission.associateEditor = this.selectedAssociateEditor;
+                this.modalService.dismissAll();
+            },
+            error: (error) => {
+                // Handle error, e.g., show error message
+                this.assignEditorErrorMessage = error;
+            }
+        });
+    }
+
+
     onSubmit(submission: any) {
         submission.isLoading = true;
         submission.updateStatus = ''; // Clear previous status
@@ -155,6 +182,33 @@ export class MySubmissionsComponent implements OnInit {
     openRevisionModal(submission: Submission): void {
         this.revisionSelectedSubmission = submission;
         this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    openAssignEditorModal(submission: Submission): void {
+        try {
+            this.assignEditorErrorMessage = '';
+            this.selectedSubmission = submission;
+            // Fetch associate editors if not already fetched
+            if (this.associateEditors?.length === 0) {
+                this.apiService.getData('/author/associateeditors').subscribe({
+                    next: (response) => {
+                        this.associateEditors = response['associateEditors'] ?? [];
+                        // Set selectedAssociateEditor to current associate editor, if any
+                        this.selectedAssociateEditor = submission.associateEditor || '';
+                        this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+                    },
+                    error: (error) => {
+                        alert('Error fetching associate editors');
+                    }
+                });
+            } else {
+                // Set selectedAssociateEditor to current associate editor, if any
+                this.selectedAssociateEditor = submission.associateEditor || '';
+                this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+            }
+        } catch (err) {
+            alert(err);
+        }
     }
 
     onReviewFilesSelected(event: Event): void {
