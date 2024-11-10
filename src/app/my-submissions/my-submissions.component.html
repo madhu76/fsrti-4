@@ -400,11 +400,11 @@
 
   <!-- Add this at the end of your file, outside of other templates -->
   <ng-template #assignEditorModal let-modal>
-    <div *ngIf="assignAssociateEditor">
+    <div *ngIf="assignEditorErrorMessage">
     An Error Occurred:
       {{ assignEditorErrorMessage | json }}
     </div>
-    <div *ngIf="!assignAssociateEditor" class="modal-header">
+    <div *ngIf="!assignEditorErrorMessage" class="modal-header">
       <h4 class="modal-title">Assign Associate Editor</h4>
     </div>
     <div class="modal-body">
@@ -425,6 +425,9 @@
           class="form-control"
           [(ngModel)]="selectedAssociateEditor"
         >
+        <option value="" disabled [selected]="!selectedAssociateEditor">
+          -- Select an Associate Editor --
+        </option>
           <option
             *ngFor="let editor of associateEditors"
             [value]="editor.email"
@@ -443,7 +446,7 @@
         Cancel
       </button>
       <button
-        *ngIf="selectedSubmission.associateEditor"
+        *ngIf="selectedAssociateEditor"
         type="button"
         class="btn btn-primary"
         (click)="assignAssociateEditor()"
