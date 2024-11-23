@@ -198,7 +198,12 @@ export class MySubmissionsComponent implements OnInit {
                         this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
                     },
                     error: (error) => {
-                        alert('Error fetching associate editors');
+                        //If unauthorized send proper alert
+                        if (error.status === 401) {
+                            alert('Only managing editors can assign associate editors');
+                        } else {
+                            alert('Error fetching associate editors');
+                        }
                     }
                 });
             } else {
