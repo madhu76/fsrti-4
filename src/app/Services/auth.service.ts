@@ -25,6 +25,7 @@ export class AuthService {
     this.userSubject.next(
     {
       name: this.decodedToken.given_name,
+      email: this.decodedToken.email
     });
     this.isAuthenticated = true;
   }
