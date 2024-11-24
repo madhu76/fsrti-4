@@ -59,4 +59,13 @@ export class ApiDataService {
     return this.http.patch(this.url + `/author/manuscript/revision/` + submissionId, formData, httpOptions);
   }
 
+  patchData(route, data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.authService.accessToken
+      })
+    };
+    return this.http.patch(this.url + route, data, httpOptions);
+  }
+
 }

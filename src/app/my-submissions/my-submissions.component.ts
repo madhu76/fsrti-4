@@ -1,7 +1,8 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, NgZone, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from '../Services/auth.service';
 import { ApiDataService } from '../Services/api-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 
 interface Submission {
     _id: string,
@@ -15,7 +16,10 @@ interface Submission {
     isLoading: boolean,
     updateStatus: String,
     reviewUrls: String[],
-    revisionUrls: String[]
+    revisionUrls: String[],
+    associateEditor?: string;
+    managingEditor?: string;
+    updatedAt: Date;
 }
 
 @Component({
@@ -28,7 +32,13 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('revisionFileUploadModal') revisionFileUploadModal: TemplateRef<any>;
     @ViewChild('revisionModal') revisionModal: TemplateRef<any>;
     @ViewChild('reviewModal') reviewModal: TemplateRef<any>;
+    @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
 
+
+    associateEditors: any[] = [];
+    assignEditorErrorMessage: string;
+    selectedSubmission: Submission;
+    selectedAssociateEditor: string;
     submissions: Submission[] = [];
     changedSubmission: Submission | null = null;
     reviewSelectedFiles: File[] = [];
@@ -43,22 +53,71 @@ export class MySubmissionsComponent implements OnInit {
     sortColumn: string = '';
     sortAscending: boolean = true;
     isAdmin: boolean = false;
+    isAssociateEditor: boolean = false;
     reviewSelectedSubmission: Submission;
     revisionSubmission: Submission;
     revisionSelectedSubmission: Submission;
-    constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal) { }
     archivedSubmissionStatuses = [
         'Accepted',
         'Rejected',
         'Withdrawn'
     ];
+    user: any;
+    private subscription: Subscription;
+    
+    constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal, private zone: NgZone) { }
+
     ngOnInit(): void {
         this.loadData();
+        this.subscription = this.authService.user.subscribe(user => {
+            this.zone.run(() => {
+                this.user = user;
+            });
+        });
+        this.apiService.getData('/author/associateeditors').subscribe({
+            next: (response) => {
+                this.associateEditors = response['associateEditors'] ?? [];
+            },
+            error: (error) => {
+                //If unauthorized send proper alert
+                if (error.status === 401) {
+                    alert('Only managing editors can assign associate editors');
+                } else {
+                    alert('Error fetching associate editors');
+                }
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     onRefresh(): void {
         this.loadData();
     }
+
+    assignAssociateEditor(): void {
+        const data = {
+            associateEditor: this.selectedAssociateEditor
+        };
+        this.apiService.patchData(`/author/manuscript/editors/${this.selectedSubmission._id}`, data).subscribe({
+            next: (response) => {
+                // On success, update managingEditor to current user email
+                this.selectedSubmission.associateEditor = this.selectedAssociateEditor;
+                this.selectedSubmission.managingEditor = this.user.email;
+                this.modalService.dismissAll();
+            },
+            error: (error) => {
+                // Handle error, e.g., show error message
+                this.assignEditorErrorMessage = error;
+            }
+        });
+    }
+
+
     onSubmit(submission: any) {
         submission.isLoading = true;
         submission.updateStatus = ''; // Clear previous status
@@ -78,6 +137,15 @@ export class MySubmissionsComponent implements OnInit {
             });
     }
 
+    getAssociateEditorName(email: string): string {
+        if(email)
+        {
+            const editor = this.associateEditors?.find(editor => editor.email === email);
+            return editor ? editor.name : email
+        }
+        return 'None';
+    }
+
     private loadData() {
         if (!this.authService.isAuthenticated) {
             this.showLoginError = true;
@@ -94,6 +162,7 @@ export class MySubmissionsComponent implements OnInit {
                         this.archivedSubmissionStatuses.includes(submission.status)
                     );
                     this.isAdmin = response['isAdmin'];
+                    this.isAssociateEditor = response['isAssociateEditor'];
                     this.filteredSubmissions = [...this.submissions];
                     this.isLoading = false;
                 },
@@ -105,8 +174,20 @@ export class MySubmissionsComponent implements OnInit {
         }
     }
 
-    getSubmissionsByStatus(status: string) {
+    getArchivedSubmissionsByStatus(status: string) {
         return this.archivedSubmissions.filter(submission => submission.status === status);
+    }
+
+    getEditorAssignments(associateEditor: string, archived: boolean): number {
+        if(associateEditor == 'mavsankar2@gmail.com')
+        {
+            debugger;
+        }
+        const submissionsToTrack = archived ? this.archivedSubmissions : this.submissions;
+        return submissionsToTrack.filter(submission =>
+            submission.associateEditor === associateEditor &&
+            new Date(submission.updatedAt).getTime() > (new Date().getTime() - 90 * 24 * 60 * 60 * 1000)
+        ).length;
     }
 
     onSort(column: string): void {
@@ -155,6 +236,38 @@ export class MySubmissionsComponent implements OnInit {
     openRevisionModal(submission: Submission): void {
         this.revisionSelectedSubmission = submission;
         this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    openAssignEditorModal(submission: Submission): void {
+        try {
+            this.assignEditorErrorMessage = '';
+            this.selectedSubmission = submission;
+            // Fetch associate editors if not already fetched
+            if (this.associateEditors?.length === 0) {
+                this.apiService.getData('/author/associateeditors').subscribe({
+                    next: (response) => {
+                        this.associateEditors = response['associateEditors'] ?? [];
+                        // Set selectedAssociateEditor to current associate editor, if any
+                        this.selectedAssociateEditor = submission.associateEditor || '';
+                        this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+                    },
+                    error: (error) => {
+                        //If unauthorized send proper alert
+                        if (error.status === 401) {
+                            alert('Only managing editors can assign associate editors');
+                        } else {
+                            alert('Error fetching associate editors');
+                        }
+                    }
+                });
+            } else {
+                // Set selectedAssociateEditor to current associate editor, if any
+                this.selectedAssociateEditor = submission.associateEditor || '';
+                this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+            }
+        } catch (err) {
+            alert(err);
+        }
     }
 
     onReviewFilesSelected(event: Event): void {

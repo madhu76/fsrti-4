@@ -16,3 +16,13 @@
  .td{
     resize: both;
  }
+
+ .small-column {
+  width: 20%;
+  overflow: wrap;
+}
+.smaller-column {
+  width: 10%;
+  overflow: wrap;
+}
+
