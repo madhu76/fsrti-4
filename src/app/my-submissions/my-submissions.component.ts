@@ -6,20 +6,28 @@ import { Subscription } from 'rxjs';
 
 interface Submission {
     _id: string,
-    submittedBy: String,
-    title: String,
-    authors: String,
-    abstract: String,
-    keywords: String,
+    submittedBy: string,
+    title: string,
+    authors: string,
+    abstract: string,
+    keywords: string,
     status: string,
-    articleUrl: String,
+    articleUrl: string,
     isLoading: boolean,
-    updateStatus: String,
-    reviewUrls: String[],
-    revisionUrls: String[],
+    updateStatus: string,
+    reviewUrls: string[],
+    revisionUrls: string[],
+    articleType: string,
+    articleStream: string,
     associateEditor?: string;
     managingEditor?: string;
     updatedAt: Date;
+}
+
+interface AssociateEditor {
+    email: string;
+    name: string;
+    streams: string[];
 }
 
 @Component({
@@ -35,7 +43,7 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
 
 
-    associateEditors: any[] = [];
+    associateEditors: AssociateEditor[] = [];
     assignEditorErrorMessage: string;
     selectedSubmission: Submission;
     selectedAssociateEditor: string;
@@ -179,10 +187,6 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     getEditorAssignments(associateEditor: string, archived: boolean): number {
-        if(associateEditor == 'mavsankar2@gmail.com')
-        {
-            debugger;
-        }
         const submissionsToTrack = archived ? this.archivedSubmissions : this.submissions;
         return submissionsToTrack.filter(submission =>
             submission.associateEditor === associateEditor &&
@@ -212,9 +216,9 @@ export class MySubmissionsComponent implements OnInit {
     onFilterChange(): void {
         this.filteredSubmissions = this.submissions.filter(submission => {
             // Convert each submission object to a lowercase JSON string
-            const submissionString = JSON.stringify(submission).toLowerCase();
+            const submissionstring = JSON.stringify(submission).toLowerCase();
             // Check if the stringified object includes the lowercase filter
-            return submissionString.includes(this.filter.toLowerCase());
+            return submissionstring.includes(this.filter.toLowerCase());
         });
     }
 
@@ -269,7 +273,13 @@ export class MySubmissionsComponent implements OnInit {
             alert(err);
         }
     }
-
+    getAssociateEditorsByStream(): any {
+        if(this.selectedSubmission.articleStream)
+        {
+            return this.associateEditors.filter(editor => editor.streams?.includes(this.selectedSubmission?.articleStream) ?? false);
+        }
+        return this.associateEditors;
+    }
     onReviewFilesSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files) {

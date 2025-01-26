@@ -432,7 +432,7 @@
             -- Select an Associate Editor --
           </option>
           <option
-            *ngFor="let editor of associateEditors"
+            *ngFor="let editor of getAssociateEditorsByStream()"
             [value]="editor.email"
           >
             {{ editor.name }} - Assignments(past 3 months): {{ getEditorAssignments(editor.email, false ) + getEditorAssignments(editor.email, true) }}
