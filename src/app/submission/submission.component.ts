@@ -61,6 +61,8 @@ export class SubmissionComponent {
       formData.append('authors', event.target.articleAuthors.value);
       formData.append('abstract', event.target.articleAbstract.value);
       formData.append('keywords', event.target.articleKeywords.value);
+      formData.append('articleType', event.target.articleType.value);
+      formData.append('articleStream', event.target.articleStream.value);
       formData.append('correspondingAuthorName', event.target.correspondingAuthorName.value);
       formData.append('articleAuthorEmails', event.target.articleAuthorEmails.value);
       formData.append('submissionFor', event.target.submissionFor.value);
