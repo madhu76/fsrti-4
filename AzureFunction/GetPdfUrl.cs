@@ -43,14 +43,6 @@ namespace JISST.IpAllowlist
     public List<string> EmailIds { get; set; }
   }
 
-public class ManuscriptEmailAddressConfig
-  {
-    [BsonElement("Name")]
-    public string Name { get; set; }
-
-    [BsonElement("EmailIds")]
-    public List<string> EmailIds { get; set; }
-  }
   public class AllowedIpRangeDocument
   {
     [BsonId]
@@ -60,7 +52,7 @@ public class ManuscriptEmailAddressConfig
     [BsonElement("AllowList")]
     public List<IpRange> AllowList { get; set; }
   }
-
+  [BsonIgnoreExtraElements]
   public class AllowedEmailAddressesDocument
   {
     [BsonId]
@@ -69,9 +61,6 @@ public class ManuscriptEmailAddressConfig
 
     [BsonElement("AllowList")]
     public List<EmailAddressConfig> AllowList { get; set; }
-
-    [BsonElement("ManuscriptMailingList")]
-    public List<ManuscriptEmailAddressConfig> ManuscriptMailingList { get; set; }
   }
 
   public static class GetPdfUrl
