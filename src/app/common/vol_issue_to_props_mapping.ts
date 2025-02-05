@@ -60,7 +60,7 @@ const mappings = {
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1728701155/Cont_V43_byamne.pdf"
     },
     "4.4": {
-        "Name": "Volume 4, Issue 4, December 2024",
+        "Name": "Volume 4, Issue 4, October 2024",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1736086184/Cont_V44_xr3qdw.pdf"
     }
 }
