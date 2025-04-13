@@ -52,13 +52,28 @@
         </tr>
         <tr *ngFor="let submission of filteredSubmissions">
           <td>{{ submission._id }}</td>
-          <td class="small-column">
+          <!-- center the content -->
+          <td class="small-column text-center">
             <button
               class="btn btn-link p-0"
               (click)="openRevisionModal(submission)"
             >
               {{ submission.title }}
             </button>
+            <!-- If submission.articleStream is present show it under title not as a badge but  with a break statement before -->
+            <span *ngIf="submission.articleStream"  class="text-muted">
+              <br/>
+              {{ submission.articleStream}}
+            </span>
+
+            <!-- If submission.articleType is present show a badge -->
+             <span *ngIf="submission.articleType" >
+              <br/>
+              <span class="badge badge-secondary text-uppercase">
+                {{ submission.articleType}}
+              </span>
+            </span>
+
           </td>
           <td class="smaller-column">
             {{ submission.submissionFor ? submission.submissionFor : "JISST" }}
