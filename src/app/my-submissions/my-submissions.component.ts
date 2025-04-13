@@ -274,10 +274,10 @@ export class MySubmissionsComponent implements OnInit {
         }
     }
     getAssociateEditorsByStream(): any {
-        if(this.selectedSubmission.articleStream)
-        {
-            return this.associateEditors.filter(editor => editor.streams?.includes(this.selectedSubmission?.articleStream) ?? false);
-        }
+        // if(this.selectedSubmission.articleStream)
+        // {
+        //     return this.associateEditors.filter(editor => editor.streams?.includes(this.selectedSubmission?.articleStream) ?? false);
+        // }
         return this.associateEditors;
     }
     onReviewFilesSelected(event: Event): void {
