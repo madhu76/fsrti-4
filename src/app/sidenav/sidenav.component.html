@@ -68,9 +68,12 @@
                   <a routerLink="/articles" [queryParams]="{vol_issue:4.4}" *ngIf="node.name=='Volume 4, Issue 4'"><span  
                   style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
                 
+                   <a routerLink="/articles" [queryParams]="{vol_issue:5.1}" *ngIf="node.name=='Volume 5, Issue 1'"><span  
+                  style="background-color: white;color: black;font-size: 17px;color: #ff7f50;font-weight: 1000;">{{node.name}}</span></a>
+                
                   <a routerLink="/specialissues" [queryParams]="{vol_issue: 'Published'}" *ngIf="node.name == 'Published'">
                   <span style="background-color: white; color: black; font-size: 17px; color: #ff7f50; font-weight: 1000;">{{ node.name }}</span></a>
-
+            
                   <a routerLink="/specialissues" [queryParams]="{vol_issue: 'Open'}" *ngIf="node.name == 'Open'"> <span 
                     style="background-color: white; color: black; font-size: 17px; color: #ff7f50; font-weight: 1000;">{{ node.name }}</span> </a>
 
