@@ -45,6 +45,15 @@ const TREE_DATA: FoodNode[] = [
     ]
   },
   {
+    name: '2025',
+    children: [
+      {name: 'Volume 5, Issue 1'},
+      // {name: 'Volume 5, Issue 2'},
+      // {name: 'Volume 5, Issue 3'},
+      // {name: 'Volume 5, Issue 4'}
+    ]
+  },
+  {
     name: 'Special Issues',
     children: [
       {name: 'Published'},
