@@ -65,7 +65,7 @@ const mappings = {
      },
     "5.1": {
         "Name": "Volume 5, Issue 1, January 2025",
-        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1715776347/Cont_V4_1_1_dvfllk.pdf"
+        // "Contents": "https://res.cloudinary.com/jisst/image/upload/v1715776347/Cont_V4_1_1_dvfllk.pdf"
     
     }
 }
