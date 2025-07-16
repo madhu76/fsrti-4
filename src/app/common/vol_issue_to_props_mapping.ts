@@ -66,7 +66,11 @@ const mappings = {
     "5.1": {
         "Name": "Volume 5, Issue 1, January 2025",
         "Contents": "https://res.cloudinary.com/jisst/image/upload/v1746576210/Cont_V51_vfko8b.pdf"
-    
+    },
+    "5.2": {
+        "Name": "Volume 5, Issue 2, April 2025",
+        "Contents": ""
+       
     }
 }
 
