@@ -42,11 +42,17 @@
           Contact
         </a>
             </li>
-            <li class="nav-item active">
-                <div  id="googleLoginButton">
-                    <!-- This will be placeholder where button will be injected through js -->
+            <li class="nav-item dropdown active" *ngIf="!authService.isAuthenticated">
+                <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
+                    <a id="googleLoginId" class="dropdown-item" href="#">
+                    </a>
+                    <a class="dropdown-item google-style-btn" href="#" (click)="loginWithEmail()">
+                        <i class="fas fa-envelope"></i> Sign in with Email
+                    </a>
                 </div>
-
             </li>
             <li class="nav-item active">
                 <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="authService.isAuthenticated">
