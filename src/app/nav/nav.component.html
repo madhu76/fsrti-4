@@ -68,3 +68,53 @@
         </ul>
     </div>
 </nav>
+
+<!-- Simple Email Login Form -->
+<div class="email-login-container" *ngIf="showEmailForm">
+  <div class="email-login-form">
+    <div class="form-header">
+      <h4>Login with Email</h4>
+      <button type="button" class="close-btn" (click)="hideEmailForm()">×</button>
+    </div>
+    
+    <!-- Email Input Step -->
+    <div *ngIf="!showconfirmationLinkInput" class="email-step">
+      <form [formGroup]="emailForm" (ngSubmit)="sendconfirmationLink()">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" class="form-control" id="email" formControlName="email" 
+                 placeholder="Enter your email address" [class.is-invalid]="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+          <div class="invalid-feedback" *ngIf="emailForm.get('email')?.hasError('required') && emailForm.get('email')?.touched">
+            Email is required
+          </div>
+          <div class="invalid-feedback" *ngIf="emailForm.get('email')?.hasError('email') && emailForm.get('email')?.touched">
+            Please enter a valid email address
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block" 
+                [disabled]="!emailForm.valid || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-2"></span>
+          {{ loading ? 'Sending...' : 'Send Confirmation Link' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Confirmation Link Input Step -->
+    <div *ngIf="showconfirmationLinkInput" class="confirmationLink-step">
+      <p class="confirmationLink-instruction">
+        We've sent a confirmation link to <strong>{{ userEmail }}</strong>
+      </p>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="alert alert-success mt-3">
+      <i class="fas fa-check-circle mr-2"></i>{{ successMessage }}
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      <i class="fas fa-exclamation-circle mr-2"></i>{{ errorMessage }}
+    </div>
+  </div>
+</div>
