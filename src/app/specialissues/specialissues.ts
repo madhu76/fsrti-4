@@ -32,12 +32,18 @@ const specialissues = {
         }
     ],
     "Open":[
-        // {
-        //     "Title": "Advances in Fractional Calculus: Theory, Models and Applications",
-        //     "SubmissionDeadLine":"29 February 2024",
-        //     "File":"https://res.cloudinary.com/jisst/image/upload/v1704532361/Special_Issue-Fractional_Calculus_oimau0.pdf",
-        //     "Editors":"Rajesh K. Pandey, Indian Institute of Technology(BHU) Varanasi, India; Yufeng Xu, Central South University, Changsha, Hunan, P.R. China"
-        // },
+        {
+            "Title":"Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications",
+            "SubmissionDeadLine":"15 November 2025",
+            "File":"https://res.cloudinary.com/jisst/image/upload/v1757080238/Special%20Issues/SI-IOT_womtiy.pdf",
+            "Editor":"Shaik Qadeer, Muffakham Jah College of Engineering, Hyderabad, India, Layak Ali, Central University of Karnataka, Kalaburgi, India, Mohammed Yousuf Khan, Maulana Azad National Urdu University, Hyderabad, India, Jameel Ahamed, University of Bisha, Kingdom of Saudi Arabia"
+        },
+        {
+            "Title": "Real World Dynamical Systems and Numerics",
+            "SubmissionDeadLine":"15 November 2025",
+            "File":"https://res.cloudinary.com/jisst/image/upload/v1757080244/Special%20Issues/SI-Dynamical_Systems_wrr2bf.pdf",
+            "Editors":"Ranjit Kumar Upadhyay, Indian Institute of Technology, Dhanbad, India, Dongpo Hu, Qufu Normal University, Shandong,  China, Arni S.R. Srinivasa Rao, Division of Infectious Diseases, Medical College of Georgia, USA"
+        },
         {
             "Title": "Advances in Partial Differential Equations:Theory, Applications and Numerics",
             "SubmissionDeadLine":"31 December 2024",
@@ -45,7 +51,7 @@ const specialissues = {
             "Editors":"Neelesh Kumar, Dyal Singh College, University of Delhi, India, Pankaj Mishra, Deshbandhu College, University of Delhi, India"
         },
         {
-            "Title": "Financial Engineering – Theory, Models and Software Implementations",
+            "Title": "Financial Engineering - Theory, Models and Software Implementations",
             "SubmissionDeadLine":"31 December 2024",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1704705354/SI-Fiancial_Engg._-_Dead_line_30_April_2024_nt5ngd.pdf",
             "Editors":"Siddhartha Pratim Chakrabarty, Indian Institute of Technology Guwahati, India, KVNM Ramesh, PES University EC Campus, Bangalore, India"
