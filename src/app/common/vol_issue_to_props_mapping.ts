@@ -69,7 +69,7 @@ const mappings = {
     },
     "5.2": {
         "Name": "Volume 5, Issue 2, April 2025",
-        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1757126082/Cont_V52_labpz8.pdf"
+        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1757173956/Cont_V52-updated_rt2rta.pdf"
        
     }
 }
