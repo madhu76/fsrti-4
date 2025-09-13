@@ -12,6 +12,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
+using System.Web.Http;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 
 namespace JISST.IpAllowlist
@@ -123,7 +126,7 @@ namespace JISST.IpAllowlist
       catch (Exception ex)
       {
         log.LogError(ex.ToString());
-        throw;
+        return new ExceptionResult(ex, true);
       }
 
       if (string.IsNullOrWhiteSpace(fileUrl))
@@ -151,13 +154,57 @@ namespace JISST.IpAllowlist
 
     private static async Task<string> GetRequestEmail(HttpRequest req)
     {
-      var payload = await GoogleJsonWebSignature.ValidateAsync(req.Headers["AccessToken"].ToString(), new GoogleJsonWebSignature.ValidationSettings()
+      var accessToken = req.Headers["AccessToken"].ToString();
+      
+      if (string.IsNullOrEmpty(accessToken))
       {
-        Audience = null
-      });
+        throw new ArgumentException("Access token is required");
+      }
 
-      var requestEmail = payload.Email;
-      return requestEmail;
+      // Try to determine the token type
+      try
+      {
+        // First, try to validate as Google JWT
+        var googlePayload = await GoogleJsonWebSignature.ValidateAsync(accessToken, new GoogleJsonWebSignature.ValidationSettings()
+        {
+          Audience = null
+        });
+
+        return googlePayload.Email;
+      }
+      catch (Exception)
+      {
+        // If Google validation fails, try to decode as Supabase JWT
+        try
+        {
+          var tokenHandler = new JwtSecurityTokenHandler();
+          var jsonToken = tokenHandler.ReadJwtToken(accessToken);
+          
+          // Extract email from Supabase JWT claims
+          var emailClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == "email");
+          if (emailClaim != null)
+          {
+            return emailClaim.Value;
+          }
+          
+          // Alternative claim names that Supabase might use
+          var userMetadataClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == "user_metadata");
+          if (userMetadataClaim != null)
+          {
+            var userMetadata = JsonSerializer.Deserialize<JsonElement>(userMetadataClaim.Value);
+            if (userMetadata.TryGetProperty("email", out var emailProperty))
+            {
+              return emailProperty.GetString();
+            }
+          }
+          
+          throw new ArgumentException("Email not found in Supabase token");
+        }
+        catch (Exception ex)
+        {
+          throw new ArgumentException($"Invalid token format. Unable to extract email from token: {ex.Message}");
+        }
+      }
     }
 
     private static async Task<List<(string, List<string>)>> GetAllowedEmailAddresses(ILogger log, MongoClient client)
