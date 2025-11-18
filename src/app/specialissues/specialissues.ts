@@ -33,7 +33,7 @@ const specialissues = {
         {
           "Title": "Real World Dynamical Systems and Numerics Part-3 : Biology and Human Health",
           "SubmissionDeadLine":" April 2024",
-          "File":"https://res.cloudinary.com/jisst/image/upload/v1757173956/Cont_V52-updated_rt2rta.pdf",
+          "File":"https://res.cloudinary.com/jisst/image/upload/v1763475145/Cont_V4_2_jgkrx9_wnobkd.pdf",
           "Editors":"V. Sree Hari Rao (India), J.J. Nieto (Spain)"
         }
     ],
