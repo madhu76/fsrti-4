@@ -34,7 +34,7 @@
                 <option value="Research Article">Original Research</option>
                 <option value="Survey/Overview/Review/Tutorial Article">Survey/Overview/Review/Tutorial Article</option>
                 <option value="Forum Paper">Forum Paper</option>
-                <option value="Pedagogues">Pedagogues</option>
+                <option value="Indian Knowledge System- Innovations">Indian Knowledge System- Innovations</option>
                 <option value="Science News and Notes">Science News and Notes</option>
             </select>
         </div>
@@ -104,7 +104,10 @@
             <label for="disagree">Disagree</label>
         </div>
         <!-- Submission Button -->
-        <button type="submit" [disabled]="!certified" class="btn btn-primary">Submit Article</button>
+        <button type="submit" [disabled]="!certified || isSubmitting" class="btn btn-primary">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isSubmitting ? 'Submitting...' : 'Submit Article' }}
+        </button>
     </form>
     <div *ngIf="showLoginError" class="alert alert-danger" role="alert">
         You must be logged in to submit an article. Please log in and try again.

@@ -13,6 +13,7 @@ export class SubmissionComponent {
   submissionId = ''; // Tracks the ID of the submission, if successful
   showError = false; // Tracks if there was an error during submission
   certified = false;
+  isSubmitting = false; // Tracks if the form is currently being submitted
 
   onCertifyChange(event) {
     if (event.target.value === 'agree') {
@@ -68,13 +69,16 @@ export class SubmissionComponent {
       formData.append('submissionFor', event.target.submissionFor.value);
       formData.append('file', event.target.articleFile.files[0]);
 
+      this.isSubmitting = true;
       this.articleSubmissionService.submitArticle(formData).subscribe({
         next: (response) => {
+          this.isSubmitting = false;
           this.showError = false;
           this.showSuccess = true;
           this.submissionId = response['submissionId'];
         },
         error: (error) => {
+          this.isSubmitting = false;
           this.showError = true;
         }
       });
