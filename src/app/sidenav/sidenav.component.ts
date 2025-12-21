@@ -49,8 +49,8 @@ const TREE_DATA: FoodNode[] = [
     children: [
       {name: 'Volume 5, Issue 1'},
       {name: 'Volume 5, Issue 2'},
-      // {name: 'Volume 5, Issue 3'},
-      // {name: 'Volume 5, Issue 4'}
+      {name: 'Volume 5, Issue 3'},
+      {name: 'Volume 5, Issue 4'}
     ]
   },
   {
