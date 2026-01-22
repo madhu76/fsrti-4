@@ -226,11 +226,15 @@
                   <th scope="col">Submission For</th>
                   <th scope="col">Status</th>
                   <th scope="col">Corresponding Author</th>
+                  <!-- Volume and Issue columns only for Accepted -->
+                  <th *ngIf="status === 'Accepted'" scope="col">Volume</th>
+                  <th *ngIf="status === 'Accepted'" scope="col">Issue</th>
+                  <th *ngIf="status === 'Accepted'" scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngIf="getArchivedSubmissionsByStatus(status).length === 0">
-                  <td colspan="5" class="text-center">
+                  <td [attr.colspan]="status === 'Accepted' ? 8 : 5" class="text-center">
                     No {{ status.toLowerCase() }} submissions found
                   </td>
                 </tr>
@@ -285,6 +289,51 @@
                         ? submission.correspondingAuthorName
                         : "Not Available"
                     }}
+                  </td>
+                  <!-- Volume input for Accepted -->
+                  <td *ngIf="status === 'Accepted'">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="submission.volume"
+                      placeholder="Volume"
+                    />
+                  </td>
+                  <!-- Issue input for Accepted -->
+                  <td *ngIf="status === 'Accepted'">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="submission.issue"
+                      placeholder="Issue"
+                    />
+                  </td>
+                  <!-- Save button for Accepted -->
+                  <td *ngIf="status === 'Accepted'">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      (click)="onSaveArchiveDetails(submission)"
+                      [disabled]="submission.isArchiveSaving"
+                    >
+                      Save
+                    </button>
+                    <div
+                      *ngIf="submission.isArchiveSaving"
+                      class="spinner-border spinner-border-sm text-primary mt-1"
+                      role="status"
+                    ></div>
+                    <div
+                      *ngIf="submission.archiveUpdateStatus === 'success'"
+                      class="text-success small"
+                    >
+                      Saved
+                    </div>
+                    <div
+                      *ngIf="submission.archiveUpdateStatus === 'error'"
+                      class="text-danger small"
+                    >
+                      Error
+                    </div>
                   </td>
                 </tr>
               </tbody>

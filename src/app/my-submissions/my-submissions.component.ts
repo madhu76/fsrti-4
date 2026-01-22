@@ -22,6 +22,10 @@ interface Submission {
     associateEditor?: string;
     managingEditor?: string;
     updatedAt: Date;
+    volume?: string;
+    issue?: string;
+    isArchiveSaving?: boolean;
+    archiveUpdateStatus?: string;
 }
 
 interface AssociateEditor {
@@ -334,5 +338,31 @@ export class MySubmissionsComponent implements OnInit {
                 });
             this.modalService.dismissAll();
         }
+    }
+
+    onSaveArchiveDetails(submission: Submission): void {
+        if (!submission.volume || !submission.issue) {
+            alert('Please enter both volume and issue');
+            return;
+        }
+        submission.isArchiveSaving = true;
+        submission.archiveUpdateStatus = '';
+        
+        const data = {
+            volume: submission.volume,
+            issue: submission.issue
+        };
+        
+        this.apiService.patchData(`/author/archived/${submission._id}`, data).subscribe({
+            next: (result) => {
+                submission.archiveUpdateStatus = 'success';
+                submission.isArchiveSaving = false;
+            },
+            error: (error) => {
+                submission.archiveUpdateStatus = 'error';
+                submission.isArchiveSaving = false;
+                console.error('Error saving archive details:', error);
+            }
+        });
     }
 }
