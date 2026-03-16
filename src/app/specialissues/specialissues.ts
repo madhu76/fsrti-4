@@ -47,13 +47,13 @@
       
         {
             "Title":"Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications",
-            "SubmissionDeadLine":"31 July 2026",
+            "SubmissionDeadLine":"July 31, 2026",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1757080238/Special%20Issues/SI-IOT_womtiy.pdf",
             "Editors":"Shaik Qadeer, Muffakham Jah College of Engineering, Hyderabad, India, Layak Ali, Central University of Karnataka, Kalaburgi, India, Mohammed Yousuf Khan, Maulana Azad National Urdu University, Hyderabad, India, Jameel Ahamed, University of Bisha, Kingdom of Saudi Arabia"
         },
         {
             "Title": "Real World Dynamical Systems and Numerics",
-            "SubmissionDeadLine":"31 July 2026",
+            "SubmissionDeadLine":"July 31, 2026",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1757080244/Special%20Issues/SI-Dynamical_Systems_wrr2bf.pdf",
             "Editors":"Ranjit Kumar Upadhyay, Indian Institute of Technology, Dhanbad, India, Dongpo Hu, Qufu Normal University, Shandong,  China, Arni S.R. Srinivasa Rao, Division of Infectious Diseases, Medical College of Georgia, USA"
         }
