@@ -8,7 +8,7 @@ export const announcements = [
             "Jameel Ahamed, University of Bisha, Kingdom of Saudi Arabia"
         ],
         "link": "https://www.jisst.com/specialissues?vol_issue=Open",
-        "lastDate": "15 November 2025"
+        "lastDate": "July 31, 2026"
     },
     {
         "theme": "Real World Dynamical Systems and Numerics",
@@ -18,6 +18,18 @@ export const announcements = [
             "Arni S.R. Srinivasa Rao, Division of Infectious Diseases, Medical College of Georgia, USA"
         ],
         "link": "https://www.jisst.com/specialissues?vol_issue=Open",
-        "lastDate": "15 November 2025"
-    }
+        "lastDate": "July 31, 2026"
+    },
+  {
+    "theme": "Nanochemistry for a Sustainable Future: Innovations in Material Design",
+        "editors": [
+            "Dr. A. Sunil, Department of Chemistry, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India",
+            "Dr. Vuggili Sai Bhargava, Water Research and Electrochemistry Laboratory, Central Research Instruments Facility, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India",
+            "Dr. Sai Prasad Nayak, Department of Chemistry, School of Engineering, Dayanand Sagar University, Bengaluru, India"
+        ],
+        "link": "https://www.jisst.com/specialissues?vol_issue=Open",
+        "lastDate": "Aug 31, 2026"
+
+    
+  },
 ]
