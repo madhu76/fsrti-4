@@ -1,4 +1,4 @@
-const specialissues = {
+  const specialissues = {
     "Published":[
         {
             "Title": "Current Trends in Computational Modelling and Simulation-Part-1",
@@ -38,15 +38,23 @@ const specialissues = {
         }
     ],
     "Open":[
+          {
+            "Title": "Nanochemistry for a Sustainable Future: Innovations in Material Design",
+            "SubmissionDeadLine":"Aug 31, 2026",
+            "File":"https://res.cloudinary.com/jisst/image/upload/v1773644015/SI-Nano_Chemistry_olejte.pdf",
+            "Editors": "Dr. A. Sunil, Department of Chemistry, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India.
+            Dr. Vuggili Sai Bhargava, Water Research and Electrochemistry Laboratory, Central Research Instruments Facility, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India. 
+            Dr. Sai Prasad Nayak, Department of Chemistry, School of Engineering, Dayanand Sagar University, Bengaluru."
+         },
         {
             "Title":"Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications",
-            "SubmissionDeadLine":"15 November 2025",
+            "SubmissionDeadLine":"31 July 2026",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1757080238/Special%20Issues/SI-IOT_womtiy.pdf",
             "Editors":"Shaik Qadeer, Muffakham Jah College of Engineering, Hyderabad, India, Layak Ali, Central University of Karnataka, Kalaburgi, India, Mohammed Yousuf Khan, Maulana Azad National Urdu University, Hyderabad, India, Jameel Ahamed, University of Bisha, Kingdom of Saudi Arabia"
         },
         {
             "Title": "Real World Dynamical Systems and Numerics",
-            "SubmissionDeadLine":"15 November 2025",
+            "SubmissionDeadLine":"31 July 2026",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1757080244/Special%20Issues/SI-Dynamical_Systems_wrr2bf.pdf",
             "Editors":"Ranjit Kumar Upadhyay, Indian Institute of Technology, Dhanbad, India, Dongpo Hu, Qufu Normal University, Shandong,  China, Arni S.R. Srinivasa Rao, Division of Infectious Diseases, Medical College of Georgia, USA"
         }
