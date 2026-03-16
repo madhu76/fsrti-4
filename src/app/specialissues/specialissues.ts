@@ -42,9 +42,9 @@
             "Title": "Nanochemistry for a Sustainable Future: Innovations in Material Design",
             "SubmissionDeadLine":"Aug 31, 2026",
             "File":"https://res.cloudinary.com/jisst/image/upload/v1773644015/SI-Nano_Chemistry_olejte.pdf",
-            "Editors": "Dr. A. Sunil, Department of Chemistry, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India.
-            Dr. Vuggili Sai Bhargava, Water Research and Electrochemistry Laboratory, Central Research Instruments Facility, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India. 
-            Dr. Sai Prasad Nayak, Department of Chemistry, School of Engineering, Dayanand Sagar University, Bengaluru."
+            "Editors": "Dr. A. Sunil, Department of Chemistry, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India, 
+            Dr. Vuggili Sai Bhargava, Water Research and Electrochemistry Laboratory, Central Research Instruments Facility, Sri Sathya Sai Institute of Higher Learning, Puttaparthi, Sri Sathya Sai Dist, Andhra Pradesh, India, 
+            Dr. Sai Prasad Nayak, Department of Chemistry, School of Engineering, Dayanand Sagar University, Bengaluru, India"
          },
         {
             "Title":"Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications",
