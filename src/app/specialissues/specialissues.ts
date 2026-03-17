@@ -38,6 +38,13 @@
         }
     ],
     "Open":[
+
+          {
+            "Title": "Indian Knowledge Systems - Innovations",
+            "SubmissionDeadLine":"May 31, 2026",
+            "File":"https://res.cloudinary.com/jisst/image/upload/v1773729468/v2_SI-IKSInnovations_q4hiwl.pdf",
+            "Editors": "Y. Kalidas, IITTirupati, India, K. Mahesh, IITKharagpur, India, V. Sree Hari Rao, FSRTI Hyderabad, India, K. Suryanarayana, National Sanskrit University, Tirupati, India"
+         },
           {
             "Title": "Nanochemistry for a Sustainable Future: Innovations in Material Design",
             "SubmissionDeadLine":"Aug 31, 2026",
