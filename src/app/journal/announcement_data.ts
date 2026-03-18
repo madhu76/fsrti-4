@@ -35,10 +35,10 @@ export const announcements = [
    {
     "theme": "Indian Knowledge Systems - Innovations",
         "editors": [
-            "Y. Kalidas, Indian Institute of Technology, Tirupati, India",
-            "K. Mahesh, Indian Institute of Technology, Kharagpur, India",
             "V. Sree Hari Rao, Foundation for Scientific Research & Technological Innovation, Hyderabad, India",
-            "K. Suryanarayana, National Sanskrit University, Tirupati, India"
+            "Y. Kalidas, Indian Institute of Technology, Tirupati, India",
+            "K. Suryanarayana, National Sanskrit University, Tirupati, India",
+            "K. Mahesh, Indian Institute of Technology, Kharagpur, India"
         ],
         "link": "https://www.jisst.com/specialissues?vol_issue=Open",
         "lastDate": "May 31, 2026"
