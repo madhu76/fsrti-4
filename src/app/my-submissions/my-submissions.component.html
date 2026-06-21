@@ -423,7 +423,7 @@
             let i = index
           "
         >
-          <a [href]="revisionUrl" target="_blank">Revision {{ i + 1 }}</a>
+          <a [href]="revisionUrl" target="_blank">Author's Response - V{{ i + 1 }}</a>
           <button
             *ngIf="isAdmin"
             class="btn btn-link btn-sm text-danger p-0 ms-2"
@@ -465,7 +465,7 @@
             let i = index
           "
         >
-          <a [href]="reviewUrl" target="_blank">Review {{ i + 1 }}</a>
+          <a [href]="reviewUrl" target="_blank">Reviewer Comments - {{ i + 1 }}</a>
           <button
             *ngIf="isAdmin"
             class="btn btn-link btn-sm text-danger p-0 ms-2"
