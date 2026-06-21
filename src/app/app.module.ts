@@ -1,9 +1,8 @@
 import { BrowserModule, Meta } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler, APP_INITIALIZER } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -57,6 +56,14 @@ import { ArchiveComponent } from './archive/archive.component';
 import { PublicationpoliciesComponent } from './publicationpolicies/publicationpolicies.component';
 import { SpecialIssuesComponent } from './specialissues/specialissues.component';
 import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
+
+import { TelemetryService } from './Services/telemetry.service';
+import { TelemetryInterceptor } from './Services/telemetry.interceptor';
+import { GlobalErrorHandler } from './global-error.handler';
+
+export function initTelemetry(telemetry: TelemetryService) {
+  return () => telemetry.init();
+}
 
 @NgModule({
   declarations: [
@@ -123,7 +130,16 @@ import { MySubmissionsComponent } from './my-submissions/my-submissions.componen
     MatTreeModule
   ],
   providers: [
-    Meta
+    Meta,
+    TelemetryService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initTelemetry,
+      deps: [TelemetryService],
+      multi: true,
+    },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: TelemetryInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
