@@ -68,4 +68,23 @@ export class ApiDataService {
     return this.http.patch(this.url + route, data, httpOptions);
   }
 
+  postData(route, data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.authService.accessToken
+      })
+    };
+    return this.http.post(this.url + route, data, httpOptions);
+  }
+
+  deleteData(route, body) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + this.authService.accessToken
+      }),
+      body: body
+    };
+    return this.http.delete(this.url + route, httpOptions);
+  }
+
 }

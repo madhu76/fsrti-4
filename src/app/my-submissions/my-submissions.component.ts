@@ -45,6 +45,7 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('revisionModal') revisionModal: TemplateRef<any>;
     @ViewChild('reviewModal') reviewModal: TemplateRef<any>;
     @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
+    @ViewChild('addEditorModal') addEditorModal: TemplateRef<any>;
 
 
     associateEditors: AssociateEditor[] = [];
@@ -74,6 +75,18 @@ export class MySubmissionsComponent implements OnInit {
         'Rejected',
         'Withdrawn'
     ];
+    streamsList: string[] = [
+        'Mathematics, Modeling, Simulations',
+        'Computer Science, Information Technology, Robotics',
+        'Life Sciences, Bio Informatics, Bio Technology',
+        'Pedagogies and Techniques'
+    ];
+    newEditor: { name: string; email: string; streams: string[] } = { name: '', email: '', streams: [] };
+    addEditorErrorMessage: string = '';
+    isAddingEditor: boolean = false;
+    addEditorModalRef: any;
+    reviewModalErrorMessage: string = '';
+    revisionModalErrorMessage: string = '';
     user: any;
     private subscription: Subscription;
     
@@ -237,11 +250,13 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     openReviewModal(submission: Submission): void {
+        this.reviewModalErrorMessage = '';
         this.reviewSelectedSubmission = submission;
         this.modalService.open(this.reviewModal, { ariaLabelledBy: 'modal-basic-title' });
     }
 
     openRevisionModal(submission: Submission): void {
+        this.revisionModalErrorMessage = '';
         this.revisionSelectedSubmission = submission;
         this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
     }
@@ -284,6 +299,100 @@ export class MySubmissionsComponent implements OnInit {
         // }
         return this.associateEditors;
     }
+
+    openAddEditorModal(): void {
+        this.newEditor = { name: '', email: '', streams: [] };
+        this.addEditorErrorMessage = '';
+        this.isAddingEditor = false;
+        this.addEditorModalRef = this.modalService.open(this.addEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    toggleEditorStream(stream: string): void {
+        const index = this.newEditor.streams.indexOf(stream);
+        if (index === -1) {
+            this.newEditor.streams.push(stream);
+        } else {
+            this.newEditor.streams.splice(index, 1);
+        }
+    }
+
+    addAssociateEditor(): void {
+        this.addEditorErrorMessage = '';
+        const name = this.newEditor.name?.trim();
+        const email = this.newEditor.email?.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!name) {
+            this.addEditorErrorMessage = 'Name is required';
+            return;
+        }
+        if (!email || !emailRegex.test(email)) {
+            this.addEditorErrorMessage = 'A valid email is required';
+            return;
+        }
+        if (this.newEditor.streams.length === 0) {
+            this.addEditorErrorMessage = 'Select at least one stream';
+            return;
+        }
+        if (!confirm(`Add ${name} (${email}) as an associate editor?`)) {
+            return;
+        }
+
+        this.isAddingEditor = true;
+        const payload = { name, email, streams: this.newEditor.streams };
+        this.apiService.postData('/author/associateeditors', payload).subscribe({
+            next: () => {
+                this.associateEditors.push({ name, email, streams: this.newEditor.streams });
+                this.isAddingEditor = false;
+                if (this.addEditorModalRef) {
+                    this.addEditorModalRef.close('Added');
+                } else {
+                    this.modalService.dismissAll();
+                }
+            },
+            error: (error) => {
+                this.isAddingEditor = false;
+                this.addEditorErrorMessage = error?.error?.message || 'Error adding associate editor';
+            }
+        });
+    }
+
+    deleteReview(submission: Submission, url: string): void {
+        if (!confirm('Delete this review? This cannot be undone.')) {
+            return;
+        }
+        this.reviewModalErrorMessage = '';
+        this.apiService.deleteData(`/author/manuscript/${submission._id}/review`, { url }).subscribe({
+            next: () => {
+                const index = submission.reviewUrls.indexOf(url);
+                if (index !== -1) {
+                    submission.reviewUrls.splice(index, 1);
+                }
+            },
+            error: (error) => {
+                this.reviewModalErrorMessage = error?.error?.message || 'Error deleting review. Please try again.';
+            }
+        });
+    }
+
+    deleteRevision(submission: Submission, url: string): void {
+        if (!confirm('Delete this revision? This cannot be undone.')) {
+            return;
+        }
+        this.revisionModalErrorMessage = '';
+        this.apiService.deleteData(`/author/manuscript/${submission._id}/revision`, { url }).subscribe({
+            next: () => {
+                const index = submission.revisionUrls.indexOf(url);
+                if (index !== -1) {
+                    submission.revisionUrls.splice(index, 1);
+                }
+            },
+            error: (error) => {
+                this.revisionModalErrorMessage = error?.error?.message || 'Error deleting revision. Please try again.';
+            }
+        });
+    }
+
     onReviewFilesSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files) {
