@@ -35,10 +35,7 @@ export class ArticlesComponent implements OnInit {
   isLoading = true;
   articles = [];
   vol_issue = '';
-  select: any;
-  Data: any = {};
   mostView = [];
-  permission: string = "";
   mappings:any = {};
   currArticles:any = [];
   isEditorialIssue:boolean = false; 
@@ -67,19 +64,6 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
-
-    this.activatedRoute.queryParams.subscribe(params => {
-      const itemId = params['item_id'];
-      this.apiData.getData(`/author/articles/${itemId}`)
-        .subscribe((res: any) => {
-          this.select = JSON.parse(res);
-          this.Data = JSON.parse(res);
-          // console.log("select = ",this.select);
-          // this.isloading = false;
-        });
-      this.permission = localStorage.getItem("permission");
-    });
-
   }
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
   showShortDesciption = true;
