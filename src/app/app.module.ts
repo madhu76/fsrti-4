@@ -60,6 +60,7 @@ import { MySubmissionsComponent } from './my-submissions/my-submissions.componen
 import { TelemetryService } from './Services/telemetry.service';
 import { TelemetryInterceptor } from './Services/telemetry.interceptor';
 import { GlobalErrorHandler } from './global-error.handler';
+import { NotificationComponent } from './common/notification.component';
 
 export function initTelemetry(telemetry: TelemetryService) {
   return () => telemetry.init();
@@ -95,7 +96,8 @@ export function initTelemetry(telemetry: TelemetryService) {
     AboutComponent,
     TestSigninComponent,
     ArchiveComponent,
-    PublicationpoliciesComponent
+    PublicationpoliciesComponent,
+    NotificationComponent
 
   ],
   imports: [

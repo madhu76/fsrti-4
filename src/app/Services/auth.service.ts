@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, Subscription, interval } from 'rxjs';
 import { CredentialResponse } from 'google-one-tap';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+import { NotificationService } from './notification.service';
 
 declare const google: any;
 @Injectable({
@@ -20,7 +21,7 @@ export class AuthService {
   private supabase: SupabaseClient;
   private supabaseUser: any = null;
   
- constructor(){
+ constructor(private notificationService: NotificationService){
    this.supabase = createClient(environment.supabase.url, environment.supabase.anonKey);
    
    // Listen for auth state changes
@@ -65,7 +66,7 @@ export class AuthService {
     try {
       this.decodedToken = JSON.parse(atob(this.accessToken.split('.')[1]));
     } catch (e) {
-      alert("Error Logging In, please try again");
+      this.notificationService.error('Error logging in, please try again.', true, String(e));
     }
     this.userSubject.next(
     {

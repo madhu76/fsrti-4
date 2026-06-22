@@ -1,0 +1,119 @@
+.app-notification-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 380px;
+  max-width: calc(100vw - 2rem);
+  pointer-events: none;
+}
+
+.app-notification {
+  display: flex;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  pointer-events: auto;
+  animation: app-notification-in 0.18s ease-out;
+}
+
+@keyframes app-notification-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.app-notification__bar {
+  width: 5px;
+  flex: 0 0 5px;
+}
+
+.app-notification__body {
+  flex: 1 1 auto;
+  padding: 0.75rem 0.9rem;
+}
+
+.app-notification__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.app-notification__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.app-notification__close {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0 0.25rem;
+}
+
+.app-notification__close:hover {
+  color: #212529;
+}
+
+.app-notification__message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #343a40;
+  white-space: pre-line;
+}
+
+.app-notification__contact {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #dee2e6;
+  font-size: 0.82rem;
+  color: #495057;
+}
+
+.app-notification__meta {
+  font-size: 0.78rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Type variants */
+.app-notification--success .app-notification__bar {
+  background: #198754;
+}
+.app-notification--success .app-notification__title {
+  color: #198754;
+}
+
+.app-notification--error .app-notification__bar {
+  background: #dc3545;
+}
+.app-notification--error .app-notification__title {
+  color: #dc3545;
+}
+
+.app-notification--warning .app-notification__bar {
+  background: #fd7e14;
+}
+.app-notification--warning .app-notification__title {
+  color: #fd7e14;
+}
+
+.app-notification--info .app-notification__bar {
+  background: #0d6efd;
+}
+.app-notification--info .app-notification__title {
+  color: #0d6efd;
+}

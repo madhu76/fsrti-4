@@ -1,6 +1,7 @@
 import { Component, NgZone, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from '../Services/auth.service';
 import { ApiDataService } from '../Services/api-data.service';
+import { NotificationService } from '../Services/notification.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
@@ -85,12 +86,10 @@ export class MySubmissionsComponent implements OnInit {
     addEditorErrorMessage: string = '';
     isAddingEditor: boolean = false;
     addEditorModalRef: any;
-    reviewModalErrorMessage: string = '';
-    revisionModalErrorMessage: string = '';
     user: any;
     private subscription: Subscription;
     
-    constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal, private zone: NgZone) { }
+    constructor(private authService: AuthService, private apiService: ApiDataService, private modalService: NgbModal, private zone: NgZone, private notificationService: NotificationService) { }
 
     ngOnInit(): void {
         this.loadData();
@@ -104,11 +103,10 @@ export class MySubmissionsComponent implements OnInit {
                 this.associateEditors = response['associateEditors'] ?? [];
             },
             error: (error) => {
-                //If unauthorized send proper alert
                 if (error.status === 401) {
-                    alert('Only managing editors can assign associate editors');
+                    this.notificationService.warning('Only managing editors can assign associate editors.');
                 } else {
-                    alert('Error fetching associate editors');
+                    this.notificationService.backendError(error, 'Error fetching associate editors.');
                 }
             }
         });
@@ -134,10 +132,11 @@ export class MySubmissionsComponent implements OnInit {
                 this.selectedSubmission.associateEditor = this.selectedAssociateEditor;
                 this.selectedSubmission.managingEditor = this.user.email;
                 this.modalService.dismissAll();
+                this.notificationService.success('Associate editor assigned successfully.');
             },
             error: (error) => {
-                // Handle error, e.g., show error message
-                this.assignEditorErrorMessage = error;
+                this.modalService.dismissAll();
+                this.notificationService.backendError(error, 'Error assigning associate editor.');
             }
         });
     }
@@ -157,7 +156,7 @@ export class MySubmissionsComponent implements OnInit {
                 error: (error) => {
                     submission.updateStatus = 'error';
                     submission.isLoading = false;
-                    // Handle error, e.g., show error message
+                    this.notificationService.backendError(error, 'Error updating the submission.');
                 }
             });
     }
@@ -194,6 +193,7 @@ export class MySubmissionsComponent implements OnInit {
                 error: (error) => {
                     this.showError = true;
                     this.isLoading = false;
+                    this.notificationService.backendError(error, 'There was an error retrieving your articles.');
                 }
             });
         }
@@ -250,13 +250,11 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     openReviewModal(submission: Submission): void {
-        this.reviewModalErrorMessage = '';
         this.reviewSelectedSubmission = submission;
         this.modalService.open(this.reviewModal, { ariaLabelledBy: 'modal-basic-title' });
     }
 
     openRevisionModal(submission: Submission): void {
-        this.revisionModalErrorMessage = '';
         this.revisionSelectedSubmission = submission;
         this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
     }
@@ -275,11 +273,10 @@ export class MySubmissionsComponent implements OnInit {
                         this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
                     },
                     error: (error) => {
-                        //If unauthorized send proper alert
                         if (error.status === 401) {
-                            alert('Only managing editors can assign associate editors');
+                            this.notificationService.warning('Only managing editors can assign associate editors.');
                         } else {
-                            alert('Error fetching associate editors');
+                            this.notificationService.backendError(error, 'Error fetching associate editors.');
                         }
                     }
                 });
@@ -289,7 +286,7 @@ export class MySubmissionsComponent implements OnInit {
                 this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
             }
         } catch (err) {
-            alert(err);
+            this.notificationService.error('Unable to open the assign editor dialog.', true, String(err));
         }
     }
     getAssociateEditorsByStream(): any {
@@ -349,10 +346,16 @@ export class MySubmissionsComponent implements OnInit {
                 } else {
                     this.modalService.dismissAll();
                 }
+                this.notificationService.success(`Associate editor ${name} added successfully.`);
             },
             error: (error) => {
                 this.isAddingEditor = false;
-                this.addEditorErrorMessage = error?.error?.message || 'Error adding associate editor';
+                if (error?.status >= 400 && error?.status < 500 && error?.error?.message) {
+                    // Expected validation/business error: show inline in the form.
+                    this.addEditorErrorMessage = error.error.message;
+                } else {
+                    this.notificationService.backendError(error, 'Error adding associate editor.');
+                }
             }
         });
     }
@@ -361,16 +364,16 @@ export class MySubmissionsComponent implements OnInit {
         if (!confirm('Delete this review? This cannot be undone.')) {
             return;
         }
-        this.reviewModalErrorMessage = '';
         this.apiService.deleteData(`/author/manuscript/${submission._id}/review`, { url }).subscribe({
             next: () => {
                 const index = submission.reviewUrls.indexOf(url);
                 if (index !== -1) {
                     submission.reviewUrls.splice(index, 1);
                 }
+                this.notificationService.success('Review deleted successfully.');
             },
             error: (error) => {
-                this.reviewModalErrorMessage = error?.error?.message || 'Error deleting review. Please try again.';
+                this.notificationService.backendError(error, 'Error deleting review. Please try again.');
             }
         });
     }
@@ -379,16 +382,16 @@ export class MySubmissionsComponent implements OnInit {
         if (!confirm('Delete this revision? This cannot be undone.')) {
             return;
         }
-        this.revisionModalErrorMessage = '';
         this.apiService.deleteData(`/author/manuscript/${submission._id}/revision`, { url }).subscribe({
             next: () => {
                 const index = submission.revisionUrls.indexOf(url);
                 if (index !== -1) {
                     submission.revisionUrls.splice(index, 1);
                 }
+                this.notificationService.success('Revision deleted successfully.');
             },
             error: (error) => {
-                this.revisionModalErrorMessage = error?.error?.message || 'Error deleting revision. Please try again.';
+                this.notificationService.backendError(error, 'Error deleting revision. Please try again.');
             }
         });
     }
@@ -416,12 +419,12 @@ export class MySubmissionsComponent implements OnInit {
                         this.changedSubmission.updateStatus = 'success';
                         this.changedSubmission.isLoading = false;
                         this.loadData();
-                        // Handle success, e.g., show success message
+                        this.notificationService.success('Review uploaded successfully.');
                     },
                     error: (error) => {
                         this.changedSubmission.updateStatus = 'error';
                         this.changedSubmission.isLoading = false;
-                        // Handle error, e.g., show error message
+                        this.notificationService.backendError(error, 'Error uploading the review.');
                     }
                 });
             this.modalService.dismissAll();
@@ -437,12 +440,12 @@ export class MySubmissionsComponent implements OnInit {
                         this.revisionSubmission.updateStatus = 'success';
                         this.revisionSubmission.isLoading = false;
                         this.loadData();
-                        // Handle success, e.g., show success message
+                        this.notificationService.success('Revision uploaded successfully.');
                     },
                     error: (error) => {
                         this.revisionSubmission.updateStatus = 'error';
                         this.revisionSubmission.isLoading = false;
-                        // Handle error, e.g., show error message
+                        this.notificationService.backendError(error, 'Error uploading the revision.');
                     }
                 });
             this.modalService.dismissAll();
@@ -451,7 +454,7 @@ export class MySubmissionsComponent implements OnInit {
 
     onSaveArchiveDetails(submission: Submission): void {
         if (!submission.volume || !submission.issue) {
-            alert('Please enter both volume and issue');
+            this.notificationService.warning('Please enter both volume and issue.');
             return;
         }
         submission.isArchiveSaving = true;
@@ -466,11 +469,12 @@ export class MySubmissionsComponent implements OnInit {
             next: (result) => {
                 submission.archiveUpdateStatus = 'success';
                 submission.isArchiveSaving = false;
+                this.notificationService.success('Archive details saved successfully.');
             },
             error: (error) => {
                 submission.archiveUpdateStatus = 'error';
                 submission.isArchiveSaving = false;
-                console.error('Error saving archive details:', error);
+                this.notificationService.backendError(error, 'Error saving archive details.');
             }
         });
     }

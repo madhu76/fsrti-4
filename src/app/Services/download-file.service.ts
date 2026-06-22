@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FileUrlService } from './file-url.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { FileUrlService } from './file-url.service';
 export class DownloadFileService {
   // url='http://localhost:3000';
   //url='https://epsbackend.herokuapp.com';
-  constructor(private http:HttpClient, private fileUrlService: FileUrlService) { }
+  constructor(private http:HttpClient, private fileUrlService: FileUrlService, private notificationService: NotificationService) { }
 
   downloadFileByItemId(item_id) {
     let headers = new HttpHeaders();
@@ -28,7 +29,7 @@ export class DownloadFileService {
         // To ensure that the object URL gets released (avoiding memory leaks), revoke it after the link click
         window.URL.revokeObjectURL(url);
       });
-    }, (error) => {alert(error.error)});
+    }, (error) => { this.notificationService.backendError(error, 'Unable to download the file.'); });
 }
 
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../Services/auth.service'; // Adjust the path as necessary
 import { ApiDataService } from '../Services/api-data.service';
+import { NotificationService } from '../Services/notification.service';
 
 @Component({
   selector: 'app-article-submission',
@@ -24,7 +25,7 @@ export class SubmissionComponent {
   }
 
 
-  constructor(private authService: AuthService, private articleSubmissionService: ApiDataService) { }
+  constructor(private authService: AuthService, private articleSubmissionService: ApiDataService, private notificationService: NotificationService) { }
   private validateEmail(email) {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email.trim());
@@ -52,7 +53,7 @@ export class SubmissionComponent {
 
       const emails = event.target.articleAuthorEmails.value;
       if (!this.validateEmails(emails)) {
-        alert('One or more email addresses are invalid. Please correct them and try again.');
+        this.notificationService.warning('One or more email addresses are invalid. Please correct them and try again.');
         return; // Stop the form submission
       }
       // Proceed with submission logic
@@ -80,6 +81,7 @@ export class SubmissionComponent {
         error: (error) => {
           this.isSubmitting = false;
           this.showError = true;
+          this.notificationService.backendError(error, 'There was an error submitting your manuscript.');
         }
       });
     }

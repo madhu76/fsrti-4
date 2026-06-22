@@ -403,9 +403,6 @@
       <h4 class="modal-title">{{ revisionSelectedSubmission.title }}</h4>
     </div>
     <div class="modal-body">
-      <div *ngIf="revisionModalErrorMessage" class="alert alert-danger" role="alert">
-        {{ revisionModalErrorMessage }}
-      </div>
       <p>
         <a [href]="revisionSelectedSubmission.articleUrl" target="_blank"
           >Original Submission</a
@@ -450,9 +447,6 @@
       <h4 class="modal-title">Reviews</h4>
     </div>
     <div class="modal-body">
-      <div *ngIf="reviewModalErrorMessage" class="alert alert-danger" role="alert">
-        {{ reviewModalErrorMessage }}
-      </div>
       <div
         *ngIf="
           reviewSelectedSubmission.reviewUrls &&

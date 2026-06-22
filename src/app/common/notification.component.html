@@ -1,0 +1,44 @@
+<div class="app-notification-container">
+  <div
+    *ngFor="let n of notificationService.notifications$ | async"
+    class="app-notification"
+    [ngClass]="'app-notification--' + n.type"
+    role="alert"
+  >
+    <div class="app-notification__bar"></div>
+    <div class="app-notification__body">
+      <div class="app-notification__header">
+        <span class="app-notification__title">
+          <ng-container [ngSwitch]="n.type">
+            <span *ngSwitchCase="'success'">Success</span>
+            <span *ngSwitchCase="'warning'">Please note</span>
+            <span *ngSwitchCase="'info'">Information</span>
+            <span *ngSwitchDefault>Something went wrong</span>
+          </ng-container>
+        </span>
+        <button
+          type="button"
+          class="app-notification__close"
+          aria-label="Dismiss"
+          (click)="dismiss(n.id)"
+        >
+          &times;
+        </button>
+      </div>
+
+      <p class="app-notification__message">{{ n.message }}</p>
+
+      <div *ngIf="n.showContact" class="app-notification__contact">
+        <p class="mb-1">
+          If this problem persists, please contact
+          <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
+          with a screenshot of this error and the timestamp below.
+        </p>
+        <p class="app-notification__meta mb-0">
+          <span *ngIf="n.detail">{{ n.detail }} &middot; </span>
+          {{ n.timestamp | date: 'medium' }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
