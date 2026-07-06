@@ -16,6 +16,9 @@ export class SubmissionComponent implements OnInit {
   certified = false;
   isSubmitting = false; // Tracks if the form is currently being submitted
   streams: string[] = [];
+  isSingleAuthor: boolean = null;
+  otherAuthors = '';
+  otherAuthorEmails = '';
 
   ngOnInit(): void {
     this.articleSubmissionService.getData('/author/streams').subscribe({
@@ -63,8 +66,45 @@ export class SubmissionComponent implements OnInit {
     } else {
       this.showLoginError = false;
 
-      const emails = event.target.articleAuthorEmails.value;
-      if (!this.validateEmails(emails)) {
+      // Ensure all mandatory fields are filled (other authors are optional).
+      const requiredFields: { value: string; label: string }[] = [
+        { value: event.target.articleTitle.value, label: 'Article Title' },
+        { value: event.target.submissionFor.value, label: 'Submission For' },
+        { value: event.target.articleType.value, label: 'Article Type' },
+        { value: event.target.articleStream.value, label: 'Article Stream' },
+        { value: event.target.correspondingAuthorName.value, label: 'Corresponding Author Name' },
+        { value: event.target.articleAbstract.value, label: 'Abstract' },
+        { value: event.target.articleKeywords.value, label: 'Keywords' }
+      ];
+      const missingField = requiredFields.find(field => !field.value || !field.value.trim());
+      if (missingField) {
+        this.notificationService.warning(`${missingField.label} is required. Please fill in all mandatory fields.`);
+        return; // Stop the form submission
+      }
+      if (!event.target.articleFile.files || event.target.articleFile.files.length === 0) {
+        this.notificationService.warning('Please upload your article (PDF) before submitting.');
+        return; // Stop the form submission
+      }
+
+      // Single vs multi-author handling.
+      if (this.isSingleAuthor === null || this.isSingleAuthor === undefined) {
+        this.notificationService.warning('Please indicate whether this is a single-author submission.');
+        return; // Stop the form submission
+      }
+      const isMultiAuthor = this.isSingleAuthor === false;
+      const otherAuthors = (this.otherAuthors || '').trim();
+      const otherAuthorEmails = (this.otherAuthorEmails || '').trim();
+      if (isMultiAuthor) {
+        if (!otherAuthors) {
+          this.notificationService.warning('Other Author(s) Name(s) is required for multi-author submissions.');
+          return; // Stop the form submission
+        }
+        if (!otherAuthorEmails) {
+          this.notificationService.warning('Other Author(s) Email(s) is required for multi-author submissions.');
+          return; // Stop the form submission
+        }
+      }
+      if (!this.validateEmails(otherAuthorEmails)) {
         this.notificationService.warning('One or more email addresses are invalid. Please correct them and try again.');
         return; // Stop the form submission
       }
@@ -72,13 +112,13 @@ export class SubmissionComponent implements OnInit {
       event.preventDefault(); // Prevent the form from submitting in the traditional way
       const formData: FormData = new FormData();
       formData.append('title', event.target.articleTitle.value);
-      formData.append('authors', event.target.articleAuthors.value);
+      formData.append('authors', isMultiAuthor ? otherAuthors : '');
       formData.append('abstract', event.target.articleAbstract.value);
       formData.append('keywords', event.target.articleKeywords.value);
       formData.append('articleType', event.target.articleType.value);
       formData.append('articleStream', event.target.articleStream.value);
       formData.append('correspondingAuthorName', event.target.correspondingAuthorName.value);
-      formData.append('articleAuthorEmails', event.target.articleAuthorEmails.value);
+      formData.append('articleAuthorEmails', isMultiAuthor ? otherAuthorEmails : '');
       formData.append('submissionFor', event.target.submissionFor.value);
       formData.append('file', event.target.articleFile.files[0]);
 

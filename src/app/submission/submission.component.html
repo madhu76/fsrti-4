@@ -15,14 +15,14 @@
     <form (ngSubmit)="onSubmit($event)">
         <!-- Article Title -->
         <div class="mb-3">
-            <label for="articleTitle" class="form-label">Article Title</label>
+            <label for="articleTitle" class="form-label">Article Title <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="articleTitle" placeholder="Enter the title of your article"
                 required>
         </div>
 
         <div class="mb-3">
-            <label for="submissionFor" class="form-label">Submission For</label>
-            <select class="form-control" id="submissionFor">
+            <label for="submissionFor" class="form-label">Submission For <span class="text-danger">*</span></label>
+            <select class="form-control" id="submissionFor" required>
                 <option value="JISST">JISST</option>
                 <option value="SI: Dynamical Systems">SI: Dynamical Systems</option>
                 <option value="SI: IKS-Innovations">SI: IKS-Innovations</option>
@@ -32,8 +32,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="articleType" class="form-label">Article Type</label>
-            <select class="form-control" id="articleType">
+            <label for="articleType" class="form-label">Article Type <span class="text-danger">*</span></label>
+            <select class="form-control" id="articleType" required>
                 <option value="Research Article">Original Research</option>
                 <option value="Survey/Overview/Review/Tutorial Article">Survey/Overview/Review/Tutorial Article</option>
                 <option value="Forum Paper">Forum Paper</option>
@@ -41,51 +41,69 @@
         </div>
 
         <div class="mb-3">
-            <label for="articleStream" class="form-label">Article Stream</label>
-            <select class="form-control" id="articleStream">
+            <label for="articleStream" class="form-label">Article Stream <span class="text-danger">*</span></label>
+            <select class="form-control" id="articleStream" required>
                 <option *ngFor="let stream of streams" [value]="stream">{{ stream }}</option>
             </select>
         </div>
 
         <!-- Corresponsing Author -->
         <div class="mb-3">
-            <label for="correspondingAuthorName" class="form-label">Corresponding Author Name</label>
+            <label for="correspondingAuthorName" class="form-label">Corresponding Author Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="correspondingAuthorName" placeholder="Corresponding Author Name"
                 required>
         </div>
 
 
-        <!-- Authors -->
+        <!-- Author count question -->
         <div class="mb-3">
-            <label for="articleAuthors" class="form-label">Other Author(s) Name(s)</label>
-            <input type="text" class="form-control" id="articleAuthors" placeholder="Author names separated by commas"
-                required>
+            <label class="form-label d-block">Is this a single-author submission? <span class="text-danger">*</span></label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="singleAuthor" id="singleAuthorYes"
+                    [value]="true" [(ngModel)]="isSingleAuthor">
+                <label class="form-check-label" for="singleAuthorYes">Yes, single author</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="singleAuthor" id="singleAuthorNo"
+                    [value]="false" [(ngModel)]="isSingleAuthor">
+                <label class="form-check-label" for="singleAuthorNo">No, multiple authors</label>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="articleAuthorEmails" class="form-label">Other Author(s) Email(s)</label>
-            <input type="text" class="form-control" id="articleAuthorEmails"
-                placeholder="Author Email Ids separated by commas" required>
+        <!-- Other Authors (only for multi-author submissions) -->
+        <div *ngIf="isSingleAuthor === false">
+            <div class="mb-3">
+                <label for="articleAuthors" class="form-label">Other Author(s) Name(s) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="articleAuthors" name="articleAuthors"
+                    placeholder="Author names separated by commas" [(ngModel)]="otherAuthors">
+            </div>
+
+            <div class="mb-3">
+                <label for="articleAuthorEmails" class="form-label">Other Author(s) Email(s) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="articleAuthorEmails" name="articleAuthorEmails"
+                    placeholder="Author Email Ids separated by commas" [(ngModel)]="otherAuthorEmails">
+            </div>
         </div>
 
         <!-- Abstract -->
         <div class="mb-3">
-            <label for="articleAbstract" class="form-label">Abstract</label>
+            <label for="articleAbstract" class="form-label">Abstract <span class="text-danger">*</span></label>
             <textarea class="form-control" id="articleAbstract" rows="3"
                 placeholder="Enter the abstract of your article" required></textarea>
         </div>
 
         <!-- Keywords -->
         <div class="mb-3">
-            <label for="articleKeywords" class="form-label">Keywords</label>
+            <label for="articleKeywords" class="form-label">Keywords <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="articleKeywords"
                 placeholder="Enter keywords separated by commas" required>
         </div>
 
         <!-- File Upload -->
         <div class="mb-3">
-            <label for="articleFile" class="form-label">Upload Article</label>
-            <input class="form-control" type="file" id="articleFile" required>
+            <label for="articleFile" class="form-label">Upload Article <span class="text-danger">*</span></label>
+            <input class="form-control" type="file" id="articleFile" accept="application/pdf,.pdf" required>
+            <small class="form-text text-muted">Please upload PDF files only.</small>
         </div>
         <!-- Certification Statement -->
         <div>

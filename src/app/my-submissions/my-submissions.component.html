@@ -268,7 +268,17 @@
                   </td>
                 </tr>
                 <tr *ngFor="let submission of getArchivedSubmissionsByStatus(status)">
-                  <td>{{ submission._id }}</td>
+                  <td>
+                    {{ submission._id }}
+                    <br *ngIf="isAdmin" />
+                    <button
+                      *ngIf="isAdmin"
+                      class="btn btn-link p-0"
+                      (click)="openEditNumberModal(submission)"
+                    >
+                      Edit No
+                    </button>
+                  </td>
                   <td>
                     <button
                       class="btn btn-link p-0"
