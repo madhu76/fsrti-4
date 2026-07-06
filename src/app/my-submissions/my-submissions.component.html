@@ -18,6 +18,25 @@
   <h2 *ngIf="!isAdmin && !isAssociateEditor" class="text-center mb-4">Submissions</h2>
   <h2 *ngIf="isAdmin || isAssociateEditor" class="text-center mb-4">Editorial Manager System</h2>
 
+  <!-- Admin Actions menu (admin only) -->
+  <div *ngIf="isAdmin" class="dropdown mb-3 text-end">
+    <button
+      class="btn btn-outline-primary dropdown-toggle"
+      type="button"
+      id="adminActionsDropdown"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Admin Actions
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminActionsDropdown">
+      <button class="dropdown-item" type="button" (click)="openAddManagingEditorModal()">
+        Add New Managing Editor
+      </button>
+    </div>
+  </div>
+
   <div class="mb-3">
     <input
       type="text"
@@ -615,6 +634,71 @@
         class="btn btn-primary"
         (click)="addAssociateEditor()"
         [disabled]="isAddingEditor"
+      >
+        Add
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Add Managing Editor Modal -->
+  <ng-template #addManagingEditorModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Add Managing Editor</h4>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="addManagingEditorErrorMessage" class="alert alert-danger" role="alert">
+        {{ addManagingEditorErrorMessage }}
+      </div>
+      <div class="form-group mb-3">
+        <label for="managingEditorName">Name</label>
+        <input
+          id="managingEditorName"
+          type="text"
+          class="form-control"
+          [(ngModel)]="newManagingEditor.name"
+          placeholder="Full name"
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label for="managingEditorEmail">Email</label>
+        <input
+          id="managingEditorEmail"
+          type="email"
+          class="form-control"
+          [(ngModel)]="newManagingEditor.email"
+          placeholder="name@example.com"
+        />
+      </div>
+      <div class="form-group">
+        <label>Streams</label>
+        <small class="d-block text-muted mb-2">Each stream can have only one managing editor.</small>
+        <div *ngFor="let stream of streamsList" class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [id]="'me-stream-' + stream"
+            [checked]="newManagingEditor.streams.includes(stream)"
+            (change)="toggleManagingEditorStream(stream)"
+          />
+          <label class="form-check-label" [for]="'me-stream-' + stream">
+            {{ stream }}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('Cancel')"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="addManagingEditor()"
+        [disabled]="isAddingManagingEditor"
       >
         Add
       </button>

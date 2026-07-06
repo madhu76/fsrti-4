@@ -47,6 +47,7 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('reviewModal') reviewModal: TemplateRef<any>;
     @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
     @ViewChild('addEditorModal') addEditorModal: TemplateRef<any>;
+    @ViewChild('addManagingEditorModal') addManagingEditorModal: TemplateRef<any>;
 
 
     associateEditors: AssociateEditor[] = [];
@@ -86,6 +87,11 @@ export class MySubmissionsComponent implements OnInit {
     addEditorErrorMessage: string = '';
     isAddingEditor: boolean = false;
     addEditorModalRef: any;
+    managingEditors: AssociateEditor[] = [];
+    newManagingEditor: { name: string; email: string; streams: string[] } = { name: '', email: '', streams: [] };
+    addManagingEditorErrorMessage: string = '';
+    isAddingManagingEditor: boolean = false;
+    addManagingEditorModalRef: any;
     user: any;
     private subscription: Subscription;
     
@@ -116,6 +122,19 @@ export class MySubmissionsComponent implements OnInit {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
+    }
+
+    private loadManagingEditors(): void {
+        this.apiService.getData('/author/managingeditors').subscribe({
+            next: (response) => {
+                this.managingEditors = response['managingEditors'] ?? [];
+            },
+            error: (error) => {
+                if (error.status !== 401) {
+                    this.notificationService.backendError(error, 'Error fetching managing editors.');
+                }
+            }
+        });
     }
 
     onRefresh(): void {
@@ -311,6 +330,70 @@ export class MySubmissionsComponent implements OnInit {
         } else {
             this.newEditor.streams.splice(index, 1);
         }
+    }
+
+    openAddManagingEditorModal(): void {
+        this.loadManagingEditors();
+        this.newManagingEditor = { name: '', email: '', streams: [] };
+        this.addManagingEditorErrorMessage = '';
+        this.isAddingManagingEditor = false;
+        this.addManagingEditorModalRef = this.modalService.open(this.addManagingEditorModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    toggleManagingEditorStream(stream: string): void {
+        const index = this.newManagingEditor.streams.indexOf(stream);
+        if (index === -1) {
+            this.newManagingEditor.streams.push(stream);
+        } else {
+            this.newManagingEditor.streams.splice(index, 1);
+        }
+    }
+
+    addManagingEditor(): void {
+        this.addManagingEditorErrorMessage = '';
+        const name = this.newManagingEditor.name?.trim();
+        const email = this.newManagingEditor.email?.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!name) {
+            this.addManagingEditorErrorMessage = 'Name is required';
+            return;
+        }
+        if (!email || !emailRegex.test(email)) {
+            this.addManagingEditorErrorMessage = 'A valid email is required';
+            return;
+        }
+        if (this.newManagingEditor.streams.length === 0) {
+            this.addManagingEditorErrorMessage = 'Select at least one stream';
+            return;
+        }
+        if (!confirm(`Add ${name} (${email}) as a managing editor?`)) {
+            return;
+        }
+
+        this.isAddingManagingEditor = true;
+        const payload = { name, email, streams: this.newManagingEditor.streams };
+        this.apiService.postData('/author/managingeditors', payload).subscribe({
+            next: () => {
+                this.managingEditors.push({ name, email, streams: this.newManagingEditor.streams });
+                this.isAddingManagingEditor = false;
+                if (this.addManagingEditorModalRef) {
+                    this.addManagingEditorModalRef.close('Added');
+                } else {
+                    this.modalService.dismissAll();
+                }
+                this.notificationService.success(`Managing editor ${name} added successfully.`);
+            },
+            error: (error) => {
+                this.isAddingManagingEditor = false;
+                if (error?.status >= 400 && error?.status < 500 && error?.error?.message) {
+                    // Expected validation/business error: show inline in the form.
+                    this.addManagingEditorErrorMessage = error.error.message;
+                } else {
+                    this.notificationService.backendError(error, 'Error adding managing editor.');
+                }
+            }
+        });
     }
 
     addAssociateEditor(): void {
