@@ -70,7 +70,17 @@
           <td colspan="8" class="text-center">No submissions found</td>
         </tr>
         <tr *ngFor="let submission of filteredSubmissions">
-          <td>{{ submission._id }}</td>
+          <td>
+            {{ submission._id }}
+            <br *ngIf="isAdmin" />
+            <button
+              *ngIf="isAdmin"
+              class="btn btn-link p-0"
+              (click)="openEditNumberModal(submission)"
+            >
+              Edit No
+            </button>
+          </td>
           <!-- center the content -->
           <td class="small-column text-center">
             <button
@@ -718,6 +728,108 @@
         [disabled]="isAddingManagingEditor"
       >
         Add
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Edit Manuscript Number Modal -->
+  <ng-template #editNumberModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Manuscript Number</h4>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="editNumberErrorMessage" class="alert alert-danger" role="alert">
+        {{ editNumberErrorMessage }}
+      </div>
+      <p class="mb-3">
+        Current number: <strong>{{ selectedNumberSubmission?._id }}</strong>
+      </p>
+      <div class="d-flex" style="gap: 12px;">
+        <div class="form-group">
+          <label for="editYear">Year</label>
+          <input
+            id="editYear"
+            type="text"
+            class="form-control"
+            maxlength="2"
+            style="width: 90px;"
+            placeholder="25"
+            [(ngModel)]="editYear"
+          />
+        </div>
+        <div class="form-group flex-grow-1">
+          <label for="editNumber">Number</label>
+          <input
+            id="editNumber"
+            type="text"
+            class="form-control"
+            maxlength="4"
+            placeholder="0001"
+            [(ngModel)]="editNumber"
+          />
+        </div>
+      </div>
+
+      <div class="mt-2">
+        New number: <strong>{{ newManuscriptNumber || '—' }}</strong>
+        <span *ngIf="newManuscriptNumber && !isNumberFormatValid()" class="text-danger">
+          — must be in the format YY-NNNN
+        </span>
+        <span *ngIf="isNumberFormatValid() && isNumberUnchanged()" class="text-muted">
+          — unchanged
+        </span>
+        <span *ngIf="isNumberFormatValid() && !isNumberUnchanged() && isNumberTaken()" class="text-danger">
+          — already taken
+        </span>
+        <span *ngIf="isNumberFormatValid() && !isNumberUnchanged() && !isNumberTaken()" class="text-success">
+          — available ✓
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm mt-2"
+        (click)="useNextAvailableNumber()"
+        [disabled]="!isEditYearValid()"
+      >
+        Use next available for {{ isEditYearValid() ? editYear : 'year' }}
+      </button>
+
+      <div class="mt-3" *ngIf="isEditYearValid()">
+        <small class="text-muted">
+          Taken numbers for {{ editYear }} ({{ getTakenNumbersForYear(editYear).length }}):
+        </small>
+        <div
+          class="border rounded p-2 mt-1"
+          style="max-height: 130px; overflow-y: auto;"
+        >
+          <span *ngIf="getTakenNumbersForYear(editYear).length === 0" class="text-muted">
+            None yet — any number is available.
+          </span>
+          <span
+            *ngFor="let n of getTakenNumbersForYear(editYear)"
+            class="badge badge-light border mr-1 mb-1"
+          >
+            {{ n }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('Cancel')"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveManuscriptNumber()"
+        [disabled]="!canSaveNumber()"
+      >
+        Save
       </button>
     </div>
   </ng-template>

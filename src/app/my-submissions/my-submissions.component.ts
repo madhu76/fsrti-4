@@ -48,6 +48,7 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('assignEditorModal') assignEditorModal: TemplateRef<any>;
     @ViewChild('addEditorModal') addEditorModal: TemplateRef<any>;
     @ViewChild('addManagingEditorModal') addManagingEditorModal: TemplateRef<any>;
+    @ViewChild('editNumberModal') editNumberModal: TemplateRef<any>;
 
 
     associateEditors: AssociateEditor[] = [];
@@ -89,6 +90,12 @@ export class MySubmissionsComponent implements OnInit {
     addManagingEditorModalRef: any;
     newStreamName: string = '';
     isAddingStream: boolean = false;
+    selectedNumberSubmission: Submission;
+    editYear: string = '';
+    editNumber: string = '';
+    editNumberErrorMessage: string = '';
+    isSavingNumber: boolean = false;
+    editNumberModalRef: any;
     user: any;
     private subscription: Subscription;
     
@@ -391,6 +398,110 @@ export class MySubmissionsComponent implements OnInit {
                     this.addManagingEditorErrorMessage = error.error.message;
                 } else {
                     this.notificationService.backendError(error, 'Error adding stream.');
+                }
+            }
+        });
+    }
+
+    openEditNumberModal(submission: Submission): void {
+        this.selectedNumberSubmission = submission;
+        const parts = (submission._id || '').split('-');
+        this.editYear = parts[0] || '';
+        this.editNumber = parts[1] || '';
+        this.editNumberErrorMessage = '';
+        this.isSavingNumber = false;
+        this.editNumberModalRef = this.modalService.open(this.editNumberModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    private allManuscriptIds(): string[] {
+        return [...this.submissions, ...this.archivedSubmissions].map(s => s._id);
+    }
+
+    isEditYearValid(): boolean {
+        return /^\d{2}$/.test((this.editYear || '').trim());
+    }
+
+    get newManuscriptNumber(): string {
+        const year = (this.editYear || '').trim();
+        const num = (this.editNumber || '').trim();
+        if (!year || !num) {
+            return '';
+        }
+        return `${year}-${num.padStart(4, '0')}`;
+    }
+
+    isNumberFormatValid(): boolean {
+        return /^\d{2}-\d{4}$/.test(this.newManuscriptNumber);
+    }
+
+    isNumberUnchanged(): boolean {
+        return this.newManuscriptNumber === (this.selectedNumberSubmission ? this.selectedNumberSubmission._id : '');
+    }
+
+    isNumberTaken(): boolean {
+        return this.allManuscriptIds().includes(this.newManuscriptNumber);
+    }
+
+    getTakenNumbersForYear(year: string): string[] {
+        const y = (year || '').trim();
+        if (!/^\d{2}$/.test(y)) {
+            return [];
+        }
+        return this.allManuscriptIds()
+            .filter(id => id.startsWith(`${y}-`))
+            .map(id => id.split('-')[1])
+            .filter(n => !!n)
+            .sort();
+    }
+
+    useNextAvailableNumber(): void {
+        const year = (this.editYear || '').trim();
+        if (!/^\d{2}$/.test(year)) {
+            return;
+        }
+        const taken = new Set(this.getTakenNumbersForYear(year).map(n => parseInt(n, 10)));
+        let candidate = 1;
+        while (taken.has(candidate)) {
+            candidate++;
+        }
+        this.editNumber = candidate.toString().padStart(4, '0');
+    }
+
+    canSaveNumber(): boolean {
+        return this.isNumberFormatValid()
+            && !this.isNumberUnchanged()
+            && !this.isNumberTaken()
+            && !this.isSavingNumber;
+    }
+
+    saveManuscriptNumber(): void {
+        if (!this.canSaveNumber() || !this.selectedNumberSubmission) {
+            return;
+        }
+        const oldId = this.selectedNumberSubmission._id;
+        const newId = this.newManuscriptNumber;
+        if (!confirm(`Change manuscript number from ${oldId} to ${newId}? Ensure the author has already agreed to this change.`)) {
+            return;
+        }
+        this.editNumberErrorMessage = '';
+        this.isSavingNumber = true;
+        this.apiService.patchData(`/author/manuscript/number/${oldId}`, { newId }).subscribe({
+            next: () => {
+                this.selectedNumberSubmission._id = newId;
+                this.isSavingNumber = false;
+                if (this.editNumberModalRef) {
+                    this.editNumberModalRef.close('Saved');
+                } else {
+                    this.modalService.dismissAll();
+                }
+                this.notificationService.success(`Manuscript number updated to ${newId}.`);
+            },
+            error: (error) => {
+                this.isSavingNumber = false;
+                if (error?.status >= 400 && error?.status < 500 && error?.error?.message) {
+                    this.editNumberErrorMessage = error.error.message;
+                } else {
+                    this.notificationService.backendError(error, 'Error updating manuscript number.');
                 }
             }
         });
