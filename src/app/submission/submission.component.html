@@ -43,14 +43,7 @@
         <div class="mb-3">
             <label for="articleStream" class="form-label">Article Stream</label>
             <select class="form-control" id="articleStream">
-                <option value="Computer Science, Information Technology, Robotics">Computer Science, Information Technology, Robotics</option>
-                <option value="Mathematics, Modeling, Simulations">Mathematics, Modeling, Simulations</option>
-                <option value="Life Sciences, Bio Informatics, Bio Technology">Life Sciences, Bio Informatics, Bio Technology</option>
-                <option value="Pedagogies and Techniques">Pedagogies and Techniques</option>
-                <option value="Indian Knowledge System- Innovations">Indian Knowledge System- Innovations</option>
-                <option value="Science News and Notes">Science News and Notes</option>
-                <option value="Nanochemistry for a Sustainable Future: Innovations in Material Design">Nanochemistry for a Sustainable Future: Innovations in Material Design</option>
-                <option value="Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications">Edge Intelligence for Internet of Things - Algorithms, Architectures and Applications</option>
+                <option *ngFor="let stream of streams" [value]="stream">{{ stream }}</option>
             </select>
         </div>
 

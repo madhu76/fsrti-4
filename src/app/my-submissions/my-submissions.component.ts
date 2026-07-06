@@ -77,12 +77,7 @@ export class MySubmissionsComponent implements OnInit {
         'Rejected',
         'Withdrawn'
     ];
-    streamsList: string[] = [
-        'Mathematics, Modeling, Simulations',
-        'Computer Science, Information Technology, Robotics',
-        'Life Sciences, Bio Informatics, Bio Technology',
-        'Pedagogies and Techniques'
-    ];
+    streamsList: string[] = [];
     newEditor: { name: string; email: string; streams: string[] } = { name: '', email: '', streams: [] };
     addEditorErrorMessage: string = '';
     isAddingEditor: boolean = false;
@@ -92,6 +87,8 @@ export class MySubmissionsComponent implements OnInit {
     addManagingEditorErrorMessage: string = '';
     isAddingManagingEditor: boolean = false;
     addManagingEditorModalRef: any;
+    newStreamName: string = '';
+    isAddingStream: boolean = false;
     user: any;
     private subscription: Subscription;
     
@@ -99,6 +96,7 @@ export class MySubmissionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadData();
+        this.loadStreams();
         this.subscription = this.authService.user.subscribe(user => {
             this.zone.run(() => {
                 this.user = user;
@@ -133,6 +131,17 @@ export class MySubmissionsComponent implements OnInit {
                 if (error.status !== 401) {
                     this.notificationService.backendError(error, 'Error fetching managing editors.');
                 }
+            }
+        });
+    }
+
+    private loadStreams(): void {
+        this.apiService.getData('/author/streams').subscribe({
+            next: (response) => {
+                this.streamsList = response['streams'] ?? [];
+            },
+            error: (error) => {
+                this.notificationService.backendError(error, 'Error fetching streams.');
             }
         });
     }
@@ -334,7 +343,10 @@ export class MySubmissionsComponent implements OnInit {
 
     openAddManagingEditorModal(): void {
         this.loadManagingEditors();
+        this.loadStreams();
         this.newManagingEditor = { name: '', email: '', streams: [] };
+        this.newStreamName = '';
+        this.isAddingStream = false;
         this.addManagingEditorErrorMessage = '';
         this.isAddingManagingEditor = false;
         this.addManagingEditorModalRef = this.modalService.open(this.addManagingEditorModal, { ariaLabelledBy: 'modal-basic-title' });
@@ -347,6 +359,41 @@ export class MySubmissionsComponent implements OnInit {
         } else {
             this.newManagingEditor.streams.splice(index, 1);
         }
+    }
+
+    addNewStream(): void {
+        const stream = this.newStreamName?.trim();
+        if (!stream) {
+            this.addManagingEditorErrorMessage = 'Stream name is required';
+            return;
+        }
+        if (this.streamsList.some(s => s.toLowerCase() === stream.toLowerCase())) {
+            this.addManagingEditorErrorMessage = 'This stream already exists';
+            return;
+        }
+
+        this.addManagingEditorErrorMessage = '';
+        this.isAddingStream = true;
+        this.apiService.postData('/author/streams', { stream }).subscribe({
+            next: () => {
+                this.streamsList.push(stream);
+                // Auto-select the newly added stream for the managing editor being added.
+                if (!this.newManagingEditor.streams.includes(stream)) {
+                    this.newManagingEditor.streams.push(stream);
+                }
+                this.newStreamName = '';
+                this.isAddingStream = false;
+                this.notificationService.success(`Stream "${stream}" added successfully.`);
+            },
+            error: (error) => {
+                this.isAddingStream = false;
+                if (error?.status >= 400 && error?.status < 500 && error?.error?.message) {
+                    this.addManagingEditorErrorMessage = error.error.message;
+                } else {
+                    this.notificationService.backendError(error, 'Error adding stream.');
+                }
+            }
+        });
     }
 
     addManagingEditor(): void {

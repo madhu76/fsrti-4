@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../Services/auth.service'; // Adjust the path as necessary
 import { ApiDataService } from '../Services/api-data.service';
 import { NotificationService } from '../Services/notification.service';
@@ -8,13 +8,25 @@ import { NotificationService } from '../Services/notification.service';
   templateUrl: './submission.component.html',
   styleUrls: ['./submission.component.css']
 })
-export class SubmissionComponent {
+export class SubmissionComponent implements OnInit {
   showLoginError = false; // Tracks if the submit attempt was made without being logged in
   showSuccess = false; // Tracks if the submit attempt was made without being logged in
   submissionId = ''; // Tracks the ID of the submission, if successful
   showError = false; // Tracks if there was an error during submission
   certified = false;
   isSubmitting = false; // Tracks if the form is currently being submitted
+  streams: string[] = [];
+
+  ngOnInit(): void {
+    this.articleSubmissionService.getData('/author/streams').subscribe({
+      next: (response) => {
+        this.streams = response['streams'] ?? [];
+      },
+      error: (error) => {
+        this.notificationService.backendError(error, 'Error fetching article streams.');
+      }
+    });
+  }
 
   onCertifyChange(event) {
     if (event.target.value === 'agree') {

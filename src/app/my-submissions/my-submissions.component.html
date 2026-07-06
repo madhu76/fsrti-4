@@ -684,6 +684,23 @@
             {{ stream }}
           </label>
         </div>
+        <div class="input-group mt-3">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="newStreamName"
+            placeholder="Add a new stream"
+            (keyup.enter)="addNewStream()"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="addNewStream()"
+            [disabled]="isAddingStream || !newStreamName.trim()"
+          >
+            + Add Stream
+          </button>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
