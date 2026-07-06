@@ -23,6 +23,10 @@ interface Submission {
     associateEditor?: string;
     managingEditor?: string;
     updatedAt: Date;
+    createdAt?: Date;
+    submissionFor?: string;
+    correspondingAuthorName?: string;
+    articleAuthorEmails?: string;
     volume?: string;
     issue?: string;
     isArchiveSaving?: boolean;
@@ -49,6 +53,7 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('addEditorModal') addEditorModal: TemplateRef<any>;
     @ViewChild('addManagingEditorModal') addManagingEditorModal: TemplateRef<any>;
     @ViewChild('editNumberModal') editNumberModal: TemplateRef<any>;
+    @ViewChild('detailsModal') detailsModal: TemplateRef<any>;
 
 
     associateEditors: AssociateEditor[] = [];
@@ -96,6 +101,7 @@ export class MySubmissionsComponent implements OnInit {
     editNumberErrorMessage: string = '';
     isSavingNumber: boolean = false;
     editNumberModalRef: any;
+    detailsSubmission: Submission;
     user: any;
     private subscription: Subscription;
     
@@ -411,6 +417,11 @@ export class MySubmissionsComponent implements OnInit {
         this.editNumberErrorMessage = '';
         this.isSavingNumber = false;
         this.editNumberModalRef = this.modalService.open(this.editNumberModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    openDetailsModal(submission: Submission): void {
+        this.detailsSubmission = submission;
+        this.modalService.open(this.detailsModal, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true });
     }
 
     private allManuscriptIds(): string[] {

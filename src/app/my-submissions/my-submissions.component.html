@@ -71,7 +71,13 @@
         </tr>
         <tr *ngFor="let submission of filteredSubmissions">
           <td>
-            {{ submission._id }}
+            <button
+              class="btn btn-link p-0"
+              (click)="openDetailsModal(submission)"
+              title="View full submission details"
+            >
+              {{ submission._id }}
+            </button>
             <br *ngIf="isAdmin" />
             <button
               *ngIf="isAdmin"
@@ -269,7 +275,13 @@
                 </tr>
                 <tr *ngFor="let submission of getArchivedSubmissionsByStatus(status)">
                   <td>
-                    {{ submission._id }}
+                    <button
+                      class="btn btn-link p-0"
+                      (click)="openDetailsModal(submission)"
+                      title="View full submission details"
+                    >
+                      {{ submission._id }}
+                    </button>
                     <br *ngIf="isAdmin" />
                     <button
                       *ngIf="isAdmin"
@@ -841,6 +853,98 @@
       >
         Save
       </button>
+    </div>
+  </ng-template>
+
+  <!-- Submission Details Modal -->
+  <ng-template #detailsModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Submission Details — {{ detailsSubmission?._id }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" *ngIf="detailsSubmission">
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Manuscript No</dt>
+        <dd class="col-sm-8">{{ detailsSubmission._id }}</dd>
+
+        <dt class="col-sm-4">Title</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.title || '—' }}</dd>
+
+        <dt class="col-sm-4">Status</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.status || '—' }}</dd>
+
+        <dt class="col-sm-4">Submission For</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.submissionFor || 'JISST' }}</dd>
+
+        <dt class="col-sm-4">Article Type</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.articleType || '—' }}</dd>
+
+        <dt class="col-sm-4">Article Stream</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.articleStream || '—' }}</dd>
+
+        <dt class="col-sm-4">Corresponding Author</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.correspondingAuthorName || '—' }}</dd>
+
+        <dt class="col-sm-4">Submitted By</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.submittedBy || '—' }}</dd>
+
+        <dt class="col-sm-4">Other Author(s)</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.authors || '—' }}</dd>
+
+        <dt class="col-sm-4">Other Author Email(s)</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.articleAuthorEmails || '—' }}</dd>
+
+        <dt class="col-sm-4">Keywords</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.keywords || '—' }}</dd>
+
+        <dt class="col-sm-4">Abstract</dt>
+        <dd class="col-sm-8" style="white-space: pre-wrap;">{{ detailsSubmission.abstract || '—' }}</dd>
+
+        <dt class="col-sm-4">Article File</dt>
+        <dd class="col-sm-8">
+          <a *ngIf="detailsSubmission.articleUrl" [href]="detailsSubmission.articleUrl" target="_blank" rel="noopener">
+            Download / View
+          </a>
+          <span *ngIf="!detailsSubmission.articleUrl">—</span>
+        </dd>
+
+        <ng-container *ngIf="isAdmin || isAssociateEditor">
+          <dt class="col-sm-4">Managing Editor</dt>
+          <dd class="col-sm-8">{{ getAssociateEditorName(detailsSubmission.managingEditor) }}</dd>
+
+          <dt class="col-sm-4">Associate Editor</dt>
+          <dd class="col-sm-8">{{ getAssociateEditorName(detailsSubmission.associateEditor) }}</dd>
+        </ng-container>
+
+        <ng-container *ngIf="detailsSubmission.volume || detailsSubmission.issue">
+          <dt class="col-sm-4">Volume / Issue</dt>
+          <dd class="col-sm-8">{{ detailsSubmission.volume || '—' }} / {{ detailsSubmission.issue || '—' }}</dd>
+        </ng-container>
+
+        <dt class="col-sm-4">Reviews</dt>
+        <dd class="col-sm-8">
+          <span *ngIf="!detailsSubmission.reviewUrls || detailsSubmission.reviewUrls.length === 0">None</span>
+          <div *ngFor="let url of detailsSubmission.reviewUrls; let i = index">
+            <a [href]="url" target="_blank" rel="noopener">Review {{ i + 1 }}</a>
+          </div>
+        </dd>
+
+        <dt class="col-sm-4">Revisions</dt>
+        <dd class="col-sm-8">
+          <span *ngIf="!detailsSubmission.revisionUrls || detailsSubmission.revisionUrls.length === 0">None</span>
+          <div *ngFor="let url of detailsSubmission.revisionUrls; let i = index">
+            <a [href]="url" target="_blank" rel="noopener">Revision {{ i + 1 }}</a>
+          </div>
+        </dd>
+
+        <dt class="col-sm-4">Last Updated</dt>
+        <dd class="col-sm-8">{{ detailsSubmission.updatedAt ? (detailsSubmission.updatedAt | date: 'medium') : '—' }}</dd>
+      </dl>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close')">Close</button>
     </div>
   </ng-template>
 </div>
