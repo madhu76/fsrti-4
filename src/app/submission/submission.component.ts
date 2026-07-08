@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../Services/auth.service'; // Adjust the path as necessary
 import { ApiDataService } from '../Services/api-data.service';
 import { NotificationService } from '../Services/notification.service';
+import { isFileTooLarge, MAX_UPLOAD_SIZE_LABEL } from '../common/file-upload.constants';
 
 @Component({
   selector: 'app-article-submission',
@@ -83,6 +84,10 @@ export class SubmissionComponent implements OnInit {
       }
       if (!event.target.articleFile.files || event.target.articleFile.files.length === 0) {
         this.notificationService.warning('Please upload your article (PDF) before submitting.');
+        return; // Stop the form submission
+      }
+      if (isFileTooLarge(event.target.articleFile.files[0])) {
+        this.notificationService.warning(`The selected file is too large. Please upload a file smaller than ${MAX_UPLOAD_SIZE_LABEL}.`);
         return; // Stop the form submission
       }
 
