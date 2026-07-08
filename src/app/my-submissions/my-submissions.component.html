@@ -937,6 +937,13 @@
           <div *ngFor="let url of detailsSubmission.revisionUrls; let i = index">
             <a [href]="url" target="_blank" rel="noopener">Revision {{ i + 1 }}</a>
           </div>
+          <button
+            *ngIf="isAdmin"
+            class="btn btn-link p-0 mt-1"
+            (click)="openRevisionFileUploadModal(detailsSubmission)"
+          >
+            Upload Revision
+          </button>
         </dd>
 
         <dt class="col-sm-4">Last Updated</dt>
