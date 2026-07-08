@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit, TemplateRef, ViewChild } from '@angular/core
 import { AuthService } from '../Services/auth.service';
 import { ApiDataService } from '../Services/api-data.service';
 import { NotificationService } from '../Services/notification.service';
+import { isFileTooLarge, MAX_UPLOAD_SIZE_LABEL } from '../common/file-upload.constants';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
@@ -664,6 +665,10 @@ export class MySubmissionsComponent implements OnInit {
 
     onUploadReviews(): void {
         if (this.changedSubmission) {
+            if (isFileTooLarge(this.reviewSelectedFiles)) {
+                this.notificationService.warning(`One or more selected files are too large. Please upload files smaller than ${MAX_UPLOAD_SIZE_LABEL}.`);
+                return;
+            }
             this.changedSubmission.isLoading = true;
             this.apiService.updateSubmission(this.changedSubmission._id, this.changedSubmission.status, this.reviewSelectedFiles)
                 .subscribe({
@@ -685,6 +690,10 @@ export class MySubmissionsComponent implements OnInit {
 
     onUploadRevision(): void {
         if (this.revisionSubmission) {
+            if (isFileTooLarge(this.revisionSelectedFile)) {
+                this.notificationService.warning(`The selected file is too large. Please upload a file smaller than ${MAX_UPLOAD_SIZE_LABEL}.`);
+                return;
+            }
             this.revisionSubmission.isLoading = true;
             this.apiService.uploadFiles(this.revisionSubmission._id, this.revisionSubmission.submittedBy, this.revisionSelectedFile)
                 .subscribe({

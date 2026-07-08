@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MAX_UPLOAD_SIZE_LABEL } from '../common/file-upload.constants';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
@@ -53,6 +54,20 @@ export class NotificationService {
       (typeof error?.error === 'string' ? error.error : null) ||
       error?.message;
 
+    // A Vercel serverless backend rejects bodies larger than the upload limit
+    // with a 413. That response has no CORS headers, so the browser blocks it
+    // and Angular reports `status: 0`. Surface a clear, actionable message for
+    // both the real 413 and the masked status-0 case instead of a raw code.
+    if (status === 413) {
+      this.push({
+        type: 'error',
+        message: `The file is too large to upload. Please upload a file smaller than ${MAX_UPLOAD_SIZE_LABEL}.`,
+        showContact: false,
+        detail: 'Status 413 (Payload Too Large)'
+      });
+      return;
+    }
+
     const isUnexpected =
       status === undefined || status === null || status === 0 || status >= 500 || !error?.error?.message;
 
@@ -64,7 +79,7 @@ export class NotificationService {
       type: 'error',
       message: message || fallback,
       showContact: isUnexpected,
-      detail: status ? `Status ${status}` : 'Network/Unknown error'
+      detail: status ? `Status ${status}` : 'Network/Unknown error (this can also happen when an uploaded file exceeds ' + MAX_UPLOAD_SIZE_LABEL + ')'
     });
   }
 

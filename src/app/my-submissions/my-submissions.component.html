@@ -402,6 +402,7 @@
     </div>
     <div class="modal-body">
       <input type="file" (change)="onReviewFilesSelected($event)" multiple />
+      <div><small class="form-text text-muted">Maximum file size: 4.5MB per file.</small></div>
     </div>
     <div class="modal-footer">
       <button
@@ -429,6 +430,7 @@
         (change)="onRevisionFileSelected($event)"
       />
       *Only Pdf files are allowed
+      <div><small class="form-text text-muted">Maximum file size: 4.5MB.</small></div>
     </div>
     <div class="modal-footer">
       <button
