@@ -61,6 +61,7 @@ export class MySubmissionsComponent implements OnInit {
     assignEditorErrorMessage: string;
     selectedSubmission: Submission;
     selectedAssociateEditor: string;
+    selectedManagingEditor: string;
     submissions: Submission[] = [];
     changedSubmission: Submission | null = null;
     reviewSelectedFiles: File[] = [];
@@ -165,20 +166,21 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     assignAssociateEditor(): void {
+        const managingEditor = this.selectedManagingEditor || this.user.email;
         const data = {
-            associateEditor: this.selectedAssociateEditor
+            associateEditor: this.selectedAssociateEditor,
+            managingEditor: managingEditor
         };
         this.apiService.patchData(`/author/manuscript/editors/${this.selectedSubmission._id}`, data).subscribe({
             next: (response) => {
-                // On success, update managingEditor to current user email
                 this.selectedSubmission.associateEditor = this.selectedAssociateEditor;
-                this.selectedSubmission.managingEditor = this.user.email;
+                this.selectedSubmission.managingEditor = managingEditor;
                 this.modalService.dismissAll();
-                this.notificationService.success('Associate editor assigned successfully.');
+                this.notificationService.success('Editors assigned successfully.');
             },
             error: (error) => {
                 this.modalService.dismissAll();
-                this.notificationService.backendError(error, 'Error assigning associate editor.');
+                this.notificationService.backendError(error, 'Error assigning editors.');
             }
         });
     }
@@ -206,7 +208,8 @@ export class MySubmissionsComponent implements OnInit {
     getAssociateEditorName(email: string): string {
         if(email)
         {
-            const editor = this.associateEditors?.find(editor => editor.email === email);
+            const editor = this.associateEditors?.find(editor => editor.email === email)
+                ?? this.managingEditors?.find(editor => editor.email === email);
             return editor ? editor.name : email
         }
         return 'None';
@@ -305,13 +308,16 @@ export class MySubmissionsComponent implements OnInit {
         try {
             this.assignEditorErrorMessage = '';
             this.selectedSubmission = submission;
+            // Load managing editors so the admin can (re)assign one.
+            this.loadManagingEditors();
             // Fetch associate editors if not already fetched
             if (this.associateEditors?.length === 0) {
                 this.apiService.getData('/author/associateeditors').subscribe({
                     next: (response) => {
                         this.associateEditors = response['associateEditors'] ?? [];
-                        // Set selectedAssociateEditor to current associate editor, if any
+                        // Set selected editors to current values, if any
                         this.selectedAssociateEditor = submission.associateEditor || '';
+                        this.selectedManagingEditor = submission.managingEditor || '';
                         this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
                     },
                     error: (error) => {
@@ -323,8 +329,9 @@ export class MySubmissionsComponent implements OnInit {
                     }
                 });
             } else {
-                // Set selectedAssociateEditor to current associate editor, if any
+                // Set selected editors to current values, if any
                 this.selectedAssociateEditor = submission.associateEditor || '';
+                this.selectedManagingEditor = submission.managingEditor || '';
                 this.modalService.open(this.assignEditorModal, { ariaLabelledBy: 'modal-basic-title' });
             }
         } catch (err) {

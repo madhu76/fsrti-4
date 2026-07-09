@@ -551,7 +551,7 @@
       {{ assignEditorErrorMessage | json }}
     </div>
     <div *ngIf="!assignEditorErrorMessage" class="modal-header">
-      <h4 class="modal-title">Assign Associate Editor</h4>
+      <h4 class="modal-title">Assign Editors</h4>
     </div>
     <div class="modal-body">
       <div>
@@ -563,6 +563,24 @@
           <strong>Current Managing Editor:</strong>
           {{ getAssociateEditorName(selectedSubmission.managingEditor) }}
         </p>
+      </div>
+      <div class="form-group">
+        <label for="managingEditorSelect">Select Managing Editor:</label>
+        <select
+          id="managingEditorSelect"
+          class="form-control"
+          [(ngModel)]="selectedManagingEditor"
+        >
+          <option value="" disabled [selected]="!selectedManagingEditor">
+            -- Select a Managing Editor --
+          </option>
+          <option
+            *ngFor="let editor of managingEditors"
+            [value]="editor.email"
+          >
+            {{ editor.name }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <label for="associateEditorSelect">Select Associate Editor:</label>
@@ -600,7 +618,7 @@
         Cancel
       </button>
       <button
-        *ngIf="selectedAssociateEditor"
+        *ngIf="selectedAssociateEditor || selectedManagingEditor"
         type="button"
         class="btn btn-primary"
         (click)="assignAssociateEditor()"
