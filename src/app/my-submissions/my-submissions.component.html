@@ -47,6 +47,17 @@
     />
   </div>
 
+  <div *ngIf="isAdmin" class="mb-3">
+    <button
+      type="button"
+      class="btn"
+      [ngClass]="showAssignedToMeOnly ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="toggleAssignedToMe()"
+    >
+      {{ showAssignedToMeOnly ? 'Showing assigned to me' : 'Show only assigned to me' }}
+    </button>
+  </div>
+
   <div class="table-responsive">
     <table class="table table-bordered">
       <thead class="thead-dark">

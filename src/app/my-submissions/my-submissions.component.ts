@@ -77,6 +77,7 @@ export class MySubmissionsComponent implements OnInit {
     sortAscending: boolean = true;
     isAdmin: boolean = false;
     isAssociateEditor: boolean = false;
+    showAssignedToMeOnly: boolean = false;
     reviewSelectedSubmission: Submission;
     revisionSubmission: Submission;
     revisionSelectedSubmission: Submission;
@@ -276,12 +277,29 @@ export class MySubmissionsComponent implements OnInit {
     }
 
     onFilterChange(): void {
+        const filterText = this.filter.toLowerCase();
+        const currentUserEmail = this.user?.email?.toLowerCase();
         this.filteredSubmissions = this.submissions.filter(submission => {
             // Convert each submission object to a lowercase JSON string
             const submissionstring = JSON.stringify(submission).toLowerCase();
             // Check if the stringified object includes the lowercase filter
-            return submissionstring.includes(this.filter.toLowerCase());
+            const matchesFilter = submissionstring.includes(filterText);
+            if (!matchesFilter) {
+                return false;
+            }
+            if (this.showAssignedToMeOnly && currentUserEmail) {
+                const assignedToMe =
+                    submission.associateEditor?.toLowerCase() === currentUserEmail ||
+                    submission.managingEditor?.toLowerCase() === currentUserEmail;
+                return assignedToMe;
+            }
+            return true;
         });
+    }
+
+    toggleAssignedToMe(): void {
+        this.showAssignedToMeOnly = !this.showAssignedToMeOnly;
+        this.onFilterChange();
     }
 
     openReviewsFileUploadModal(submission: Submission): void {
