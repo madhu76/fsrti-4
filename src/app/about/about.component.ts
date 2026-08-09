@@ -48,7 +48,7 @@ export class AboutComponent implements OnInit {
     link.href = url;
     link.download = 'About-The-Journal.doc';
     link.click();
-    window.URL.revokeObjectURL(url);
+    setTimeout(() => window.URL.revokeObjectURL(url));
   }
 
 }
