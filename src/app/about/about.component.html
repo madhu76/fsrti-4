@@ -5,6 +5,12 @@
         </div>
         <div class="col-lg-8">
             <div class="jumbotron">
+                <div *ngIf="isAdmin" class="text-right mb-3">
+                    <button type="button" class="btn btn-primary" (click)="downloadAsWord()">
+                        Download as Word document
+                    </button>
+                </div>
+                <div #aboutContent>
                 <h1 class="display-3">About The Journal</h1>
                 <hr class="my-4">
 
@@ -175,6 +181,7 @@
                         <li>This journal is very suitable for academia, innovators, field scientists, technical teams and research groups in the industry, undergraduate and graduate students, product developers and multidisciplinary researchers. This helps
                             showcase their creativity as expositions from some of the above category innovators are not usually encouraged in traditional research journals.</li>
                     </ul>
+                </div>
                 </div>
             </div>
         </div>
