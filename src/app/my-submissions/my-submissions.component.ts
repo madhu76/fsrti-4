@@ -19,6 +19,8 @@ interface Submission {
     updateStatus: string,
     reviewUrls: string[],
     revisionUrls: string[],
+    reviewLabels?: { url: string; label: string }[],
+    revisionLabels?: { url: string; label: string }[],
     articleType: string,
     articleStream: string,
     associateEditor?: string;
@@ -81,6 +83,10 @@ export class MySubmissionsComponent implements OnInit {
     reviewSelectedSubmission: Submission;
     revisionSubmission: Submission;
     revisionSelectedSubmission: Submission;
+    editingReviewUrl: string | null = null;
+    editingReviewLabel: string = '';
+    editingRevisionUrl: string | null = null;
+    editingRevisionLabel: string = '';
     archivedSubmissionStatuses = [
         'Accepted',
         'Rejected',
@@ -314,12 +320,84 @@ export class MySubmissionsComponent implements OnInit {
 
     openReviewModal(submission: Submission): void {
         this.reviewSelectedSubmission = submission;
+        this.editingReviewUrl = null;
+        this.editingRevisionUrl = null;
         this.modalService.open(this.reviewModal, { ariaLabelledBy: 'modal-basic-title' });
     }
 
     openRevisionModal(submission: Submission): void {
         this.revisionSelectedSubmission = submission;
+        this.editingReviewUrl = null;
+        this.editingRevisionUrl = null;
         this.modalService.open(this.revisionModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    getReviewLabel(submission: Submission, url: string, index: number): string {
+        const custom = submission.reviewLabels?.find(l => l.url === url)?.label;
+        return custom && custom.trim() ? custom : `Reviewer Comments - ${index + 1}`;
+    }
+
+    getRevisionLabel(submission: Submission, url: string, index: number): string {
+        const custom = submission.revisionLabels?.find(l => l.url === url)?.label;
+        return custom && custom.trim() ? custom : `Author's Response - V${index + 1}`;
+    }
+
+    startEditReview(submission: Submission, url: string, index: number): void {
+        this.editingReviewUrl = url;
+        const custom = submission.reviewLabels?.find(l => l.url === url)?.label;
+        this.editingReviewLabel = custom || '';
+    }
+
+    cancelEditReview(): void {
+        this.editingReviewUrl = null;
+        this.editingReviewLabel = '';
+    }
+
+    saveReviewLabel(submission: Submission, url: string): void {
+        const label = (this.editingReviewLabel || '').trim();
+        this.apiService.patchData(`/author/manuscript/${submission._id}/review-label`, { url, label }).subscribe({
+            next: () => {
+                submission.reviewLabels = (submission.reviewLabels || []).filter(l => l.url !== url);
+                if (label) {
+                    submission.reviewLabels.push({ url, label });
+                }
+                this.editingReviewUrl = null;
+                this.editingReviewLabel = '';
+                this.notificationService.success('Review name updated successfully.');
+            },
+            error: (error) => {
+                this.notificationService.backendError(error, 'Error renaming review. Please try again.');
+            }
+        });
+    }
+
+    startEditRevision(submission: Submission, url: string, index: number): void {
+        this.editingRevisionUrl = url;
+        const custom = submission.revisionLabels?.find(l => l.url === url)?.label;
+        this.editingRevisionLabel = custom || '';
+    }
+
+    cancelEditRevision(): void {
+        this.editingRevisionUrl = null;
+        this.editingRevisionLabel = '';
+    }
+
+    saveRevisionLabel(submission: Submission, url: string): void {
+        const label = (this.editingRevisionLabel || '').trim();
+        this.apiService.patchData(`/author/manuscript/${submission._id}/revision-label`, { url, label }).subscribe({
+            next: () => {
+                submission.revisionLabels = (submission.revisionLabels || []).filter(l => l.url !== url);
+                if (label) {
+                    submission.revisionLabels.push({ url, label });
+                }
+                this.editingRevisionUrl = null;
+                this.editingRevisionLabel = '';
+                this.notificationService.success('Revision name updated successfully.');
+            },
+            error: (error) => {
+                this.notificationService.backendError(error, 'Error renaming revision. Please try again.');
+            }
+        });
     }
 
     openAssignEditorModal(submission: Submission): void {

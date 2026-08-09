@@ -484,14 +484,47 @@
             let i = index
           "
         >
-          <a [href]="revisionUrl" target="_blank">Author's Response - V{{ i + 1 }}</a>
-          <button
-            *ngIf="isAdmin"
-            class="btn btn-link btn-sm text-danger p-0 ms-2"
-            (click)="deleteRevision(revisionSelectedSubmission, revisionUrl)"
-          >
-            Delete
-          </button>
+          <ng-container *ngIf="editingRevisionUrl !== revisionUrl">
+            <a [href]="revisionUrl" target="_blank">{{ getRevisionLabel(revisionSelectedSubmission, revisionUrl, i) }}</a>
+            <button
+              *ngIf="isAdmin || isAssociateEditor"
+              class="btn btn-link btn-sm p-0 ms-2"
+              title="Rename"
+              (click)="startEditRevision(revisionSelectedSubmission, revisionUrl, i)"
+            >
+              ✏️
+            </button>
+            <button
+              *ngIf="isAdmin"
+              class="btn btn-link btn-sm text-danger p-0 ms-2"
+              (click)="deleteRevision(revisionSelectedSubmission, revisionUrl)"
+            >
+              Delete
+            </button>
+          </ng-container>
+          <span *ngIf="editingRevisionUrl === revisionUrl" class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editingRevisionLabel"
+              [placeholder]="'Author\'s Response - V' + (i + 1)"
+              (keyup.enter)="saveRevisionLabel(revisionSelectedSubmission, revisionUrl)"
+            />
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="saveRevisionLabel(revisionSelectedSubmission, revisionUrl)"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelEditRevision()"
+            >
+              Cancel
+            </button>
+          </span>
         </p>
       </div>
     </div>
@@ -523,14 +556,47 @@
             let i = index
           "
         >
-          <a [href]="reviewUrl" target="_blank">Reviewer Comments - {{ i + 1 }}</a>
-          <button
-            *ngIf="isAdmin"
-            class="btn btn-link btn-sm text-danger p-0 ms-2"
-            (click)="deleteReview(reviewSelectedSubmission, reviewUrl)"
-          >
-            Delete
-          </button>
+          <ng-container *ngIf="editingReviewUrl !== reviewUrl">
+            <a [href]="reviewUrl" target="_blank">{{ getReviewLabel(reviewSelectedSubmission, reviewUrl, i) }}</a>
+            <button
+              *ngIf="isAdmin || isAssociateEditor"
+              class="btn btn-link btn-sm p-0 ms-2"
+              title="Rename"
+              (click)="startEditReview(reviewSelectedSubmission, reviewUrl, i)"
+            >
+              ✏️
+            </button>
+            <button
+              *ngIf="isAdmin"
+              class="btn btn-link btn-sm text-danger p-0 ms-2"
+              (click)="deleteReview(reviewSelectedSubmission, reviewUrl)"
+            >
+              Delete
+            </button>
+          </ng-container>
+          <span *ngIf="editingReviewUrl === reviewUrl" class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editingReviewLabel"
+              [placeholder]="'Reviewer Comments - ' + (i + 1)"
+              (keyup.enter)="saveReviewLabel(reviewSelectedSubmission, reviewUrl)"
+            />
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="saveReviewLabel(reviewSelectedSubmission, reviewUrl)"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelEditReview()"
+            >
+              Cancel
+            </button>
+          </span>
         </p>
       </div>
       <div
