@@ -78,7 +78,7 @@ const mappings = {
     },
     "5.4": {
         "Name": "Volume 5, Issue 4, October 2025",
-        "Contents": ""
+        "Contents": "https://res.cloudinary.com/jisst/image/upload/v1786543928/Cont_V5_4_ojqs1k.pdf"
     }
 }
 
