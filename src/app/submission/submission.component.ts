@@ -20,8 +20,12 @@ export class SubmissionComponent implements OnInit {
   isSingleAuthor: boolean = null;
   otherAuthors = '';
   otherAuthorEmails = '';
+  correspondingAuthorName = '';
 
   ngOnInit(): void {
+    // Prefill the corresponding author name from the access token, while keeping it editable.
+    this.correspondingAuthorName = this.authService.getUserName() ?? '';
+
     this.articleSubmissionService.getData('/author/streams').subscribe({
       next: (response) => {
         this.streams = response['streams'] ?? [];
