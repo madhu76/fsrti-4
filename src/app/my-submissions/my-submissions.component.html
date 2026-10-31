@@ -73,12 +73,13 @@
             Corresponding Author
           </th>
           <th *ngIf="isAdmin || isAssociateEditor" scope="col">Editorial Assignments</th>
+          <th *ngIf="isAdmin || isAssociateEditor" scope="col">Reviewers</th>
           <th *ngIf="isAdmin || isAssociateEditor" scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="filteredSubmissions.length === 0">
-          <td colspan="8" class="text-center">No submissions found</td>
+          <td colspan="9" class="text-center">No submissions found</td>
         </tr>
         <tr *ngFor="let submission of filteredSubmissions">
           <td>
@@ -205,7 +206,7 @@
             <span>
              ME: {{getAssociateEditorName(submission.managingEditor)}}
              <br/>
-             AE: {{getAssociateEditorName(submission.associateEditor)}}</span>
+             HE: {{getAssociateEditorName(submission.associateEditor)}}</span>
              <br/>
             <button
               *ngIf="isAdmin"
@@ -213,6 +214,21 @@
               (click)="openAssignEditorModal(submission)"
             >
               Assign
+            </button>
+          </td>
+
+          <td *ngIf="isAdmin || isAssociateEditor">
+            <span *ngIf="!submission.reviewers?.length" class="text-muted">None</span>
+            <div *ngFor="let reviewer of submission.reviewers; let i = index" class="small">
+              {{ i + 1 }}. {{ reviewer.name }}<br />
+              <a [href]="'mailto:' + reviewer.email">{{ reviewer.email }}</a>
+            </div>
+            <button
+              *ngIf="canEditReviewers(submission)"
+              class="btn btn-link p-0"
+              (click)="openReviewersModal(submission)"
+            >
+              Edit
             </button>
           </td>
 
@@ -633,7 +649,7 @@
     <div class="modal-body">
       <div>
         <p>
-          <strong>Current Associate Editor:</strong>
+          <strong>Current Handling Editor:</strong>
           {{ getAssociateEditorName( selectedSubmission.associateEditor)  }}
         </p>
         <p>
@@ -660,14 +676,14 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="associateEditorSelect">Select Associate Editor:</label>
+        <label for="associateEditorSelect">Select Handling Editor:</label>
         <select
           id="associateEditorSelect"
           class="form-control"
           [(ngModel)]="selectedAssociateEditor"
         >
           <option value="" disabled [selected]="!selectedAssociateEditor">
-            -- Select an Associate Editor --
+            -- Select a Handling Editor --
           </option>
           <option
             *ngFor="let editor of getAssociateEditorsByStream()"
@@ -685,7 +701,7 @@
         class="btn btn-outline-primary me-auto"
         (click)="openAddEditorModal()"
       >
-        + Add New Associate Editor
+        + Add New Handling Editor
       </button>
       <button
         type="button"
@@ -708,7 +724,7 @@
   <!-- Add Associate Editor Modal -->
   <ng-template #addEditorModal let-modal>
     <div class="modal-header">
-      <h4 class="modal-title">Add Associate Editor</h4>
+      <h4 class="modal-title">Add Handling Editor</h4>
     </div>
     <div class="modal-body">
       <div *ngIf="addEditorErrorMessage" class="alert alert-danger" role="alert">
@@ -1011,8 +1027,24 @@
           <dt class="col-sm-4">Managing Editor</dt>
           <dd class="col-sm-8">{{ getAssociateEditorName(detailsSubmission.managingEditor) }}</dd>
 
-          <dt class="col-sm-4">Associate Editor</dt>
+          <dt class="col-sm-4">Handling Editor</dt>
           <dd class="col-sm-8">{{ getAssociateEditorName(detailsSubmission.associateEditor) }}</dd>
+
+          <dt class="col-sm-4">Reviewers</dt>
+          <dd class="col-sm-8">
+            <span *ngIf="!detailsSubmission.reviewers?.length">None</span>
+            <div *ngFor="let reviewer of detailsSubmission.reviewers; let i = index">
+              {{ i + 1 }}. {{ reviewer.name }} —
+              <a [href]="'mailto:' + reviewer.email">{{ reviewer.email }}</a>
+            </div>
+            <button
+              *ngIf="canEditReviewers(detailsSubmission)"
+              class="btn btn-link p-0 mt-1"
+              (click)="openReviewersModal(detailsSubmission)"
+            >
+              Edit Reviewers
+            </button>
+          </dd>
         </ng-container>
 
         <ng-container *ngIf="detailsSubmission.volume || detailsSubmission.issue">
@@ -1049,6 +1081,50 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close')">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Reviewers Modal -->
+  <ng-template #reviewersModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Reviewers — {{ reviewersSubmission?._id }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="reviewersErrorMessage" class="alert alert-danger" role="alert">
+        {{ reviewersErrorMessage }}
+      </div>
+      <div *ngFor="let reviewer of editReviewers; let i = index" class="form-group mb-3">
+        <label class="font-weight-bold">{{ i + 1 }}. Name and E-mail:</label>
+        <input
+          type="text"
+          class="form-control mb-1"
+          [(ngModel)]="reviewer.name"
+          [name]="'reviewerName' + i"
+          placeholder="Name"
+        />
+        <input
+          type="email"
+          class="form-control"
+          [(ngModel)]="reviewer.email"
+          [name]="'reviewerEmail' + i"
+          placeholder="E-mail"
+        />
+      </div>
+      <small class="form-text text-muted">Leave both fields empty to remove a reviewer.</small>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveReviewers()"
+        [disabled]="isSavingReviewers"
+      >
+        Save
+      </button>
     </div>
   </ng-template>
 </div>

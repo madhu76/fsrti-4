@@ -21,6 +21,7 @@ interface Submission {
     revisionUrls: string[],
     reviewLabels?: { url: string; label: string }[],
     revisionLabels?: { url: string; label: string }[],
+    reviewers?: Reviewer[],
     articleType: string,
     articleStream: string,
     associateEditor?: string;
@@ -34,6 +35,11 @@ interface Submission {
     issue?: string;
     isArchiveSaving?: boolean;
     archiveUpdateStatus?: string;
+}
+
+interface Reviewer {
+    name: string;
+    email: string;
 }
 
 interface AssociateEditor {
@@ -57,6 +63,14 @@ export class MySubmissionsComponent implements OnInit {
     @ViewChild('addManagingEditorModal') addManagingEditorModal: TemplateRef<any>;
     @ViewChild('editNumberModal') editNumberModal: TemplateRef<any>;
     @ViewChild('detailsModal') detailsModal: TemplateRef<any>;
+    @ViewChild('reviewersModal') reviewersModal: TemplateRef<any>;
+
+    readonly maxReviewers = 3;
+    reviewersSubmission: Submission;
+    editReviewers: Reviewer[] = [];
+    reviewersErrorMessage: string = '';
+    isSavingReviewers: boolean = false;
+    reviewersModalRef: any;
 
 
     associateEditors: AssociateEditor[] = [];
@@ -130,9 +144,9 @@ export class MySubmissionsComponent implements OnInit {
             },
             error: (error) => {
                 if (error.status === 401) {
-                    this.notificationService.warning('Only managing editors can assign associate editors.');
+                    this.notificationService.warning('Only managing editors can assign handling editors.');
                 } else {
-                    this.notificationService.backendError(error, 'Error fetching associate editors.');
+                    this.notificationService.backendError(error, 'Error fetching handling editors.');
                 }
             }
         });
@@ -418,9 +432,9 @@ export class MySubmissionsComponent implements OnInit {
                     },
                     error: (error) => {
                         if (error.status === 401) {
-                            this.notificationService.warning('Only managing editors can assign associate editors.');
+                            this.notificationService.warning('Only managing editors can assign handling editors.');
                         } else {
-                            this.notificationService.backendError(error, 'Error fetching associate editors.');
+                            this.notificationService.backendError(error, 'Error fetching handling editors.');
                         }
                     }
                 });
@@ -526,6 +540,52 @@ export class MySubmissionsComponent implements OnInit {
     openDetailsModal(submission: Submission): void {
         this.detailsSubmission = submission;
         this.modalService.open(this.detailsModal, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true });
+    }
+
+    canEditReviewers(submission: Submission): boolean {
+        if (this.isAdmin) {
+            return true;
+        }
+        return this.isAssociateEditor && !!submission?.associateEditor &&
+            submission.associateEditor === this.user?.email;
+    }
+
+    openReviewersModal(submission: Submission): void {
+        this.reviewersSubmission = submission;
+        this.editReviewers = Array.from({ length: this.maxReviewers }, (_, i) => ({
+            name: submission.reviewers?.[i]?.name || '',
+            email: submission.reviewers?.[i]?.email || ''
+        }));
+        this.reviewersErrorMessage = '';
+        this.isSavingReviewers = false;
+        this.reviewersModalRef = this.modalService.open(this.reviewersModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
+    saveReviewers(): void {
+        const reviewers = this.editReviewers
+            .map(r => ({ name: (r.name || '').trim(), email: (r.email || '').trim() }))
+            .filter(r => r.name || r.email);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (reviewers.some(r => !r.name || !emailRegex.test(r.email))) {
+            this.reviewersErrorMessage = 'Each reviewer requires a name and a valid e-mail.';
+            return;
+        }
+        this.reviewersErrorMessage = '';
+        this.isSavingReviewers = true;
+        const submission = this.reviewersSubmission;
+        this.apiService.patchData(`/author/manuscript/${submission._id}/reviewers`, { reviewers }).subscribe({
+            next: () => {
+                submission.reviewers = reviewers;
+                this.isSavingReviewers = false;
+                this.reviewersModalRef?.close();
+                this.notificationService.success('Reviewers updated successfully.');
+            },
+            error: (error) => {
+                this.isSavingReviewers = false;
+                this.reviewersErrorMessage = error?.error?.message || 'Error updating reviewers. Please try again.';
+                this.notificationService.backendError(error, 'Error updating reviewers.');
+            }
+        });
     }
 
     private allManuscriptIds(): string[] {
@@ -687,7 +747,7 @@ export class MySubmissionsComponent implements OnInit {
             this.addEditorErrorMessage = 'Select at least one stream';
             return;
         }
-        if (!confirm(`Add ${name} (${email}) as an associate editor?`)) {
+        if (!confirm(`Add ${name} (${email}) as a handling editor?`)) {
             return;
         }
 
@@ -702,7 +762,7 @@ export class MySubmissionsComponent implements OnInit {
                 } else {
                     this.modalService.dismissAll();
                 }
-                this.notificationService.success(`Associate editor ${name} added successfully.`);
+                this.notificationService.success(`Handling editor ${name} added successfully.`);
             },
             error: (error) => {
                 this.isAddingEditor = false;
@@ -710,7 +770,7 @@ export class MySubmissionsComponent implements OnInit {
                     // Expected validation/business error: show inline in the form.
                     this.addEditorErrorMessage = error.error.message;
                 } else {
-                    this.notificationService.backendError(error, 'Error adding associate editor.');
+                    this.notificationService.backendError(error, 'Error adding handling editor.');
                 }
             }
         });
