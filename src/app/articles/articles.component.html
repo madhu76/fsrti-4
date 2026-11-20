@@ -28,7 +28,8 @@
                                 <div class="card-body">
 
                                     <p class="card-text" style="text-align: justify;">
-                                        <b><a href="{{mappings[vol_issue]['Contents']}}" target="_blank" download
+                                        <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" [url]="mappings[vol_issue]['Contents']" style="float: right;"></app-pdf-viewer>
+                                        <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="{{mappings[vol_issue]['Contents']}}" target="_blank" download
                                                 style="float: right;"><i
                                                     class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp;Download</a> </b>
                                     </p>
@@ -51,7 +52,8 @@
 
                                     <!-- href="https://res.cloudinary.com/jisst/image/upload/v1638015863/Editorial_rt3vxp.pdf" -->
 
-                                    <b><a id="downloadpass"
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf" style="float: right;"></app-pdf-viewer>
+                                    <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" id="downloadpass"
                                             href="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
@@ -65,7 +67,8 @@
                                             51.
                                         </p>
                                     </div>
-                                    <b><a href="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf"
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf" style="float: right;"></app-pdf-viewer>
+                                    <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
                                 </div>
@@ -77,7 +80,8 @@
                                             Technologies,3(3)(2023),109.
                                         </p>
                                     </div>
-                                    <b><a href="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf"
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf" style="float: right;"></app-pdf-viewer>
+                                    <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
                                 </div>
@@ -90,7 +94,8 @@
                                             V. Sree Hari Rao (India) . J. J. Nieto (Spain)
                                         </p>
                                     </div>
-                                    <b><a href="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf"
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf" style="float: right;"></app-pdf-viewer>
+                                    <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
                                 </div>
@@ -130,7 +135,7 @@
                                             <i class="fa fa-eye"
                                                 style="float: left; font-size: larger;">&nbsp;&nbsp;&nbsp;
                                                 <b>Views: {{item.views}} </b> </i>
-                                            <i class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;
+                                            <i *ngIf="publicViewVolumes && !isViewOnly(item.vol_issue)" class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;
                                                 <b>Downloads: {{item.downloads}} </b> </i>
                                             <!-- href="{{item.fileUrl}}" -->
                                             <!-- <a id="downloadpass" href="{{item.fileUrl}}" download="" target="_blank" style="float: right; font-size: larger;" (click)="countDownloads()"><i
@@ -190,7 +195,7 @@
                                     <p style=" text-align: center;">
                                         <i class="fa fa-eye" style="float: left; font-size: larger;">&nbsp;&nbsp;&nbsp;
                                             <b>Views: {{item.views}} </b> </i>
-                                        <i class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;
+                                        <i *ngIf="publicViewVolumes && !isViewOnly(item.vol_issue)" class="fa fa-download" style="font-size: larger;">&nbsp;&nbsp;&nbsp;
 
                                             <b>Downloads: {{item.downloads}} </b> </i>
                                         <!-- <a id="downloadpass" href="{{item.fileUrl}}" style="display: none" download="" target="_blank" style="float: right; font-size: larger;" (click)="countDownloads()" ><i

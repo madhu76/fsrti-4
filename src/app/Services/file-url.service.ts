@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,9 @@ export class FileUrlService {
   // url='http://localhost:3000';
   //url='https://epsbackend.herokuapp.com';
   url='https://ipallowlistjisst.azurewebsites.net/api/GetPdfUrl' 
+  readonly publicViewVolumes$ = this.http.get<string[]>(this.url + '?accessPolicy=true')
+    .pipe(shareReplay(1));
+
   constructor(private http:HttpClient, private authService: AuthService) { }
 
   getPdfUrlByItemId(item_id) {
