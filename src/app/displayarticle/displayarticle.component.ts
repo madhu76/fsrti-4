@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiDataService } from '../Services/api-data.service';
 import { DownloadFileService } from '../Services/download-file.service';
 import mappings from '../common/vol_issue_to_props_mapping'
+import { FileUrlService } from '../Services/file-url.service';
+import { NotificationService } from '../Services/notification.service';
 interface FoodNode {
   name: string;
   children?: FoodNode[];
@@ -36,7 +38,14 @@ export class DisplayarticleComponent implements OnInit {
   isloading = true;
   original = "Original Research";
   mappings: any = {};
-  constructor(private activatedRoute: ActivatedRoute, private apidata: ApiDataService, private downloadFileService: DownloadFileService) {
+  publicViewVolumes: string[];
+  get viewOnly(): boolean {
+    return !!this.publicViewVolumes && !!this.select &&
+      this.publicViewVolumes.includes(String(this.select.vol_issue).split('.')[0]);
+  }
+  constructor(private activatedRoute: ActivatedRoute, private apidata: ApiDataService,
+    private downloadFileService: DownloadFileService, private fileUrls: FileUrlService,
+    private notifications: NotificationService) {
     this.dataSource.data = TREE_DATA;
     this.mappings = mappings;
   }
@@ -58,6 +67,8 @@ export class DisplayarticleComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+    this.fileUrls.publicViewVolumes$.subscribe(volumes => this.publicViewVolumes = volumes,
+      error => this.notifications.backendError(error, 'Unable to load publication access settings.'));
     // console.log("on ng init ");
 
     this.activatedRoute.queryParams.subscribe(params => {
@@ -77,6 +88,10 @@ export class DisplayarticleComponent implements OnInit {
 
   downloadFile(event: Event, item_id) {
     event.preventDefault();
+    if (!this.publicViewVolumes || this.viewOnly) {
+      this.notifications.warning('Downloads are unavailable. Please use View for public volumes.');
+      return;
+    }
     console.log("downloding mthod");
     // this.activatedRoute.queryParams.subscribe(params => {
     //   const itemId = params['item_id'];

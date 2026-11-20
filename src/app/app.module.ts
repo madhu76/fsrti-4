@@ -61,6 +61,7 @@ import { TelemetryService } from './Services/telemetry.service';
 import { TelemetryInterceptor } from './Services/telemetry.interceptor';
 import { GlobalErrorHandler } from './global-error.handler';
 import { NotificationComponent } from './common/notification.component';
+import { PdfViewerComponent } from './common/pdf-viewer.component';
 
 export function initTelemetry(telemetry: TelemetryService) {
   return () => telemetry.init();
@@ -97,7 +98,8 @@ export function initTelemetry(telemetry: TelemetryService) {
     TestSigninComponent,
     ArchiveComponent,
     PublicationpoliciesComponent,
-    NotificationComponent
+    NotificationComponent,
+    PdfViewerComponent
 
   ],
   imports: [

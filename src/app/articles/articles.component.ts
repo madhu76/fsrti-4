@@ -8,6 +8,8 @@ import mappings from '../common/vol_issue_to_props_mapping'
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { HttpHeaders } from '@angular/common/http';
 import { DownloadFileService } from '../Services/download-file.service';
+import { FileUrlService } from '../Services/file-url.service';
+import { NotificationService } from '../Services/notification.service';
 interface FoodNode {
   name: string;
   children?: FoodNode[];
@@ -39,9 +41,15 @@ export class ArticlesComponent implements OnInit {
   mappings:any = {};
   currArticles:any = [];
   isEditorialIssue:boolean = false; 
+  publicViewVolumes: string[];
+
+  isViewOnly(issue: string): boolean {
+    return !!this.publicViewVolumes && this.publicViewVolumes.includes(String(issue).split('.')[0]);
+  }
 
   constructor(private apiData: ApiDataService, public auth: AuthService,
-    public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService) { this.dataSource.data = TREE_DATA;
+    public router: Router, private activatedRoute: ActivatedRoute, private downloadFileService: DownloadFileService,
+    private fileUrls: FileUrlService, private notifications: NotificationService) { this.dataSource.data = TREE_DATA;
     this.mappings = mappings;
     }
   private _transformer = (node: FoodNode, level: number) => {
@@ -63,6 +71,8 @@ export class ArticlesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.fileUrls.publicViewVolumes$.subscribe(volumes => this.publicViewVolumes = volumes,
+      error => this.notifications.backendError(error, 'Unable to load publication access settings.'));
     this.getData();
   }
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;

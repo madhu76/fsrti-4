@@ -75,6 +75,12 @@ namespace JISST.IpAllowlist
     {
       log.LogInformation("C# HTTP trigger function processed a request.");
 
+      var publicViewVolumes = GetPublicViewVolumes();
+      if (req.Query["accessPolicy"].ToString() == "true")
+      {
+        return new OkObjectResult(publicViewVolumes);
+      }
+
       // Read the IP ranges from the JSON file
       var connectionUri = Environment.GetEnvironmentVariable("MongoDb:ConnectionString");
 
@@ -84,44 +90,44 @@ namespace JISST.IpAllowlist
       // Create a new client and connect to the server
       var client = new MongoClient(settings);
 
-      var allowedIPRanges = await GetAllowedIpRanges(log, client);
-
-      // Get the request IP
-      var requestIP = IPAddress.Parse(req.HttpContext.Connection.RemoteIpAddress.ToString());
-
-      (IPAddress, IPAddress, List<string>) allowedIpConfig;
-
-      var allowUsingIp = IsIPInAllowedRanges(requestIP, allowedIPRanges, out allowedIpConfig);
-
-      // Check if the IP is within any allowed range
-      if (!allowUsingIp)
-      {
-        if (string.IsNullOrEmpty(req.Headers["AccessToken"].ToString()))
-        {
-          return new BadRequestObjectResult($"Your IP is not allowed. Please login/sign-up with google if you have individual access.");
-        }
-      }
-      
       // Send a ping to confirm a successful connection
       string fileUrl = string.Empty;
       try
       {
         var filter = Builders<BsonDocument>.Filter.Eq("item_id", req.Query["item_id"].ToString());
-        var result = await client.GetDatabase("eps").GetCollection<BsonDocument>("articlesubmissions").Find(filter).ToListAsync();
-
-        var volume = result.FirstOrDefault()["vol_issue"].ToString().Split('.').First();
-
-        if (allowedIpConfig.Item3 == null || (allowedIpConfig.Item3 != null && !allowedIpConfig.Item3.Contains(volume)))
+        var article = await client.GetDatabase("eps").GetCollection<BsonDocument>("articlesubmissions").Find(filter).FirstOrDefaultAsync();
+        if (article == null)
         {
-          var allowedEmailAddresses = await GetAllowedEmailAddresses(log, client);
-          var requestEmail = await GetRequestEmail(req);
-          if(!IsEmailInAllowedList(requestEmail, allowedEmailAddresses,volume))
+          return new NotFoundObjectResult("File Not found");
+        }
+
+        var volume = article["vol_issue"].ToString().Split('.').First();
+
+        // Resolve the article first so public volumes never require an IP or token.
+        if (!publicViewVolumes.Contains(volume))
+        {
+          var allowedIPRanges = await GetAllowedIpRanges(log, client);
+          var requestIP = req.HttpContext.Connection.RemoteIpAddress;
+          (IPAddress, IPAddress, List<string>) allowedIpConfig;
+          var allowUsingIp = IsIPInAllowedRanges(requestIP, allowedIPRanges, out allowedIpConfig);
+
+          if (!allowUsingIp && string.IsNullOrEmpty(req.Headers["AccessToken"].ToString()))
           {
-            return new BadRequestObjectResult($"Your IP and {requestEmail} is not allowed for this volume");
+            return new BadRequestObjectResult("Your IP is not allowed. Please login/sign-up with google if you have individual access.");
+          }
+
+          if (allowedIpConfig.Item3 == null || !allowedIpConfig.Item3.Contains(volume))
+          {
+            var allowedEmailAddresses = await GetAllowedEmailAddresses(log, client);
+            var requestEmail = await GetRequestEmail(req);
+            if (!IsEmailInAllowedList(requestEmail, allowedEmailAddresses, volume))
+            {
+              return new BadRequestObjectResult($"Your IP and {requestEmail} is not allowed for this volume");
+            }
           }
         }
 
-        fileUrl = result.FirstOrDefault()["fileUrl"].ToString();
+        fileUrl = article["fileUrl"].ToString();
       }
       catch (Exception ex)
       {
@@ -137,6 +143,20 @@ namespace JISST.IpAllowlist
 
       // return a response or call your Logic App, etc.
       return new OkObjectResult(fileUrl);
+    }
+
+    private static string[] GetPublicViewVolumes()
+    {
+      var configured = Environment.GetEnvironmentVariable("PublicViewVolumes") ?? "1,2";
+      if (configured.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+      {
+        return Array.Empty<string>();
+      }
+      return configured.Split(',', StringSplitOptions.RemoveEmptyEntries)
+        .Select(volume => volume.Trim())
+        .Where(volume => !string.IsNullOrEmpty(volume))
+        .Distinct()
+        .ToArray();
     }
 
     private static bool IsEmailInAllowedList(string requestEmail, List<(string, List<string>)> allowedEmailAddresses, string volume)
