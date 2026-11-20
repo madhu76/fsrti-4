@@ -1,0 +1,81 @@
+name: Azure Function deployment ZIP
+
+on:
+  pull_request:
+    paths:
+      - 'AzureFunction/**'
+      - 'AzureFunction.Tests/**'
+      - '.github/workflows/azure-function-package.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'AzureFunction/**'
+      - 'AzureFunction.Tests/**'
+      - '.github/workflows/azure-function-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: azure-function-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      PACKAGE_NAME: ipallowlistjisst-${{ github.sha }}.zip
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Test Azure Function
+        run: dotnet test AzureFunction.Tests/AzureFunction.Tests.csproj --configuration Release
+
+      - name: Publish Azure Function
+        run: >-
+          dotnet publish AzureFunction/AzureFunction.csproj
+          --configuration Release --no-restore
+          --output "$RUNNER_TEMP/azure-function-publish"
+
+      - name: Create deployment ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/azure-function-publish"
+          test -f host.json
+          test -f GetPdfUrl/function.json
+          test -f bin/AzureFunction.dll
+          test ! -f local.settings.json
+          zip --quiet --recurse-paths "$RUNNER_TEMP/$PACKAGE_NAME" .
+
+      - name: Upload downloadable deployment ZIP
+        id: upload
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          path: ${{ runner.temp }}/${{ env.PACKAGE_NAME }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Link deployment ZIP
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          {
+            printf '## Azure Function package\n\n'
+            printf '[Download %s](%s)\n\n' "$PACKAGE_NAME" "$ARTIFACT_URL"
+            printf 'Ready for Azure ZIP deployment: host.json is at the ZIP root.\n\n'
+            printf 'This workflow does not deploy or change Azure settings.\n'
+          } >> "$GITHUB_STEP_SUMMARY"

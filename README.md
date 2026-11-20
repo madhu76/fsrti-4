@@ -34,6 +34,37 @@ endpoint. Changes to the application setting take effect in the UI after a reloa
 
 Run access-policy tests with `dotnet test AzureFunction.Tests`.
 
+## Azure Function deployment ZIP
+
+The **Azure Function deployment ZIP** GitHub Actions workflow tests and packages
+the function on relevant pull requests and pushes to `main`. After the workflow is
+merged, it can also be started under **Actions > Azure Function deployment ZIP >
+Run workflow**. No Azure credentials or GitHub Actions secrets are required.
+
+Open a successful run and download `ipallowlistjisst-<commit-sha>.zip` from its
+summary link or **Artifacts** section. Artifacts are retained for 14 days. For a
+production deployment, use a run from `main`, not a pull request.
+
+The downloaded file is the deployment ZIP itself, not an outer ZIP containing
+another ZIP. It contains `host.json` at its root, the function metadata, and the
+published binaries. Local settings and deployment credentials are not included.
+
+To deploy manually from a machine or Azure Cloud Shell with Azure CLI access:
+
+```sh
+az login
+az functionapp deployment source config-zip \
+  --resource-group <your-function-resource-group> \
+  --name ipallowlistjisst \
+  --src ipallowlistjisst-<commit-sha>.zip
+```
+
+In Azure Cloud Shell, upload the downloaded ZIP first; an existing authenticated
+Cloud Shell session does not need another `az login`. Select the correct Azure
+subscription before deploying if your account has access to more than one.
+The workflow does not deploy anything or modify the app's existing Azure settings,
+including its database connection and `PublicViewVolumes` configuration.
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
