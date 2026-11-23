@@ -28,7 +28,7 @@
                                 <div class="card-body">
 
                                     <p class="card-text" style="text-align: justify;">
-                                        <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" [url]="mappings[vol_issue]['Contents']" style="float: right;"></app-pdf-viewer>
+                                        <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" [url]="mappings[vol_issue]['Contents']" [issue]="vol_issue" documentType="contents" style="float: right;"></app-pdf-viewer>
                                         <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="{{mappings[vol_issue]['Contents']}}" target="_blank" download
                                                 style="float: right;"><i
                                                     class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp;Download</a> </b>
@@ -52,7 +52,7 @@
 
                                     <!-- href="https://res.cloudinary.com/jisst/image/upload/v1638015863/Editorial_rt3vxp.pdf" -->
 
-                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf" style="float: right;"></app-pdf-viewer>
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf" [issue]="vol_issue" documentType="editorial" style="float: right;"></app-pdf-viewer>
                                     <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" id="downloadpass"
                                             href="https://res.cloudinary.com/jisst/image/upload/v1661429766/Articles/Editorial_alwgpv.pdf"
                                             target="_blank" download style="float: right;"><i
@@ -67,7 +67,7 @@
                                             51.
                                         </p>
                                     </div>
-                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf" style="float: right;"></app-pdf-viewer>
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf" [issue]="vol_issue" documentType="editorial" style="float: right;"></app-pdf-viewer>
                                     <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1690291282/Editorial_kwside.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
@@ -80,7 +80,7 @@
                                             Technologies,3(3)(2023),109.
                                         </p>
                                     </div>
-                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf" style="float: right;"></app-pdf-viewer>
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf" [issue]="vol_issue" documentType="editorial" style="float: right;"></app-pdf-viewer>
                                     <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1693578543/Editorial_3_3_rncofk.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
@@ -94,7 +94,7 @@
                                             V. Sree Hari Rao (India) . J. J. Nieto (Spain)
                                         </p>
                                     </div>
-                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf" style="float: right;"></app-pdf-viewer>
+                                    <app-pdf-viewer *ngIf="isViewOnly(vol_issue)" url="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf" [issue]="vol_issue" documentType="editorial" style="float: right;"></app-pdf-viewer>
                                     <b><a *ngIf="publicViewVolumes && !isViewOnly(vol_issue)" href="https://res.cloudinary.com/jisst/image/upload/v1717863303/Editorial_e9ej9w.pdf"
                                             target="_blank" download style="float: right;"><i
                                                 class="fa fa-file-pdf"></i>&nbsp;&nbsp;&nbsp; Download</a> </b>
