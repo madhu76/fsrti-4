@@ -1,4 +1,4 @@
-<div class="container m-5">
+<div class="container my-5 mx-auto">
   <!-- Show Login Error -->
   <div *ngIf="showLoginError" class="alert alert-danger" role="alert">
     You must be logged in to view the articles. Please log in and try again.
@@ -59,7 +59,7 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-bordered" [class.editorial-table]="isAdmin || isAssociateEditor">
       <thead class="thead-dark">
         <tr>
           <th scope="col" (click)="onSort('id')">Manuscript No</th>
@@ -72,14 +72,15 @@
           <th *ngIf="isAdmin || isAssociateEditor" scope="col" (click)="onSort('submittedBy')">
             Corresponding Author
           </th>
-          <th *ngIf="isAdmin || isAssociateEditor" scope="col">Editorial Assignments</th>
+          <th *ngIf="isAdmin || isAssociateEditor" scope="col">Managing Editor</th>
+          <th *ngIf="isAdmin || isAssociateEditor" scope="col">Handling Editor</th>
           <th *ngIf="isAdmin || isAssociateEditor" scope="col">Reviewers</th>
           <th *ngIf="isAdmin || isAssociateEditor" scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="filteredSubmissions.length === 0">
-          <td colspan="9" class="text-center">No submissions found</td>
+          <td [attr.colspan]="isAdmin || isAssociateEditor ? 10 : 5" class="text-center">No submissions found</td>
         </tr>
         <tr *ngFor="let submission of filteredSubmissions">
           <td>
@@ -202,12 +203,21 @@
             }}
           </td>
 
-          <td *ngIf="isAdmin ||isAssociateEditor">
-            <span>
-             ME: {{getAssociateEditorName(submission.managingEditor)}}
-             <br/>
-             HE: {{getAssociateEditorName(submission.associateEditor)}}</span>
-             <br/>
+          <td *ngIf="isAdmin || isAssociateEditor">
+            {{ getAssociateEditorName(submission.managingEditor) }}
+            <br *ngIf="isAdmin" />
+            <button
+              *ngIf="isAdmin"
+              class="btn btn-link p-0"
+              (click)="openAssignEditorModal(submission)"
+            >
+              Assign
+            </button>
+          </td>
+
+          <td *ngIf="isAdmin || isAssociateEditor">
+            {{ getAssociateEditorName(submission.associateEditor) }}
+            <br *ngIf="isAdmin" />
             <button
               *ngIf="isAdmin"
               class="btn btn-link p-0"

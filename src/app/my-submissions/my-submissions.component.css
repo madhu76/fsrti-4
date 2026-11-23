@@ -13,6 +13,15 @@
     padding: 15px;
   }
 
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .editorial-table {
+    min-width: 1200px;
+  }
+
  .td{
     resize: both;
  }

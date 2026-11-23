@@ -14,6 +14,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
+## Editorial Manager System
+
+The submissions table shows Managing Editor and Handling Editor in separate
+columns for editorial staff. Administrators can open the existing assignment
+dialog from either column. Wide tables scroll horizontally within the page.
+
 ## Public, view-only volumes
 
 The Azure Function's `PublicViewVolumes` application setting is a comma-separated
