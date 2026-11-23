@@ -17,7 +17,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Public, view-only volumes
 
 The Azure Function's `PublicViewVolumes` application setting is a comma-separated
-list of volumes that anyone may read without signing in or matching an allowed IP.
+list of volumes available without a subscription or matching an allowed IP.
 It defaults to `1,2` when unset. For example, set it to `1,2,3` to include volume 3,
 or `none` to keep all volumes under the existing access rules.
 The setting applies to every issue in each listed volume.
@@ -26,6 +26,18 @@ The UI reads this same policy from `GetPdfUrl?accessPolicy=true`; it has no sepa
 volume list to maintain. Articles, contents, and editorials in these volumes show
 View instead of Download and open in a PDF viewer with the browser toolbar hidden.
 Other volumes retain their existing download and access behavior.
+The UI requires login to use View for these volumes, including contents and
+editorials. Logged-out readers see **Log in to view**; logging out closes the viewer.
+This login requirement is a UI gate, not server-side authorization: the public
+Azure URL endpoint and direct PDF URLs remain accessible outside the UI.
+
+When the PDF iframe loads, the UI sends one `publication_view` event per opening
+through the existing TelemetryService (HomeServer ingest gateway to Loki). Events
+include `itemId` for articles, `issue`, `documentType`, and `authenticated: true`.
+They do not include names, emails, tokens, or PDF URLs. As with existing activity
+beacons, delivery is best-effort and requires the configured telemetry endpoint;
+failed downloads and blocked logged-out attempts do not emit successful view events.
+
 This is a UI restriction, not DRM: browser support for hiding the PDF toolbar varies,
 and readers can still save content delivered to their browser.
 
